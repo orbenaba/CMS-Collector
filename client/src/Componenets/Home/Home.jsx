@@ -10,6 +10,7 @@ export default function Home() {
                 if (user._id != null) {
                     return (
                         <h1>user._id: {user._id}</h1>
+                        //todo show user name
                     )
                 }
                 else {

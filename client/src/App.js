@@ -28,6 +28,7 @@ function App() {
             <Route exact path="/register" component={Register}></Route>
             <Route exact path="/logout" component={Logout}></Route>
             <Route exact path="/my-activity" component={Activity}></Route>
+            <Route exact path="/my-user" component={Home}></Route>
             <Route exact path="/scanning" component={Scanning}></Route>
           </Switch>
         </Router>

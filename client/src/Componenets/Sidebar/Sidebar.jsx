@@ -28,7 +28,13 @@ const Sidebar = ({ width, height }) => {
                     displayedLinks = (
                         <div>
                             <Link to="/logout">Log out</Link>
-                            <div></div>
+                            <div>
+                            <Link to="/my-activity">My Activity</Link>
+                            <div>
+                            <Link to="my-user">My User</Link>
+                        
+                            </div>
+                            </div>
                         </div>
                     )
                 }
