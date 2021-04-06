@@ -1,27 +1,35 @@
 import React from "react";
+import { makeStyles } from "@material-ui/styles";
+
+const useStyle = makeStyles((theme) => ({
+    btnDesign: {
+        marginTop: '20px',
+        height: '3rem',
+        textTransform: 'uppeercase',
+        fontSize: '25px',
+        width: '10rem',
+        borderRadius: '20px',
+        backgroundColor: 'var(--mainBlue)',
+        color: 'white',
+        borderColor: 'blue',
+        fontFamily: 'cursive',
+        outline: 'none',
+        cursor: 'pointer',
+        marginLeft: '3rem',
+        '&:hover': {
+            backgroundColor: 'var(--purpleBlue)'
+        }
+    }
+}))
+
+
 export default function BigButton(props) {
+    const classes = useStyle()
     return (
         <button
             size="large"
             type="secondary"
-            style={{
-                height: '10rem',
-                textTransform: 'uppeercase',
-                fontSize: '50px',
-                width: '20rem',
-                borderRadius: '40px',
-                display: 'flex',
-                margin: '0 auto',
-                marginTop: '2rem',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'var(--azure)',
-                borderColor: 'blue',
-                borderWidth: '3rem',
-                fontFamily: 'monospace',
-                outline: 'none',
-                cursor: 'pointer'
-            }}
+            className={classes.btnDesign}
         >
             {props.text}
         </button>

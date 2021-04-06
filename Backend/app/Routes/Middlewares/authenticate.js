@@ -31,6 +31,8 @@ module.exports = (flag = false) => {
                         res.cookie(ACCESS_TOKEN, user.accessToken);
                         req.accessToken = user.accessToken;
                         req.user = user;
+                        console.log("[HI]\n".repeat(100))
+                        res.locals.user = user;
                         res.locals.hasToken = true;
                         next();
                     }

@@ -5,7 +5,7 @@ export default makeStyles((theme) => ({
         boxSizing: 'border-box',
         width: '100%',
         borderRadius: '40px',
-        backgroundColor: '#f9cddd',
+        backgroundColor: 'var(--azure)',
         padding: '4px 5px',
         marginBottom: '10px',
         fontSize: '14px',
@@ -14,9 +14,7 @@ export default makeStyles((theme) => ({
         margin: '0 auto',
         fontWeight: 'bold',
         outline: 'none',
-        '&:hover': {
-            background: '#ec5990'
-        }
+        textAlign: 'center'
     },
 
     formLabel: {
@@ -25,18 +23,18 @@ export default makeStyles((theme) => ({
         display: 'block',
         marginBottom: '13px',
         marginTop: '20px',
-        color: 'white',
+        color: 'var(--azure)',
         fontSize: '14px',
         fontWeight: '200',
         marginLeft: '2rem',
         '&:hover': {
-            color: '#ec5990'
+            color: 'var(--purpleBlue)'
         }
 
     },
 
     btnSubmit: {
-        background: '#ec5990',
+        background: 'var(--mainBlue)',
         color: 'white',
         textTransform: 'uppercase',
         border: 'none',
@@ -52,7 +50,7 @@ export default makeStyles((theme) => ({
         width: '50%',
         outline: 'none',
         '&:hover': {
-            background: '#bf1650',
+            background: 'var(--purpleBlue)',
             cursor: 'pointer'
         }
     },
@@ -66,11 +64,12 @@ export default makeStyles((theme) => ({
     },
 
     linkTo: {
-        color: 'white',
+        color: 'var(--azure)',
         display: 'flex',
         justifyContent: 'center',
         '&:hover': {
-            textDecoration: 'none'
+            textDecoration: 'none',
+            color: 'var(--purpleBlue)'
         }
     },
 

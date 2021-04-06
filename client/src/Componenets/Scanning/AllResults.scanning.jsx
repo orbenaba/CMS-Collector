@@ -50,12 +50,12 @@ function Row(props) {
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
-                <TableCell>
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                <TableCell style={{ backgroundColor: 'rgba(0,0,128,0.45)', textAlign: 'center', borderWidth: '0.2rem', borderColor: 'black', borderStyle: 'solid' }}>
+                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} style={{ color: 'white', backgroundColor: 'var(--purpleBlue)' }}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" style={{ backgroundColor: 'var(--azure)', fontFamily: 'cursive', borderWidth: '0.2rem', borderColor: 'black', borderStyle: 'solid' }}>
                     {row.asset}
                 </TableCell>
             </TableRow>
@@ -63,25 +63,25 @@ function Row(props) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
-                            <Typography variant="h6" gutterBottom component="div" align="center">
+                            <Typography variant="h6" gutterBottom component="div" align="center" style={{ fontFamily: 'cursive' }}>
                                 Systems
                             </Typography>
                             <Table size="small" aria-label="purchases">
-                                <TableHead>
+                                <TableHead >
                                     <TableRow>
-                                        <TableCell>Name</TableCell>
-                                        <TableCell>Version</TableCell>
-                                        <TableCell>Categories</TableCell>
+                                        <TableCell style={{ fontFamily: 'cursive' }}>Name</TableCell>
+                                        <TableCell style={{ fontFamily: 'cursive' }}>Version</TableCell>
+                                        <TableCell style={{ fontFamily: 'cursive' }}>Categories</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {row.systems.map((systemRow) => (
                                         <TableRow key={systemRow._id}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell component="th" scope="row" style={{ fontFamily: 'cursive' }}>
                                                 {systemRow.name}
                                             </TableCell>
-                                            <TableCell>{systemRow.version}</TableCell>
-                                            <TableCell>{systemRow.categories}</TableCell>
+                                            <TableCell style={{ fontFamily: 'cursive' }}>{systemRow.version}</TableCell>
+                                            <TableCell style={{ fontFamily: 'cursive' }}>{systemRow.categories}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -100,12 +100,12 @@ export default function AllResults(props) {
     const domainScans = JSON.parse(props.domainScans);
     console.log("domainScans = ", domainScans)
     return (
-        <TableContainer component={Paper}>
-            <Table aria-label="collapsible table">
+        <TableContainer component={Paper} style={{ marginBottom: '3rem', width: '75%', margin: '0 auto' }}>
+            <Table aria-label="collapsible table" style={{ borderWidth: '0.5rem', borderColor: 'var(--purpleBlue)', borderStyle: 'solid' }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell />
-                        <TableCell>Asset</TableCell>
+                        <TableCell style={{ backgroundColor: 'var(--mainBlue)', borderWidth: '0.2rem', borderColor: 'black', borderStyle: 'solid' }} />
+                        <TableCell style={{ backgroundColor: 'var(--azure)', fontFamily: 'cursive', borderWidth: '0.2rem', borderColor: 'black', borderStyle: 'solid' }}>Asset</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -117,6 +117,6 @@ export default function AllResults(props) {
                     ))}
                 </TableBody>
             </Table>
-        </TableContainer>
+        </TableContainer >
     );
 }

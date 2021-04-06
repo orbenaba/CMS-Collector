@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Input } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { ServerAddress } from "../../Magic/Config.magic";
 import axios from "axios";
 import useStyles from "../Login/useStyles.login";
@@ -13,32 +11,26 @@ import Logout from "../Logout/logout";
 
 
 export default function Register() {
+    const history = useHistory();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [email, setEmail] = useState('');
     const [displayedError, setDisplayedError] = useState('');
-    const { control, handleSubmit } = useForm();
     const classes = useStyles();
 
 
-    const onSubmit = async () => {
+    const onSubmit = async (event, handleChangeUser) => {
+        event.preventDefault()
         //api/user/login
         try {
             if (confirmPassword !== password) {
                 throw "Passwords not match.";
             }
             const response = await axios.post(ServerAddress + "api/user/register",
-                { username, password, email }, {
-                withCredentials: true // Sent cookies if there are
-            });
-            console.log("[+] Response =", response)
-            //Clearing the form right after the Data has been added to the DB
-            document.formInput.reset();
-            setDisplayedError('');
-            setEmail('');
-            setPassword('');
-            setConfirmPassword('');
+                { username, password, email }, { withCredentials: true });
+            history.push('/');
+            handleChangeUser(response.data.user)
         } catch (err) {
             if (typeof err.response !== 'undefined') {
                 if (err.response.data.error.includes('User validation failed:')) {
@@ -88,61 +80,49 @@ export default function Register() {
                 }
                 else {
                     return (
-                        <form name="formInput" onSubmit={handleSubmit(onSubmit)} className={classes.form}>
+                        <form name="formInput" onSubmit={(event) => onSubmit(event, value.handleChangeUser)} className={classes.form} style={{ fontFamily: 'cursive' }}>
                             <label className={classes.formLabel}>Username</label>
-                            <Input
+                            <input
                                 name="userName"
-                                control={control}
                                 defaultValue=""
                                 className={classes.materialUIInput}
                                 onChange={e => onUsernameChange(e.target.value)}
-                                inputProps={{
-                                    required: 'You must provide username',
-                                    pattern: REGEX.R_USERNAME,
-                                    title: ERRORS.INVALID_USERNAME
-                                }}
+                                required='You must provide username'
+                                pattern={REGEX.R_USERNAME}
+                                title={ERRORS.INVALID_USERNAME}
                                 autoComplete="username"
                             />
                             <label className={classes.formLabel}>Password</label>
-                            <Input
+                            <input
                                 name="password"
-                                control={control}
                                 defaultValue=""
                                 className={classes.materialUIInput}
                                 onChange={e => onPasswordChange(e.target.value)}
-                                inputProps={{
-                                    required: true,
-                                    pattern: REGEX.R_PASSWORD,
-                                    title: ERRORS.INVALID_PASSWORD
-                                }}
+                                required
+                                pattern={REGEX.R_PASSWORD}
+                                title={ERRORS.INVALID_PASSWORD}
                                 autoComplete="password"
                             />
                             <label className={classes.formLabel}>Confirm Password</label>
-                            <Input
+                            <input
                                 name="confirm-password"
-                                control={control}
                                 defaultValue=""
                                 className={classes.materialUIInput}
                                 onChange={e => onConfirmPasswordChange(e.target.value)}
-                                inputProps={{
-                                    required: true,
-                                    pattern: REGEX.R_PASSWORD,
-                                    title: ERRORS.INVALID_PASSWORD
-                                }}
+                                required
+                                pattern={REGEX.R_PASSWORD}
+                                title={ERRORS.INVALID_PASSWORD}
                                 autoComplete="password"
                             />
                             <label className={classes.formLabel}>Email</label>
-                            <Input
+                            <input
                                 name="email"
-                                control={control}
                                 defaultValue=""
                                 className={classes.materialUIInput}
                                 onChange={e => onEmailChange(e.target.value)}
-                                inputProps={{
-                                    required: true,
-                                    pattern: REGEX.R_EMAIL,
-                                    title: ERRORS.INVALID_EMAIL
-                                }}
+                                required
+                                pattern={REGEX.R_EMAIL}
+                                title={ERRORS.INVALID_EMAIL}
                                 autoComplete="email"
                             />
                             {error}

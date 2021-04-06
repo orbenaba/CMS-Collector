@@ -9,7 +9,8 @@ const { R_IP, R_DOMAIN } = require("../../../client/src/Magic/Regex.magic");
 async function scan(req, res) {
     try {
         let domains_ips = req.body.domainOrIps;
-        let username = req.user.username;
+        console.log("-+] res.locals =\n", res.locals);
+        let username = res.locals.user.username;
         // user.username
         let batchOfScans = new BatchOfQueriesModel({ username });
         const promises = domains_ips.map(domain_ip => {

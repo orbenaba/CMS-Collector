@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { ServerAddress } from "../../Magic/Config.magic";
 import axios from "axios";
@@ -61,7 +61,7 @@ export default function Login() {
                 }
                 else {
                     return (
-                        <form onSubmit={(event) => onSubmit(event, value.handleChangeUser)} className={classes.form} style={{ height: '350px' }}>
+                        <form onSubmit={(event) => onSubmit(event, value.handleChangeUser)} className={classes.form} style={{ height: '350px', fontFamily: 'cursive' }}>
                             <label className={classes.formLabel}>Username</label>
                             <input
                                 name="userName"

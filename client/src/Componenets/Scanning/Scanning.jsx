@@ -34,9 +34,7 @@ export default function Scanning() {
             return domainOrIps && Array.isArray(domainOrIps) && domainOrIps.map(dip => <DomainOrIp domainOrIP={dip}></DomainOrIp>)
         }
         else {
-            return <div>
-                <h3 className="">You have no scans</h3>
-            </div>
+            return <div></div>
         }
     }
 
@@ -79,7 +77,7 @@ export default function Scanning() {
         return (
             <div>
                 <Title name="scan" title="results"></Title>
-                <Button variant="secondary" style={{ margin: '0 auto', display: 'flex', marginBottom: '2rem' }} onClick={closeTable}>Close Results</Button>
+                <button style={{ margin: '0 auto', display: 'flex', backgroundColor: 'var(--purpleBlue)', fontFamily: 'cursive', color: 'white', height: '3.3rem', fontSize: '2rem', cursor: 'pointer' }} onClick={closeTable}>Close Results</button>
                 <AllResults domainScans={JSON.stringify(scanResults.domainScans)} ipScans={JSON.stringify(scanResults.ipScans)}></AllResults>
             </div>
         )
@@ -93,13 +91,12 @@ export default function Scanning() {
                     return (
                         <form onSubmit={(event) => onSubmit(event, domainOrIps, dispatch)}>
                             <Title name="Scan your" title="ips/domains"></Title>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', alignContent: 'space-between' }}>
-                                <div style={{ margin: '0 auto', justifyContent: 'center' }}>
+                            <div style={{ display: 'flex' }}>
+                                <div style={{ margin: '0 25%', justifyContent: 'center' }}>
                                     <AddScan></AddScan>
                                     {allScans(domainOrIps)}
                                 </div>
                             </div>
-                            <BigButton text="Scan" />
                         </form>
                     )
                 }

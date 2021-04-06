@@ -11,7 +11,7 @@ import { Consumer } from "../../Context";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -22,8 +22,10 @@ const useStyles = makeStyles((theme) => ({
     btns: {
         color: 'white',
         textDecoration: 'none',
+
         '&:hover': {
-            backgroundColor: 'rgba(197, 1, 77, 0.5)',
+            backgroundColor: 'var(--azure)',
+            color: 'black',
             borderRadius: '5rem'
         }
     }
@@ -35,7 +37,7 @@ export default function Navbar() {
     const common = (nameOrLink) => {
         return (
             <div className={classes.root}>
-                <AppBar position="static" style={{ backgroundColor: '#ec5990', fontFamily: 'cursive' }}>
+                <AppBar position="static" style={{ backgroundColor: 'var(--mainBlue)', fontFamily: 'cursive' }}>
                     <Toolbar>
                         <Typography variant="h6" className={classes.title}>
                             <Link to="/" className="btn" className={classes.btns}>CMS</Link>

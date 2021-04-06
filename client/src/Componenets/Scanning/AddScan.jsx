@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { R_IP, R_DOMAIN } from "../../Magic/Regex.magic";
 import { INVALID_IPDOMAIN } from "../../Magic/Errors.magic";
 import { useAlert } from 'react-alert'
-
+import BigButton from "./BigButton";
 
 
 
@@ -16,38 +16,33 @@ const useStyle = makeStyles((theme) => ({
         backgroundColor: 'var(--azure)',
         padding: '4px 5px',
         marginBottom: '10px',
-        fontSize: '14px',
-        width: '12rem',
-        height: '2.3rem',
+        marginTop: '20px',
+        fontSize: '15px',
+        fontWeight: 'bold',
+        fontFamily: 'cursive',
+        width: '15rem',
+        height: '3rem',
         fontWeigaht: 'bold',
         outline: 'none',
-        textAlign: 'center'
+        textAlign: 'center',
+        borderWidth: '0.2rem',
+        borderColor: 'var(--mainBlue)'
     },
 
     addInput: {
-        background: 'none',
-        color: 'var(--azure)',
-        textTransform: 'uppercase',
+        color: 'var(--mainBlue)',
         border: 'none',
         padding: '20px',
-        fontSize: '16px',
-        fontWeight: '100',
-        letterSpacing: '10px',
-        appearance: 'none',
-        borderRadius: '400px',
         display: 'flex',
         alignItems: 'center',
         alignText: 'center',
         justifyContent: 'center',
         margin: '0 auto',
-        height: '3rem',
-        width: '3rem',
-        fontSize: '3rem',
+        marginTop: '10px',
+        cursor: 'pointer',
         '&:hover': {
-            color: 'var(--mainBlue)',
-            cursor: 'pointer'
-        },
-        outline: 'none'
+            color: 'var(--azure)'
+        }
     }
 }))
 
@@ -78,15 +73,16 @@ export default function AddScan() {
             {value => {
                 const { dispatch } = value.state;
                 return (
-                    <div style={{ display: 'flex' }}>
+                    <div style={{ display: 'flex', marginRight: '1rem' }}>
+                        <i class={`fa fa-plus fa-2x ${classes.addInput}`} aria-hidden="true" onClick={(e) => onClick(e, dispatch)}></i>
                         <input
                             value={domainOrIP}
                             name="dip"
                             onChange={e => onDomainOrIPChange(e.target.value)}
                             className={classes.inputDesign}
-                            placeholder={domainOrIP}
+                            placeholder={domainOrIP ? domainOrIP : "Insert IP/Domain"}
                         />
-                        <button className={classes.addInput} onClick={(e) => onClick(e, dispatch)} >+</button>
+                        <BigButton text="Scan" />
                     </div>
                 )
             }}
