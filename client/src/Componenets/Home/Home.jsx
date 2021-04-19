@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Consumer } from "../../Context";
-import Blog from "./Blog";
+
 
 export default function Home() {
     return (
@@ -9,14 +9,12 @@ export default function Home() {
                 const { user } = value.state;
                 if (user._id != null) {
                     return (
-<<<<<<< HEAD
-                        <h1>user._id: {user._id}</h1>
-                        //todo show user name
-=======
-                        <div>
-                            <Blog></Blog>
-                        </div>
->>>>>>> cd36537619f274243c183b125a858bd3435fdded
+                        <React.Fragment>
+                            <div>User._Id: {user._id}</div>
+                            <div>User Name: {user.username} </div>
+                            <div>Mail: {user.email} </div>
+
+                        </React.Fragment>
                     )
                 }
                 else {
@@ -25,6 +23,6 @@ export default function Home() {
                     )
                 }
             }}
-        </Consumer >
+        </Consumer>
     )
 }
