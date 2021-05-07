@@ -4,7 +4,7 @@ const { R_USERNAME, R_PASSWORD, R_EMAIL } = require('../../../../client/src/Magi
 const IsCommonPassword = require('../../Help-Functions/CheckIfPasswordInList');
 // flag specifices With out mail 
 module.exports = (flag = false) => {
-    return (req, res, next) => {
+    return async (req, res, next) => {
         // If the token sent within the request so there is no point to validate username | password | email
         if (res.locals.hasToken === true) {
             next();
@@ -17,7 +17,8 @@ module.exports = (flag = false) => {
                 }
                 return res.status(400).send({ error: flag ? 'Username & password are required fields' : 'Username, password & email are required fields' });
             }
-            if (IsCommonPassword(password)) {
+            const isWeek = await IsCommonPassword(password)
+            if (isWeek) {
                 return res.status(400).send({ error: "Too week password; Some dictionary attack might be happened :(" })
             }
             if (!username.match(R_USERNAME)) {
