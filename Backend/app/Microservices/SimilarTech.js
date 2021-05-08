@@ -3,7 +3,7 @@
  * Its API only takes a URL/DOMAIN as a parameter
  */
 
-const API_KEY = require('../Magic/API_Keys.magic').API_KEY_SIMILARTECH;
+const API_KEY = config.get("API_KEY_SIMILARTECH");
 const axios = require('axios');
 
 

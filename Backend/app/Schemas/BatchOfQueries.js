@@ -1,9 +1,4 @@
-/**
- * A single log which is a query that contains all the results,
- * Each log contains array of domains and IPs.
- */
-
-
+// One request of the user contains multiple assets than we save all this batch as one struct
 const mongoose = require('mongoose');
 const { DomainScanModel, DomainScanSchema } = require('./DomainScan');
 const { IPScanModel, IPScanSchema } = require('./IPScan');
@@ -60,6 +55,4 @@ BatchOfQueriesSchema.statics.isExisted = async function (domain2Find) {
 }
 
 const BatchOfQueriesModel = mongoose.model('BatchOfQueries', BatchOfQueriesSchema);
-
-
 module.exports = { BatchOfQueriesModel, BatchOfQueriesSchema };

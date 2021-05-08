@@ -1,11 +1,15 @@
+// Node Modules
 const nodemailer = require('nodemailer');
+const config = require("config");
 
-
+// Custom Modules
 const { UserModel } = require('../Schemas/User');
-const { ACCESS_TOKEN, REFRESH_TOKEN } = require('../config/cookies');
 const validateEmail = require('../Routes/Middlewares/validateEmail');
 const { saveToken, useToken } = require('../Microservices/ValidToken')
-const config = require("config");
+
+// constants
+const ACCESS_TOKEN = config.get("ACCESS_TOKEN");
+const REFRESH_TOKEN = config.get("REFRESH_TOKEN");
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',

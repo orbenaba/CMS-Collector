@@ -1,22 +1,17 @@
+// Custom modules
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-// We need a secret to sign and validate JWT's. This secret should be a random
-// string that is remembered for your application; it's essentially the password to your JWT's.
-const { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE, REFRESH_TOKEN_LIFE, REFRESH_TOKEN_SECRET } = require('../config');
-const ERRORS = require('../../../client/src/Magic/Errors.magic');
-const { R_EMAIL, R_USERNAME } = require('../Magic/Regex.magic');
-const { nextTick } = require('process');
-/**
- * Constants
- */
+const config = require('config');
+
+// Constants
 const ITERATIONS = 10000;
 const HASH_LENGTH = 512;
+const ERRORS = require('../../../client/src/Magic/Errors.magic');
+const { R_EMAIL, R_USERNAME } = require('../Magic/Regex.magic');
 
-/**
- * Denote 4me, we never save discovered passwords in the DB, only their hashes
- */
+
 const UserSchema = new mongoose.Schema({
     username: { type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [R_USERNAME, 'is invalid'], index: true },
     email: { type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [R_EMAIL, 'is invalid'], index: true },
@@ -27,6 +22,7 @@ const UserSchema = new mongoose.Schema({
     oldPasswords: [String]
 }, { timestamps: true });
 
+// Usernames/emails cannot be duplicated
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' });
 
 // Using mongo hooks to save the password as a hash in the DataBase and not as plain text
@@ -40,11 +36,10 @@ UserSchema.pre("save", function (next) {
         this.password_hash = crypto.pbkdf2Sync(this.password_hash, this.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
 
         // Generating the Access & Refresh Tokens right after the user signed up
-        this.refreshToken = createToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-        this.accessToken = createToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+        this.refreshToken = createToken({ username: this.username, email: this.email }, config.get("REFRESH_TOKEN_SECRET"), config.get("REFRESH_TOKEN_LIFE"));
+        this.accessToken = createToken({ username: this.username, email: this.email }, config.get("ACCESS_TOKEN_SECRET"), config.get("ACCESS_TOKEN_LIFE"));
     }
     next()
-
 });
 
 // Methods
@@ -102,8 +97,8 @@ UserSchema.statics.login = async function (username, password) {
     // If the user did not authenticated then an exception would be thrown
     const userM = await UserModel.authenticate(username, password);
     let payload = { username: userM.username, email: userM.email };
-    let accessToken = createToken(payload, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
-    let refreshToken = createToken(payload, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+    let accessToken = createToken(payload, config.get("ACCESS_TOKEN_SECRET"), config.get("ACCESS_TOKEN_LIFE"));
+    let refreshToken = createToken(payload, config.get("REFRESH_TOKEN_SECRET"), config.get("REFRESH_TOKEN_LIFE"));
     // In order to re-hash the password we need to update the hash to be the plain text just for a moment
     userM.password_hash = password;
     userM.accessToken = accessToken;
@@ -148,7 +143,7 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
         throw "No Access/Refresh tokens specified"
     }
 
-    jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, async (err, decode) => {
+    jwt.verify(refreshToken, config.get("REFRESH_TOKEN_SECRET"), async (err, decode) => {
         if (err && err.toString().includes('TokenExpiredError: jwt expired')) {
             return callBack('Refresh token expired')
         }
@@ -159,7 +154,7 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
                     return callBack('Refresh token forgery')
                 }
 
-                user.accessToken = createToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, 10)
+                user.accessToken = createToken({ username: user.username, email: user.email }, config.get("ACCESS_TOKEN_SECRET"), 10)
                 await user.save()
                 return callBack(null, user)
             })
@@ -209,8 +204,8 @@ UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshTo
  */
 
 UserSchema.statics.changeDetails = async function (oldUserDetails, newUsername, newPassword, newEmail) {
-    let newRefreshToken = createToken({ username: newUsername, newEmail }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-    let newAccessToken = createToken({ username: newUsername, newEmail }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+    let newRefreshToken = createToken({ username: newUsername, newEmail }, config.get("REFRESH_TOKEN_SECRET"), config.get("REFRESH_TOKEN_LIFE"));
+    let newAccessToken = createToken({ username: newUsername, newEmail }, config.get("ACCESS_TOKEN_SECRET"), config.get("ACCESS_TOKEN_LIFE"));
     let salt = crypto.randomBytes(16).toString('hex');
     let updatedUser = await UserModel.findOne({ email: oldUserDetails.email });
     updatedUser.username = newUsername;

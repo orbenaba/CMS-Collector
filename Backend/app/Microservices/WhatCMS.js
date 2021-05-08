@@ -2,9 +2,8 @@
  * What CMS offers a free API which is very suit to our project requirements.
  * Its API only takes a URL/DOMAIN as a parameter
  */
-const API_KEY = require('../Magic/API_Keys.magic').API_KEY_WhatCMS;
 const axios = require('axios');
-
+const API_KEY = config.get("API_KEY_WhatCMS")
 
 // Status code which whatcms supplys in case the domain not found
 const DOMAIN_NOT_FOUND = 202;
