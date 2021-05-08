@@ -4,6 +4,8 @@ const config = require("config");
 // Authenticate the user with its cookies'
 const { UserModel } = require('../../Schemas/User');
 const { TOKEN_EXPIRED } = require('../../../../client/src/Magic/Errors.magic');
+
+const ACCESS_TOKEN = config.get("ACCESS_TOKEN");
 // flag is used to distinguish between a request with cookies or without em
 module.exports = (flag = false) => {
     return async (req, res, next) => {
@@ -31,7 +33,7 @@ module.exports = (flag = false) => {
                     }
                     else {
                         // update the access token cookie
-                        res.cookie(config.get("ACCESS_TOKEN"), user.accessToken);
+                        res.cookie(ACCESS_TOKEN, user.accessToken);
                         req.accessToken = user.accessToken;
                         req.user = user;
                         res.locals.hasToken = true;

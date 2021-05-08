@@ -1,15 +1,16 @@
 // Entry point server.js
-// Modules
+// Node Modules
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const colors = require("colors");
 const { json, urlencoded } = require('body-parser');
 // Custom routes
 const assetRoutes = require('./app/Routes/asset.routes');
 const userRoutes = require('./app/Routes/user.routes');
 
 // Helpers
-const { connectDB } = require("./app/config/db");
+const { connectDB } = require("./config/db");
 
 (async () => {
     // mongo

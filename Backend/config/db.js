@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
+const config = require("config");
+
 async function connectDB() {
     try {
-        const mongoose = require('mongoose');
         const connectionString = config.get("MongoURI");
         await mongoose.connect(connectionString, { useNewUrlParser: true });
         console.log('[+] MongoDB connected ...'.rainbow);

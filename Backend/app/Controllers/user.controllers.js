@@ -13,7 +13,7 @@ const REFRESH_TOKEN = config.get("REFRESH_TOKEN");
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
-    auth: config.get("auth")
+    auth: config.get("EMAIL_AUTH")
 });
 
 
