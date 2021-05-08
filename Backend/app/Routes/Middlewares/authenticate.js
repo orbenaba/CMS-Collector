@@ -1,6 +1,6 @@
 // Authenticate the user with its cookies'
 const { UserModel } = require('../../Schemas/User');
-const { ACCESS_TOKEN } = require('../../Config/cookies.config');
+const { ACCESS_TOKEN } = require('../../Config/cookies');
 const { TOKEN_EXPIRED } = require('../../../../client/src/Magic/Errors.magic');
 // flag is used to distinguish between a request with cookies or without em
 module.exports = (flag = false) => {

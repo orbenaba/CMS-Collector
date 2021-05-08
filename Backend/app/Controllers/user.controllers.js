@@ -1,15 +1,15 @@
-const { UserModel } = require('../Schemas/User');
-const { ACCESS_TOKEN, REFRESH_TOKEN } = require('../Config/cookies.config');
-const validateEmail = require('../Routes/Middlewares/validateEmail');
 const nodemailer = require('nodemailer');
+
+
+const { UserModel } = require('../Schemas/User');
+const { ACCESS_TOKEN, REFRESH_TOKEN } = require('../config/cookies');
+const validateEmail = require('../Routes/Middlewares/validateEmail');
 const { saveToken, useToken } = require('../Microservices/ValidToken')
+const config = require("config");
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
-    auth: {
-        user: 'team5risk@gmail.com',
-        pass: 'TRK12345!'
-    }
+    auth: config.get("auth")
 });
 
 
@@ -136,7 +136,7 @@ async function logout(req, res) {
 async function changeDetails(req, res) {
     try {
         let oldUserDetails = req.user;
-        let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email,
+        let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
         // newUsername, newPassword, newEmail are already been validated
         const user = await UserModel.changeDetails(oldUserDetails, newUsername, newPassword, newEmail)
         await user.save();
