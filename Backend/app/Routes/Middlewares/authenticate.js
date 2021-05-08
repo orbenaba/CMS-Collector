@@ -15,11 +15,9 @@ module.exports = (flag = false) => {
                 if (err !== null) {
                     if (err.toString() === 'Refresh token expired') {
                         // We need to refresh the access token
-                        console.log("1) Here")
                         res.locals.unauthorized = { Unauthorized: TOKEN_EXPIRED };
                     }
                     if (flag) {
-                        console.log("2) Here")
                         return res.status(401).send({ error: TOKEN_EXPIRED })
                     }
                     next();
@@ -34,7 +32,6 @@ module.exports = (flag = false) => {
                         res.cookie(ACCESS_TOKEN, user.accessToken);
                         req.accessToken = user.accessToken;
                         req.user = user;
-                        res.locals.user = user;
                         res.locals.hasToken = true;
                         next();
                     }

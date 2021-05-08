@@ -135,10 +135,10 @@ async function logout(req, res) {
 
 async function changeDetails(req, res) {
     try {
+        let oldUserDetails = req.user;
         let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email,
-            accessToken = req.cookies.jwt_access_token, refresh_token = req.cookies.jwt_refresh_token;
         // newUsername, newPassword, newEmail are already been validated
-        const user = await UserModel.changeDetails(newUsername, newPassword, newEmail, accessToken, refresh_token)
+        const user = await UserModel.changeDetails(oldUserDetails, newUsername, newPassword, newEmail)
         await user.save();
         console.log("[+] New user:\n", user)
         return res.status(200).send({ user })

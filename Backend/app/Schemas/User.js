@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE, REFRESH_TOKEN_LIFE, REFRESH_TOKEN_SECRET } = require('../Config');
 const ERRORS = require('../../../client/src/Magic/Errors.magic');
 const { R_EMAIL, R_USERNAME } = require('../Magic/Regex.magic');
+const { nextTick } = require('process');
 /**
  * Constants
  */
@@ -29,9 +30,11 @@ const UserSchema = new mongoose.Schema({
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' });
 
 // Using mongo hooks to save the password as a hash in the DataBase and not as plain text
-UserSchema.pre(["updateOne", "save"], function () {
-    // Generate salt only when the password_hash has changed
-    if (this.isModified("password_hash")) {
+UserSchema.pre("save", function (next) {
+    // Generate salt only when the password_hash has changed (and not when the refreshToken/accessToken has been changed)
+    // if the password just now added in the create user so isModified = true
+    if (this.password_hash.length < 30) {
+        // password_hash was not changed
         this.salt = crypto.randomBytes(16).toString('hex');
         // pbkdf2 algorithm is used to generate and validate hashes 
         this.password_hash = crypto.pbkdf2Sync(this.password_hash, this.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
@@ -40,6 +43,8 @@ UserSchema.pre(["updateOne", "save"], function () {
         this.refreshToken = createToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
         this.accessToken = createToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     }
+    next()
+
 });
 
 // Methods
@@ -53,7 +58,6 @@ UserSchema.methods.validatePassword = function (password) {
 };
 
 UserSchema.methods.validateEmail = function (email) {
-
     return this.email === email;
 };
 
@@ -140,7 +144,7 @@ UserSchema.statics.authenticate = async function (username, password) {
 }
 
 UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToken, callBack) {
-    if (!accessToken || typeof (accessToken) == 'undefined' || !refreshToken || typeof (refreshToken) === 'undefined') {
+    if (!accessToken || accessToken == 'undefined' || !refreshToken || refreshToken === 'undefined') {
         throw "No Access/Refresh tokens specified"
     }
 
@@ -150,7 +154,7 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
         }
         else {
             // The refresh token is verified
-            await UserModel.findOne({ "refreshToken": refreshToken }, async (err, user) => {
+            await UserModel.findOne({ email: decode.email }, async (err, user) => {
                 if (err) {
                     return callBack('Refresh token forgery')
                 }
@@ -203,21 +207,20 @@ UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshTo
  * @param {new data} newUsername_newPassword_newEmail
  * @param {used to authenticate the user} accessToken 
  */
-/*
-UserSchema.statics.changeDetails = async function (newUsername, newPassword, newEmail, accessToken, refresh_token) {
-    await UserModel.findByTokenOrRefresh(accessToken, refresh_token, async (err, user) => {
-        if (err) {
-            throw err;
-        }
-        let newRefreshToken = createToken({ username: newUsername, newEmail }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-        let newAccessToken = createToken({ username: newUsername, newEmail }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
-        let salt = crypto.randomBytes(16).toString('hex');
-        // pbkdf2 algorithm is used to generate and validate hashes 
-        let newPasswordHash = crypto.pbkdf2Sync(newPassword, salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
-        return await UserModel.findOneAndUpdate({ "username": user.username }, {
-            "username": newUsername, "email": newEmail, "password_hash": newPasswordHash, "refreshToken": newRefreshToken, "accessToken": newAccessToken, "salt": salt
-        })
-    })
+
+UserSchema.statics.changeDetails = async function (oldUserDetails, newUsername, newPassword, newEmail) {
+    let newRefreshToken = createToken({ username: newUsername, newEmail }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+    let newAccessToken = createToken({ username: newUsername, newEmail }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+    let salt = crypto.randomBytes(16).toString('hex');
+    let updatedUser = await UserModel.findOne({ email: oldUserDetails.email });
+    updatedUser.username = newUsername;
+    updatedUser.email = newEmail;
+    updatedUser.password_hash = newPassword
+    updatedUser.refreshToken = newRefreshToken
+    updatedUser.accessToken = newAccessToken
+    updatedUser.salt = salt
+    return updatedUser
+    //await updatedUser.save()
 }
 
 // Help Functions
@@ -227,7 +230,7 @@ UserSchema.statics.findDups = async function (oldUsername, newUsername, oldEmail
         return true;
     }
 
-}*/
+}
 
 function createToken(payload, secret, expiresIn) {
     return jwt.sign(payload, secret, {
