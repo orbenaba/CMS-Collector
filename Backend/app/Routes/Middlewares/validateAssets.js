@@ -5,7 +5,7 @@ const { R_IP, R_DOMAIN } = require("../../../../client/src/Magic/Regex.magic");
 module.exports = () => {
     return (req, res, next) => {
         const domains_ips = req.body.domainOrIps;
-        if (typeof domains_ips === 'undefined' || domains_ips === null || !Array.isArray(domains_ips)) {
+        if (Array.isArray(domains_ips)) {
             return res.status(400).send({ error: "URLs/IPs must be given !" });
         }
         for (let domain_ip of domains_ips) {

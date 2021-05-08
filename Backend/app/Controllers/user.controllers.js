@@ -32,7 +32,7 @@ async function signup(req, res) {
         return Success(res, { user });
     } catch (error) {
         // If the error is thrown as a result of "username/email is already taken" we sanitize the error to the client side
-        if (typeof error.message !== 'undefined') {
+        if (error.message) {
             return BadRequest(res, error.message);
         }
         else {

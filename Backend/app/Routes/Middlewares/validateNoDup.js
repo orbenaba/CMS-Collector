@@ -12,7 +12,7 @@ module.exports = () => {
 
         // Validating the given fields
         let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
-        if (typeof (newUsername) === 'undefined' || typeof (newPassword) === 'undefined' || typeof (newEmail) === 'undefined') {
+        if (!newUsername || !newPassword || !newEmail) {
             return res.status(400).send({ error: 'Username, password & email are required fields' });
         }
         if (!newUsername.match(R_USERNAME)) {

@@ -76,7 +76,6 @@ UserSchema.statics.deleteUserByUsername = async function (username) {
 
 //Change Password 
 UserSchema.statics.changePassword = async function (newPassowrd, email) {
-    console.log(newPassowrd, email)
     let userFound = await UserModel.findOne({ email }, (err, user) => {
         if (err) {
             throw err;
@@ -116,7 +115,7 @@ UserSchema.statics.login = async function (username, password) {
  * Authenticate the user using its password & username
  */
 UserSchema.statics.authenticate = async function (username, password) {
-    if (typeof (username) === 'undefined' || typeof (password) === 'undefined') {
+    if (!username || !password) {
         throw "Username and Password must be provided ...";
     }
     // Get User by username
@@ -143,7 +142,7 @@ UserSchema.statics.authenticate = async function (username, password) {
 }
 
 UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToken, callBack) {
-    if (!accessToken || accessToken == 'undefined' || !refreshToken || refreshToken === 'undefined') {
+    if (!accessToken || !refreshToken) {
         throw "No Access/Refresh tokens specified"
     }
 
@@ -170,7 +169,7 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
 // the access to controlled route will be granted if both matches.
 // In case the access token expired, we refresh it
 UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshToken, callBack) {
-    if (!accessToken || typeof (accessToken) === 'undefined') {
+    if (!accessToken) {
         throw "No access token specified :(";
     }
     jwt.verify(accessToken, ACCESS_TOKEN_SECRET, async (err, decode) => {
