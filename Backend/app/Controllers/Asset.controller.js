@@ -1,16 +1,22 @@
+// Custom Modules
 const SimilarTechScanDomain = require('../Microservices/SimilarTech');
 const WhatCMSScanDomain = require('../Microservices/WhatCMS');
 const WappalyzerScanDomain = require('../Microservices/Wappalyzer');
-const RemoveDups = require('../Help-Functions/RemoveDups');
 const { BatchOfQueriesModel } = require('../Schemas/BatchOfQueries');
+
+// Custom Algorithms
+const RemoveDups = require('../Help-Functions/RemoveDups');
+
+// Constants
 const { R_IP } = require("../../../client/src/Magic/Regex.magic");
 
+// Gernerals
+const { BadRequest, ServerError, Success } = require("../Helpers/generals.helpers");
 
 async function scan(req, res) {
     try {
         let domains_ips = req.body.domainOrIps;
         let username = res.locals.user.username;
-        // user.username
         let batchOfScans = new BatchOfQueriesModel({ username });
         const promises = domains_ips.map(domain_ip => {
             if (domain_ip.toString().match(R_IP)) {
@@ -23,10 +29,9 @@ async function scan(req, res) {
         });
 
         await Promise.all(promises)
-        return res.status(200).send({ results: batchOfScans })
+        return Success(res, { results: batchOfScans });
     } catch (err) {
-        console.log("error = ", err)
-        return res.status(400).send({ error: err })
+        return ServerError(res, err);
     }
 }
 
@@ -62,9 +67,9 @@ async function getAllUserScans(req, res) {
             scans = scans.concat(batch.domainScans);
             scans = scans.concat(batch.ipsScans);
         }
-        return res.status(200).send({ scans })
+        return Success(res, { scans })
     } catch (err) {
-        return res.status(400).send({ error: err })
+        return ServerError(res, err);
     }
 }
 
@@ -72,15 +77,10 @@ async function recapAboutUserScans(req, res) {
     try {
         const username = req.user.username;
         const totalScans = (await BatchOfQueriesModel.find({ username })).length;
-
-        return res.status(200).send({ results: { totalScans } })
+        return Success(res, { results: { totalScans } })
     } catch (error) {
-        return res.status(400).send({ error })
+        return ServerError(res, error)
     }
 }
-
-
-
-
 
 module.exports = { scan, recapAboutUserScans, getAllUserScans };

@@ -6,6 +6,10 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 
 // Constants
+const ACCESS_TOKEN_SECRET = config.get("ACCESS_TOKEN_SECRET");
+const REFRESH_TOKEN_SECRET = config.get("REFRESH_TOKEN_SECRET");
+const REFRESH_TOKEN_LIFE = config.get("REFRESH_TOKEN_LIFE");
+const ACCESS_TOKEN_LIFE = config.get("ACCESS_TOKEN_LIFE");
 const ITERATIONS = 10000;
 const HASH_LENGTH = 512;
 const ERRORS = require('../../../client/src/Magic/Errors.magic');
@@ -36,8 +40,8 @@ UserSchema.pre("save", function (next) {
         this.password_hash = crypto.pbkdf2Sync(this.password_hash, this.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
 
         // Generating the Access & Refresh Tokens right after the user signed up
-        this.refreshToken = createToken({ username: this.username, email: this.email }, config.get("REFRESH_TOKEN_SECRET"), config.get("REFRESH_TOKEN_LIFE"));
-        this.accessToken = createToken({ username: this.username, email: this.email }, config.get("ACCESS_TOKEN_SECRET"), config.get("ACCESS_TOKEN_LIFE"));
+        this.refreshToken = createToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+        this.accessToken = createToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     }
     next()
 });
@@ -97,8 +101,8 @@ UserSchema.statics.login = async function (username, password) {
     // If the user did not authenticated then an exception would be thrown
     const userM = await UserModel.authenticate(username, password);
     let payload = { username: userM.username, email: userM.email };
-    let accessToken = createToken(payload, config.get("ACCESS_TOKEN_SECRET"), config.get("ACCESS_TOKEN_LIFE"));
-    let refreshToken = createToken(payload, config.get("REFRESH_TOKEN_SECRET"), config.get("REFRESH_TOKEN_LIFE"));
+    let accessToken = createToken(payload, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+    let refreshToken = createToken(payload, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
     // In order to re-hash the password we need to update the hash to be the plain text just for a moment
     userM.password_hash = password;
     userM.accessToken = accessToken;
@@ -143,7 +147,7 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
         throw "No Access/Refresh tokens specified"
     }
 
-    jwt.verify(refreshToken, config.get("REFRESH_TOKEN_SECRET"), async (err, decode) => {
+    jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, async (err, decode) => {
         if (err && err.toString().includes('TokenExpiredError: jwt expired')) {
             return callBack('Refresh token expired')
         }
@@ -154,7 +158,7 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
                     return callBack('Refresh token forgery')
                 }
 
-                user.accessToken = createToken({ username: user.username, email: user.email }, config.get("ACCESS_TOKEN_SECRET"), 10)
+                user.accessToken = createToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, 10)
                 await user.save()
                 return callBack(null, user)
             })
@@ -204,8 +208,8 @@ UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshTo
  */
 
 UserSchema.statics.changeDetails = async function (oldUserDetails, newUsername, newPassword, newEmail) {
-    let newRefreshToken = createToken({ username: newUsername, newEmail }, config.get("REFRESH_TOKEN_SECRET"), config.get("REFRESH_TOKEN_LIFE"));
-    let newAccessToken = createToken({ username: newUsername, newEmail }, config.get("ACCESS_TOKEN_SECRET"), config.get("ACCESS_TOKEN_LIFE"));
+    let newRefreshToken = createToken({ username: newUsername, newEmail }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+    let newAccessToken = createToken({ username: newUsername, newEmail }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     let salt = crypto.randomBytes(16).toString('hex');
     let updatedUser = await UserModel.findOne({ email: oldUserDetails.email });
     updatedUser.username = newUsername;
