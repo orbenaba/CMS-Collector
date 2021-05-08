@@ -11,7 +11,6 @@ async function scanDomain(domain_ip) {
     } catch (error) {
         console.error(error)
     }
-
     await wappalyzer.destroy()
 }
 

@@ -15,6 +15,8 @@ const HASH_LENGTH = 512;
 const ERRORS = require('../../../client/src/Magic/Errors.magic');
 const { R_EMAIL, R_USERNAME } = require('../Magic/Regex.magic');
 
+// Custom Algorithm
+const { IsNotHash, CreateToken, ComparePasswords } = require("../Helpers/generals.helpers");
 
 const UserSchema = new mongoose.Schema({
     username: { type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [R_USERNAME, 'is invalid'], index: true },
@@ -32,38 +34,28 @@ UserSchema.plugin(uniqueValidator, { message: 'is already taken.' });
 // Using mongo hooks to save the password as a hash in the DataBase and not as plain text
 UserSchema.pre("save", function (next) {
     // Generate salt only when the password_hash has changed (and not when the refreshToken/accessToken has been changed)
-    // if the password just now added in the create user so isModified = true
-    if (this.password_hash.length < 30) {
+    if (IsNotHash(this.password_hash)) {
         // password_hash was not changed
         this.salt = crypto.randomBytes(16).toString('hex');
         // pbkdf2 algorithm is used to generate and validate hashes 
         this.password_hash = crypto.pbkdf2Sync(this.password_hash, this.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
 
         // Generating the Access & Refresh Tokens right after the user signed up
-        this.refreshToken = createToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-        this.accessToken = createToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+        this.refreshToken = CreateToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+        this.accessToken = CreateToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     }
     next()
 });
 
-// Methods
-/**
- * @param {The given password from the user in order to check if he is authenticated} password 
- * @returns validate passwords - T/F
- */
+
 UserSchema.methods.validatePassword = function (password) {
-    var password_hash = crypto.pbkdf2Sync(password, this.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
-    return this.password_hash === password_hash;
+    return ComparePasswords(this.password_hash, password, this.salt);
 };
 
 UserSchema.methods.validateEmail = function (email) {
     return this.email === email;
 };
 
-
-/**
- * Deleting existed user with its password & username
- */
 UserSchema.statics.deleteUserByUsername = async function (username) {
     let userDeleted = await UserModel.findOne({ "username": username });
     if (userDeleted) {
@@ -93,21 +85,18 @@ UserSchema.statics.changePassword = async function (newPassowrd, email) {
 }
 
 
-/**
- * @returns {The user with its new access and refresh tokens}
- */
 UserSchema.statics.login = async function (username, password) {
     // If the user did not authenticated then an exception would be thrown
     const userM = await UserModel.authenticate(username, password);
     let payload = { username: userM.username, email: userM.email };
-    let accessToken = createToken(payload, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
-    let refreshToken = createToken(payload, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+    let accessToken = CreateToken(payload, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+    let refreshToken = CreateToken(payload, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
     // In order to re-hash the password we need to update the hash to be the plain text just for a moment
     userM.password_hash = password;
     userM.accessToken = accessToken;
     userM.refreshToken = refreshToken;
     await userM.save();
-    return userM;
+    return userM.toObject();
 }
 
 /**
@@ -126,7 +115,7 @@ UserSchema.statics.authenticate = async function (username, password) {
         return user;
     });
 
-    if (user !== null) {
+    if (user) {
         const userM = new UserModel(user);
         // Check wheter the current given password equals to the password in the DataBase
         if (userM.validatePassword(password)) {
@@ -157,7 +146,7 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
                     return callBack('Refresh token forgery')
                 }
 
-                user.accessToken = createToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, 10)
+                user.accessToken = CreateToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, 10)
                 await user.save()
                 return callBack(null, user)
             })
@@ -207,8 +196,8 @@ UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshTo
  */
 
 UserSchema.statics.changeDetails = async function (oldUserDetails, newUsername, newPassword, newEmail) {
-    let newRefreshToken = createToken({ username: newUsername, newEmail }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-    let newAccessToken = createToken({ username: newUsername, newEmail }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+    let newRefreshToken = CreateToken({ username: newUsername, newEmail }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+    let newAccessToken = CreateToken({ username: newUsername, newEmail }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     let salt = crypto.randomBytes(16).toString('hex');
     let updatedUser = await UserModel.findOne({ email: oldUserDetails.email });
     updatedUser.username = newUsername;
@@ -221,22 +210,7 @@ UserSchema.statics.changeDetails = async function (oldUserDetails, newUsername, 
     //await updatedUser.save()
 }
 
-// Help Functions
-// Check if the new email and username are already exist in the DataBase
-UserSchema.statics.findDups = async function (oldUsername, newUsername, oldEmail, newEmail) {
-    if (oldEmail === newEmail && oldUsername === newUsername) {
-        return true;
-    }
 
-}
-
-function createToken(payload, secret, expiresIn) {
-    return jwt.sign(payload, secret, {
-        algorithm: "HS256",
-        expiresIn
-    })
-}
 
 const UserModel = mongoose.model('User', UserSchema);
-
 module.exports = { UserModel, UserSchema };

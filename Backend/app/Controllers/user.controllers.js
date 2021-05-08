@@ -4,8 +4,7 @@ const config = require("config");
 
 // Custom Modules
 const { UserModel } = require('../Schemas/User');
-const validateEmail = require('../Routes/Middlewares/validateEmail');
-const { saveToken, useToken } = require('../Microservices/ValidToken')
+const { saveToken, useToken, validateEmail } = require('../Helpers/ValidToken');
 
 // constants
 const ACCESS_TOKEN = config.get("ACCESS_TOKEN");

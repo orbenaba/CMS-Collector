@@ -32,7 +32,7 @@ export default function Register() {
             history.push('/');
             handleChangeUser(response.data.user)
         } catch (err) {
-            if (typeof err.response !== 'undefined') {
+            if (err.response) {
                 if (err.response.data.error.includes('User validation failed:')) {
                     setDisplayedError(err.response.data.error.substring(('User validation failed:').length))
                 }

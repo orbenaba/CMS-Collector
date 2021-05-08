@@ -4,14 +4,11 @@ const WhatCMSScanDomain = require('../Microservices/WhatCMS');
 const WappalyzerScanDomain = require('../Microservices/Wappalyzer');
 const { BatchOfQueriesModel } = require('../Schemas/BatchOfQueries');
 
-// Custom Algorithms
-const RemoveDups = require('../Help-Functions/RemoveDups');
-
 // Constants
 const { R_IP } = require("../../../client/src/Magic/Regex.magic");
 
 // Gernerals
-const { BadRequest, ServerError, Success } = require("../Helpers/generals.helpers");
+const { BadRequest, ServerError, Success, RemoveDups } = require("../Helpers/generals.helpers");
 
 async function scan(req, res) {
     try {

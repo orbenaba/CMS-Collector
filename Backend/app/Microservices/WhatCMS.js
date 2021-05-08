@@ -12,9 +12,7 @@ const DOMAIN_NOT_FOUND = 202;
 async function scanDomain(domain) {
     try {
         const requestFormatted = `https://whatcms.org/API/Tech?key=${API_KEY}&url=${domain}`;
-
         const response = await axios.get(requestFormatted);
-
         if (response.data.result.code === DOMAIN_NOT_FOUND) {
             // Domain not found :(
             return [];
@@ -24,6 +22,5 @@ async function scanDomain(domain) {
         return [];
     }
 }
-
 
 module.exports = scanDomain;

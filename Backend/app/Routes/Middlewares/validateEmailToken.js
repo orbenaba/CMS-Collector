@@ -1,13 +1,13 @@
-const { validToken } = require('../../Microservices/ValidToken')
-function validateEmailToken(request, response, next) {
-    const email = request.body.email
-    const token = request.body.token
+const { BadRequest } = require('../../Helpers/generals.helpers')
+const { validToken } = require('../../Helpers/ValidToken')
+function validateEmailToken(req, res, next) {
+    const email = req.body.email
+    const token = req.body.token
     const tokenIsValid = validToken(token, email)
     if (!tokenIsValid) {
-        response.sendStatus(400)
+        return BadRequest(res, "Invalid token");
     }
     next()
-    // response.sendStatus(200)
 }
 
 module.exports = { validateEmailToken }
