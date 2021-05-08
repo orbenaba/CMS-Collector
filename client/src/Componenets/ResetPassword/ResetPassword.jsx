@@ -16,9 +16,11 @@ export default function ResetPassword() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [displayedError, setDisplayedError] = useState('');
     const [canSubmit, setCanSubmit] = useState(false)
+    const [isSent, setIsSent] = useState(false)
     const [paramApproved, setParamApproved] = useState(false)
 
     const classes = useStyles();
+    useEffect(()=>{console.log(isSent)},[isSent])
 
     useEffect(() => {
         const passequals = confirmPassword === password
@@ -51,14 +53,14 @@ export default function ResetPassword() {
 
     const onSubmit = async (event) => {
         event.preventDefault()
-        console.log('submit')
+        
         try {
             const response = await axios.post(ServerAddress + "api/user/reset-password",
                 { email, token, password }) 
-            //setIsSent(true)
+            setIsSent(true)
         }
         catch (err) { 
-            //setIsSent('error')
+            setIsSent('error')
         }
 
     }
@@ -96,7 +98,7 @@ export default function ResetPassword() {
                             type={'password'}
                         />
                         <Link to="/login" className={classes.linkTo}>Cancel</Link>
-                        <input type="submit" disabled={!canSubmit} className={classes.btnSubmit} />
+                        <input type="submit" disabled={!canSubmit} style={isSent === 'error' ? {backgroundColor:'red'} : isSent ? { backgroundColor: 'green' } : {}} className={classes.btnSubmit} />
                     </>) :
                     <label className={classes.formLabel}>Timeout</label>
             }
