@@ -1,8 +1,10 @@
-const { UserModel } = require('../Schemas/User');
+const { UserModel, createToken } = require('../Schemas/User');
 const { ACCESS_TOKEN, REFRESH_TOKEN } = require('../Config/cookies.config');
 const validateEmail = require('../Routes/Middlewares/validateEmail');
 const nodemailer = require('nodemailer');
-const { saveToken, useToken } = require('../Microservices/ValidToken')
+const { saveToken, useToken } = require('../Microservices/ValidToken');
+const { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE } = require('../Config');
+const jwt = require('jsonwebtoken');
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -36,16 +38,17 @@ async function signup(req, res) {
 //If the email is exists, a link to reset password will be sent to the user email 
 async function forgotPassword(req, res) {
     const email = req.body.email
-    const validEmail = await validateEmail(email)
+    const user = await validateEmail(email)
 
-    if (!validEmail) {
+    if (!user) {
         res.sendStatus(403)
         return
     }
 
-    const token = require('crypto').randomBytes(48).toString('hex');
+    const token = createToken({ email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE * 3)
+    console.log("token: ", token)
     saveToken(token, email)
-    const link = `http://localhost:3000/reset-password?token=${token}&email=${email}`
+    const link = `http://localhost:3000/reset-password?token=${token}`
 
     var mailOptions = {
         from: 'team5risk@gmail.com',
@@ -58,9 +61,9 @@ async function forgotPassword(req, res) {
         const info = transporter.sendMail(mailOptions);
         console.log('Email sent: ' + info.response);
     }
-    catch (error) {
-        console.log(error);
-        res.sendStatus(400)
+    catch (err) {
+        console.log(err);
+        res.sendStatus(405)
     }
     res.sendStatus(200)
     //console.log(validEmail, email, token)
@@ -68,16 +71,27 @@ async function forgotPassword(req, res) {
 }
 
 async function resetPassword(req, res) {
-    const { password, email, token } = req.body
-    try {
-        console.log("in reset-password: ", email)
-        const user = await UserModel.changePassword(password, email)
-        useToken(token, email)
-        console.log("[+] New user:\n", user)
-        return res.status(200).send({ user })
-    } catch (error) {
-        return res.status(400).send({ error })
-    }
+    const { password, token } = req.body
+    console.log(password)
+    jwt.verify(token, ACCESS_TOKEN_SECRET, async (err, decode) => {
+        if (err) {
+            console.log(JSON.stringify(err))
+            return res.status(403).send({ err })
+        }
+        else {
+            const email = decode.email
+            try {
+                console.log("in reset-password: ", email)
+                const user = await UserModel.changePassword(password, email)
+                console.log("[+] reset password:\n", user)
+                return res.status(200).send({ user })
+            } catch (err) {
+                console.log(JSON.stringify(err))
+                return res.status(404).send({ err })
+            }
+        }
+    })
+
 }
 
 
@@ -140,10 +154,11 @@ async function changeDetails(req, res) {
         // newUsername, newPassword, newEmail are already been validated
         const user = await UserModel.changeDetails(oldUserDetails, newUsername, newPassword, newEmail)
         await user.save();
-        console.log("[+] New user:\n", user)
+        console.log("[+] change user:\n", user)
         return res.status(200).send({ user })
-    } catch (error) {
-        return res.status(400).send({ error })
+    } catch (err) {
+        console.log(JSON.stringify(err))
+        return res.status(406).send({ err })
     }
 }
 

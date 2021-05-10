@@ -4,10 +4,6 @@ const INVALID ="invalid"
 const USEDTOKEN = "use"
 function saveToken(token, email){
     tokenCache[email] = {token, "status": VALID}
-    setTimeout(()=>{
-        console.log(`invalidaing ${email}`)
-        tokenCache[email].status = INVALID
-    },300000)//60000 is a min, need to be 5 min change it later
 }
 
 function validToken(token, email){

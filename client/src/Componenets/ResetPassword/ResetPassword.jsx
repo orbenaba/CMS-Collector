@@ -10,7 +10,6 @@ import axios from "axios";
 export default function ResetPassword() {
 
     const query = new URLSearchParams(useLocation().search);;
-    const email = query.get('email')
     const token = query.get('token')
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -30,7 +29,7 @@ export default function ResetPassword() {
     useEffect(() => {
         console.log(`effect`)
         axios.post(ServerAddress + "api/user/validate-change-password",
-            { email, token })
+            { token })
             .then(()=>{
                 console.log(`approved`)
                 !paramApproved && setParamApproved(true)
@@ -56,7 +55,7 @@ export default function ResetPassword() {
         
         try {
             const response = await axios.post(ServerAddress + "api/user/reset-password",
-                { email, token, password }) 
+                {token, password }) 
             setIsSent(true)
         }
         catch (err) { 

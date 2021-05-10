@@ -30,19 +30,8 @@ const UserSchema = new mongoose.Schema({
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' });
 
 // Using mongo hooks to save the password as a hash in the DataBase and not as plain text
-UserSchema.pre("save", function (next) {
-    // Generate salt only when the password_hash has changed (and not when the refreshToken/accessToken has been changed)
-    // if the password just now added in the create user so isModified = true
-    if (this.password_hash.length < 30) {
-        // password_hash was not changed
-        this.salt = crypto.randomBytes(16).toString('hex');
-        // pbkdf2 algorithm is used to generate and validate hashes 
-        this.password_hash = crypto.pbkdf2Sync(this.password_hash, this.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
-
-        // Generating the Access & Refresh Tokens right after the user signed up
-        this.refreshToken = createToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-        this.accessToken = createToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
-    }
+UserSchema.pre(["save"], function (next) {
+    hashPassword(this)
     next()
 
 });
@@ -54,6 +43,12 @@ UserSchema.pre("save", function (next) {
  */
 UserSchema.methods.validatePassword = function (password) {
     var password_hash = crypto.pbkdf2Sync(password, this.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
+    console.log(`------------------------------`);
+    console.log(`given pasS: ${password}`);
+    console.log(`salt: ${this.salt}`);
+    // console.log(`hash DB: ${this.password_hash}`);
+    // console.log(`hash calc: ${password_hash}`);
+    console.log(`------------------------------`);
     return this.password_hash === password_hash;
 };
 
@@ -80,17 +75,28 @@ UserSchema.statics.changePassword = async function (newPassowrd, email) {
     console.log(newPassowrd, email)
     let userFound = await UserModel.findOne({ email }, (err, user) => {
         if (err) {
+            console.log(JSON.stringify(err))
             throw err;
         }
         return user;
     });
 
     if (userFound) {
-        await UserModel.updateOne(userFound, { "password_hash": newPassowrd })
-        console.log(userFound)
+        try {
+            userFound.password_hash = newPassowrd
+            const user = hashPassword(userFound)
+            console.log(`user found! ${userFound}`)
+            // await UserModel.updateOne({ email: userFound.email }, userFound)
+            await user.save()
+        }
+        catch (err) {
+            console.log(`err ${JSON.stringify(err)}`)
+            throw err
+        }
+        console.log(`user updated!`)
     }
     else {
-        throw "User not exist"
+        throw new Error("User not exist")
     }
 }
 
@@ -239,6 +245,23 @@ function createToken(payload, secret, expiresIn) {
     })
 }
 
+function hashPassword(user) {
+    // Generate salt only when the password_hash has changed (and not when the refreshToken/accessToken has been changed)
+    // if the password just now added in the create user so isModified = true
+    if (user.password_hash.length < 30) {
+        console.log(`hashing password`);
+        // password_hash was not changed
+        user.salt = crypto.randomBytes(16).toString('hex');
+        // pbkdf2 algorithm is used to generate and validate hashes 
+        user.password_hash = crypto.pbkdf2Sync(user.password_hash, user.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
+
+        // Generating the Access & Refresh Tokens right after the user signed up
+        user.refreshToken = createToken({ username: user.username, email: user.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+        user.accessToken = createToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+    }
+    return user
+}
+
 const UserModel = mongoose.model('User', UserSchema);
 
-module.exports = { UserModel, UserSchema };
+module.exports = { UserModel, UserSchema, createToken };
