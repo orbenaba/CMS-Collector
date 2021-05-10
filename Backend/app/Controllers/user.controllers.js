@@ -1,17 +1,23 @@
-const { UserModel, createToken } = require('../Schemas/User');
-const { ACCESS_TOKEN, REFRESH_TOKEN } = require('../Config/cookies.config');
-const validateEmail = require('../Routes/Middlewares/validateEmail');
+
+// Node Modules
 const nodemailer = require('nodemailer');
-const { saveToken, useToken } = require('../Microservices/ValidToken');
-const { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE } = require('../Config');
+const config = require("config");
 const jwt = require('jsonwebtoken');
+
+// Custom Modules
+const { UserModel, createToken } = require('../Schemas/User');
+const { saveToken, useToken, validateEmail } = require('../Helpers/ValidToken');
+
+// constants
+const ACCESS_TOKEN = config.get("ACCESS_TOKEN");
+const REFRESH_TOKEN = config.get("REFRESH_TOKEN");
+
+// Gernerals
+const { BadRequest, ServerError, Success } = require("../Helpers/generals.helpers");
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
-    auth: {
-        user: 'team5risk@gmail.com',
-        pass: 'TRK12345!'
-    }
+    auth: config.get("EMAIL_AUTH")
 });
 
 
@@ -24,14 +30,14 @@ async function signup(req, res) {
         // Secure enforcing that the cookies are sent only over https and not over http
         res.cookie(ACCESS_TOKEN, user.accessToken, { /*secure: true,*/ httpOnly: false })
         res.cookie(REFRESH_TOKEN, user.refreshToken, { /*secure: true,*/ httpOnly: true })
-        res.status(200).send({ user });
+        return Success(res, { user });
     } catch (error) {
         // If the error is thrown as a result of "username/email is already taken" we sanitize the error to the client side
-        if (typeof error.message !== 'undefined') {
-            return res.status(400).send({ error: error.message });
+        if (error.message) {
+            return BadRequest(res, error.message);
         }
         else {
-            return res.status(400).send({ error });
+            return ServerError(res, error);
         }
     }
 }
@@ -76,7 +82,7 @@ async function resetPassword(req, res) {
     jwt.verify(token, ACCESS_TOKEN_SECRET, async (err, decode) => {
         if (err) {
             console.log(JSON.stringify(err))
-            return res.status(403).send({ err })
+            return ServerError(res, error)
         }
         else {
             const email = decode.email
@@ -84,14 +90,13 @@ async function resetPassword(req, res) {
                 console.log("in reset-password: ", email)
                 const user = await UserModel.changePassword(password, email)
                 console.log("[+] reset password:\n", user)
-                return res.status(200).send({ user })
+                return Success(res, { user })
             } catch (err) {
                 console.log(JSON.stringify(err))
-                return res.status(404).send({ err })
+                return ServerError(res, error)
             }
         }
     })
-
 }
 
 
@@ -102,7 +107,7 @@ async function login(req, res) {
     try {
         // If the token sent within the request so there is no point to login again
         if (res.locals.hasToken) {
-            res.status(200).send({ user: req.user });
+            return Success(res, { user: req.user });
         }
         else {
             const username = req.body.username, password = req.body.password;
@@ -112,10 +117,10 @@ async function login(req, res) {
             // httpOnly - cannot access the cookie via the DOM (a CSRF mitigation)
             res.cookie(ACCESS_TOKEN, user.accessToken, { httpOnly: false });
             res.cookie(REFRESH_TOKEN, user.refreshToken, { /*secure: true,*/ httpOnly: true });
-            res.status(200).send({ user });
+            return Success(res, { user });
         }
     } catch (error) {
-        return res.status(400).send({ error });
+        return ServerError(res, error);
     }
 }
 
@@ -126,13 +131,13 @@ async function deleteUser(req, res) {
             await UserModel.deleteUserByUsername(res.locals.user.username);
             res.clearCookie(ACCESS_TOKEN);
             res.clearCookie(REFRESH_TOKEN);
-            return res.status(200).send({ success: "Success in deleting user account" })
+            return Success(res, { success: "Success in deleting user account" })
         }
         else {
-            throw "No cookies specified"
+            return BadRequest(res, "No cookies specified")
         }
     } catch (error) {
-        return res.status(400).send({ error });
+        return ServerError(res, error);
     }
 }
 
@@ -141,24 +146,23 @@ async function logout(req, res) {
         // Clear the cookies before log out
         res.clearCookie(ACCESS_TOKEN);
         res.clearCookie(REFRESH_TOKEN);
-        return res.status(200).send({ message: "Cookies were deleted in success" });
+        return Success(res, { message: "Cookies were deleted in success" });
     } catch (error) {
-        return res.status(400).send({ error })
+        return ServerError(res, error);
     }
 }
 
 async function changeDetails(req, res) {
     try {
         let oldUserDetails = req.user;
-        let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email
+        let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
         // newUsername, newPassword, newEmail are already been validated
         const user = await UserModel.changeDetails(oldUserDetails, newUsername, newPassword, newEmail)
         await user.save();
-        console.log("[+] change user:\n", user)
-        return res.status(200).send({ user })
-    } catch (err) {
-        console.log(JSON.stringify(err))
-        return res.status(406).send({ err })
+        console.log("[+] New user:\n", user)
+        return Success(res, { user })
+    } catch (error) {
+        return ServerError(res, error)
     }
 }
 
