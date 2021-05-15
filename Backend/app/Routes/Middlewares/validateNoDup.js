@@ -13,18 +13,16 @@ module.exports = () => {
 
             // Validating the given fields
             let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
-            if (!newUsername || !newPassword || !newEmail) {
-                return BadRequest(res, 'Username, password & email are required fields');
-            }
-            if (!newUsername.match(R_USERNAME)) {
+            // Not all the fields are required, but if given we'll check for it
+            if (newUsername && !newUsername.match(R_USERNAME)) {
                 return BadRequest(res, INVALID_USERNAME);
             }
 
-            if (!newPassword.match(R_PASSWORD)) {
+            if (newPassword && !newPassword.match(R_PASSWORD)) {
                 return BadRequest(res, INVALID_PASSWORD);
             }
 
-            if (!newEmail.match(R_EMAIL)) {
+            if (newEmail && !newEmail.match(R_EMAIL)) {
                 return BadRequest(res, INVALID_EMAIL);
             }
         }

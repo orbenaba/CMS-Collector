@@ -119,7 +119,7 @@ function AddPasswordToOldPasswords(arrOldPassword, sNewPassword) {
     else {
         // The array is full and we need to remove the oldest password 
         // and add to it the newest one which is always the first
-        arrOldPassword = arrOldPassword.shift()
+        arrOldPassword.shift()
         arrOldPassword.push(sNewPassword)
     }
 }

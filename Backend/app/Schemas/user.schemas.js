@@ -37,6 +37,8 @@ UserSchema.pre("save", function (next) {
     if (IsNotHash(this.password_hash)) {
         // This is the function that is always being called when changing a password
         if(IsPasswordAlreadyUsed(this.oldPasswords, this.password_hash)) {
+            this.refreshToken = CreateToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+            this.accessToken = CreateToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);        
             throw ERRORS.PASSWORD_USED_RECENTLY;
         }
         else{
@@ -45,10 +47,10 @@ UserSchema.pre("save", function (next) {
         this.salt = crypto.randomBytes(16).toString('hex');
         // pbkdf2 algorithm is used to generate and validate hashes 
         this.password_hash = crypto.pbkdf2Sync(this.password_hash, this.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
-        // Generating the Access & Refresh Tokens right after the user signed up
-        this.refreshToken = CreateToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-        this.accessToken = CreateToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     }
+    // Generating the Access & Refresh Tokens right after the user signed up
+    this.refreshToken = CreateToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+    this.accessToken = CreateToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     next()
 });
 
@@ -151,7 +153,6 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
             throw 'Refresh token expired'
         }
     }
-    console.log("[+] Delete this line")
 }
 
 // Verify the cookie from browser with the token save in mongodb and
@@ -184,16 +185,16 @@ UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshTo
 
 
 /**
+ * Changing only sended parameters -> Maybe password will be undefined
  * @param {new data} newUsername_newPassword_newEmail
- * @param {used to authenticate the user} accessToken 
+ * @param {used to authenticate the user} accessToken
  */
-UserSchema.statics.changeDetails = async function (oldUserDetails, newUsername, newPassword, newEmail) {
-    let updatedUser = await UserModel.findOne({ email: oldUserDetails.email });
-    updatedUser.username = newUsername;
-    updatedUser.email = newEmail;
-    updatedUser.password_hash = newPassword
-    updatedUser.refreshToken = CreateToken({ username: newUsername, newEmail }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-    updatedUser.accessToken = CreateToken({ username: newUsername, newEmail }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+UserSchema.statics.changeDetails = async function (updatedUser, newUsername, newPassword, newEmail) {
+    updatedUser.username = newUsername ? newUsername : updatedUser.username ;
+    updatedUser.email = newEmail ? newEmail : updatedUser.email;
+    updatedUser.password_hash = newPassword ? newPassword : updatedUser.password_hash;
+    updatedUser.refreshToken = CreateToken({ username: updatedUser.username, email: updatedUser.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+    updatedUser.accessToken = CreateToken({ username: updatedUser.username, email: updatedUser.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     updatedUser.salt = crypto.randomBytes(16).toString('hex');
     return updatedUser
 }

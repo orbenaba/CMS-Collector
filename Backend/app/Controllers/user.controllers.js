@@ -142,10 +142,12 @@ async function changeDetails(req, res) {
         if(!res.locals.unauthorizedWithResponse) {
             let oldUserDetails = req.user;
             let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
-            // newUsername, newPassword, newEmail are already been validated
+            // newUsername, newPassword, newEmail have already been validated
             const user = await UserModel.changeDetails(oldUserDetails, newUsername, newPassword, newEmail)
+            // Setting the new cookies
+            res.cookie(ACCESS_TOKEN, user.accessToken, { httpOnly: false });
+            res.cookie(REFRESH_TOKEN, user.refreshToken, { /*secure: true,*/ httpOnly: true });
             await user.save();
-            console.log("[+] New user:\n", user)
             return Success(res, { user })
         }
     } catch (error) {
