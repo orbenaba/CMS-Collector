@@ -12,7 +12,7 @@ module.exports = (flag = false) => {
         else {
             let username = req.body.username, password = req.body.password, email = req.body.email;
             if (!username || !password || (!email && flag === false)) {
-                if (!res.locals.unauthorized) {
+                if (res.locals.unauthorized) {
                     return Unauthorized(res, res.locals.unauthorized);
                 }
                 return BadRequest(res, flag ? 'Username & password are required fields' : 'Username, password & email are required fields');

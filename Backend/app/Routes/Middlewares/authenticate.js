@@ -23,7 +23,7 @@ module.exports = (flag = false) => {
                         res.locals.unauthorized = { Unauthorized: TOKEN_EXPIRED };
                     }
                     if (flag) {
-                        return Unauthorized(res, TOKEN_EXPIRED)
+                        return Unauthorized(res, err)
                     }
                 }
                 else {

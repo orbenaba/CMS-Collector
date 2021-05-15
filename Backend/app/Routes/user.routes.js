@@ -23,7 +23,10 @@ module.exports = function routes(app) {
 
     // A route to check if the user cookies are authenticated
     router.post('/is-authenticated', authenticate(true), (req, res) => {
-        return Success(res, { user: req.user });
+        if(!res.locals.unauthorizedWithResponse){
+            // The response was not sent
+            return Success(res, { user: req.user });
+        }
     });
 
     router.post('/logout', authenticate(true), logout);

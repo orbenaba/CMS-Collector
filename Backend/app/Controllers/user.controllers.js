@@ -11,9 +11,9 @@ const ACCESS_TOKEN = config.get("ACCESS_TOKEN");
 const REFRESH_TOKEN = config.get("REFRESH_TOKEN");
 
 // Gernerals
-const { BadRequest, ServerError, Success } = require("../Helpers/generals.helpers");
+const { BadRequest, ServerError, Success, ClearAllCookies } = require("../Helpers/generals.helpers");
 
-var transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: config.get("EMAIL_AUTH")
 });
@@ -87,13 +87,10 @@ async function resetPassword(req, res) {
 }
 
 
-
-
-// After login, we renewing the tokens
 async function login(req, res) {
     try {
         if (res.locals.hasToken) {
-            // Login wih {refresh & access token}
+            // Login wih {refresh & access tokens}
             return Success(res, { user: req.user });
         }
         else {
@@ -119,8 +116,7 @@ async function deleteUser(req, res) {
     try {
         if (res.locals.hasToken) {
             await UserModel.deleteUserByUsername(res.locals.user.username);
-            res.clearCookie(ACCESS_TOKEN);
-            res.clearCookie(REFRESH_TOKEN);
+            ClearAllCookies(res);
             return Success(res, { success: "Success in deleting user account" })
         }
         else {
@@ -134,8 +130,7 @@ async function deleteUser(req, res) {
 async function logout(req, res) {
     try {
         // Clear the cookies before log out
-        res.clearCookie(ACCESS_TOKEN);
-        res.clearCookie(REFRESH_TOKEN);
+        ClearAllCookies(res);
         return Success(res, { message: "Cookies were deleted in success" });
     } catch (error) {
         return ServerError(res, error);
@@ -144,13 +139,15 @@ async function logout(req, res) {
 
 async function changeDetails(req, res) {
     try {
-        let oldUserDetails = req.user;
-        let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
-        // newUsername, newPassword, newEmail are already been validated
-        const user = await UserModel.changeDetails(oldUserDetails, newUsername, newPassword, newEmail)
-        await user.save();
-        console.log("[+] New user:\n", user)
-        return Success(res, { user })
+        if(!res.locals.unauthorizedWithResponse) {
+            let oldUserDetails = req.user;
+            let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
+            // newUsername, newPassword, newEmail are already been validated
+            const user = await UserModel.changeDetails(oldUserDetails, newUsername, newPassword, newEmail)
+            await user.save();
+            console.log("[+] New user:\n", user)
+            return Success(res, { user })
+        }
     } catch (error) {
         return ServerError(res, error)
     }

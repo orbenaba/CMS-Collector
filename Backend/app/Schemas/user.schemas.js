@@ -162,7 +162,7 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
 // In case the access token expired, we refresh it
 UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshToken, callBack) {
     if (!accessToken) {
-        throw "No access token specified :(";
+        return callBack("No access token specified :(");
     }
     jwt.verify(accessToken, ACCESS_TOKEN_SECRET, async (err, decode) => {
         if (!IsTokenExpired(err)) {

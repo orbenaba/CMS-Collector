@@ -4,6 +4,8 @@ const crypto = require('crypto');
 const lineReader = require("line-reader");
 const config = require("config");
 
+const ACCESS_TOKEN = config.get("ACCESS_TOKEN");
+const REFRESH_TOKEN = config.get("REFRESH_TOKEN");
 const ITERATIONS = 10000;
 const HASH_LENGTH = 512;
 ////////////////////////////////////////////////////////////////////
@@ -15,8 +17,11 @@ function BadRequest(res, payload) {
     return res.status(400).send({ error: payload })
 }
 
-function Unauthorized(res, payload) {
-    console.log(`[-] Unauthorizes: ${payload}`.red);
+async function Unauthorized(res, payload) {
+    console.log(`[-] Unauthorized: ${payload}`.red);
+    res.locals.unauthorizedWithResponse = true;
+    // If the cookies are expired then clear them out
+    await ClearAllCookies(res);
     return res.status(401).send({ error: `Unauthorized` })
 }
 
@@ -29,6 +34,11 @@ function ServerError(res, payload) {
 // 200
 function Success(res, payload) {
     return res.status(200).send(payload);
+}
+
+async function ClearAllCookies(res) {
+    await res.clearCookie(ACCESS_TOKEN);
+    await res.clearCookie(REFRESH_TOKEN);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -120,6 +130,7 @@ module.exports = {
     Unauthorized,
     ServerError,
     Success,
+    ClearAllCookies,
     IsNotHash,
     IsTokenExpired,
     CreateToken,
