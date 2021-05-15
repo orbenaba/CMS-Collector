@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const config = require("config");
 
 // Custom Modules
-const { UserModel } = require('../Schemas/User');
+const { UserModel } = require('../Schemas/user.schemas');
 const { saveToken, useToken, validateEmail } = require('../Helpers/ValidToken');
 
 // constants
@@ -92,13 +92,16 @@ async function resetPassword(req, res) {
 // After login, we renewing the tokens
 async function login(req, res) {
     try {
-        // If the token sent within the request so there is no point to login again
         if (res.locals.hasToken) {
+            // Login wih {refresh & access token}
             return Success(res, { user: req.user });
         }
         else {
+            // Login with {username & password}
             const username = req.body.username, password = req.body.password;
-            const user = await UserModel.login(username, password);
+            const userM = await UserModel.login(username, password);
+            await userM.save();
+            const user = userM.toObject();
             // Returning the new token to the user after its login
             // secure - Only over https
             // httpOnly - cannot access the cookie via the DOM (a CSRF mitigation)

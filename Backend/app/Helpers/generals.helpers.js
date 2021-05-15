@@ -1,9 +1,8 @@
 // Node Modules
-const colors = require("colors");
 const jwt = require("jsonwebtoken");
 const crypto = require('crypto');
 const lineReader = require("line-reader");
-
+const config = require("config");
 
 const ITERATIONS = 10000;
 const HASH_LENGTH = 512;
@@ -11,25 +10,25 @@ const HASH_LENGTH = 512;
 ////////////////////////> SERVER CODES <////////////////////////////
 ////////////////////////////////////////////////////////////////////
 // 400
-function BadRequest(res, err) {
-    console.log(`[-] Bad Request: ${err}`.red);
-    return res.status(400).send({ error: err })
+function BadRequest(res, payload) {
+    console.log(`[-] Bad Request: ${payload}`.red);
+    return res.status(400).send({ error: payload })
 }
 
-function Unauthorized(res, err) {
-    console.log(`[-] Unauthorizes: ${err}`.red);
+function Unauthorized(res, payload) {
+    console.log(`[-] Unauthorizes: ${payload}`.red);
     return res.status(401).send({ error: `Unauthorized` })
 }
 
 // 500
-function ServerError(res, err) {
-    console.log(`[-] Server Error: ${err}`.red);
-    return res.status(500).send({ error: "Server Error" });
+function ServerError(res, payload) {
+    console.log(`[-] Server Error: ${payload}`.red);
+    return res.status(500).send({ error: `Server Error: ${payload}` });
 }
 
 // 200
-function Success(res, data) {
-    return res.status(200).send(data);
+function Success(res, payload) {
+    return res.status(200).send(payload);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -39,7 +38,9 @@ function IsNotHash(sPassword) {
     return sPassword.length < 50;
 }
 
-
+function IsTokenExpired(sTokenErr) {
+    return !(sTokenErr && sTokenErr.toString().includes('TokenExpiredError: jwt expired'));
+}
 
 
 
@@ -91,6 +92,28 @@ function RemoveDups(arrOfArrays) {
     return arrayWithoutDups;
 }
 
+/**
+ * Check if the new user password was already used and if so -> return true
+ *       else -> return false
+ * @param {At the most the five old passwords} arrOldPasswords 
+ * @param {The new password} sNewPassword 
+ */
+function IsPasswordAlreadyUsed(arrOldPassword, sNewPassword) {
+    return Array.isArray(arrOldPassword) && arrOldPassword.find(sOldPassword => sOldPassword === sNewPassword);
+}
+
+function AddPasswordToOldPasswords(arrOldPassword, sNewPassword) {
+    if (arrOldPassword.length < config.get("OLD_PASSWORDS_MEMORY")) {
+        arrOldPassword.push(sNewPassword);
+    }
+    else {
+        // The array is full and we need to remove the oldest password 
+        // and add to it the newest one which is always the first
+        arrOldPassword = arrOldPassword.shift()
+        arrOldPassword.push(sNewPassword)
+    }
+}
+
 
 module.exports = {
     BadRequest,
@@ -98,8 +121,11 @@ module.exports = {
     ServerError,
     Success,
     IsNotHash,
+    IsTokenExpired,
     CreateToken,
     ComparePasswords,
     CheckIfPasswordInList,
-    RemoveDups
+    RemoveDups,
+    IsPasswordAlreadyUsed,
+    AddPasswordToOldPasswords
 }

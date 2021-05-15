@@ -6,7 +6,6 @@ const { BadRequest, Unauthorized } = require('../../Helpers/generals.helpers');
 module.exports = () => {
     return async (req, res, next) => {
         // first validating that we have token from the last middleware
-        console.log("[+] res.locals = ", res.locals)
         if (res.locals.unauthorized || res.locals.hasToken === false) {
             return Unauthorized(res, 'You must be authorized in order to change details');
         }

@@ -1,6 +1,6 @@
 // The Doamin of the requested asset and the list of systems that assembles the asset
 const mongoose = require('mongoose');
-const { SystemSchema, SystemModel } = require('./System');
+const { SystemSchema, SystemModel } = require('./system.schemas.js');
 
 const DomainScanSchema = new mongoose.Schema({
     // Asset is the queried domain

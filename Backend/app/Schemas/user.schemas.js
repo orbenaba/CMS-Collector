@@ -16,7 +16,7 @@ const ERRORS = require('../../../client/src/Magic/Errors.magic');
 const { R_EMAIL, R_USERNAME } = require('../Magic/Regex.magic');
 
 // Custom Algorithm
-const { IsNotHash, CreateToken, ComparePasswords } = require("../Helpers/generals.helpers");
+const { IsNotHash, CreateToken, ComparePasswords, IsPasswordAlreadyUsed, AddPasswordToOldPasswords, IsTokenExpired } = require("../Helpers/generals.helpers");
 
 const UserSchema = new mongoose.Schema({
     username: { type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [R_USERNAME, 'is invalid'], index: true },
@@ -35,11 +35,16 @@ UserSchema.plugin(uniqueValidator, { message: 'is already taken.' });
 UserSchema.pre("save", function (next) {
     // Generate salt only when the password_hash has changed (and not when the refreshToken/accessToken has been changed)
     if (IsNotHash(this.password_hash)) {
-        // password_hash was not changed
+        // This is the function that is always being called when changing a password
+        if(IsPasswordAlreadyUsed(this.oldPasswords, this.password_hash)) {
+            throw ERRORS.PASSWORD_USED_RECENTLY;
+        }
+        else{
+            AddPasswordToOldPasswords(this.oldPasswords, this.password_hash);
+        }
         this.salt = crypto.randomBytes(16).toString('hex');
         // pbkdf2 algorithm is used to generate and validate hashes 
         this.password_hash = crypto.pbkdf2Sync(this.password_hash, this.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
-
         // Generating the Access & Refresh Tokens right after the user signed up
         this.refreshToken = CreateToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
         this.accessToken = CreateToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
@@ -91,12 +96,10 @@ UserSchema.statics.login = async function (username, password) {
     let payload = { username: userM.username, email: userM.email };
     let accessToken = CreateToken(payload, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     let refreshToken = CreateToken(payload, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-    // In order to re-hash the password we need to update the hash to be the plain text just for a moment
-    userM.password_hash = password;
+    // When the user re-login we will refresh its tokens
     userM.accessToken = accessToken;
     userM.refreshToken = refreshToken;
-    await userM.save();
-    return userM.toObject();
+    return userM;
 }
 
 /**
@@ -136,7 +139,7 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
     }
 
     jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, async (err, decode) => {
-        if (err && err.toString().includes('TokenExpiredError: jwt expired')) {
+        if (!IsTokenExpired(err)) {
             return callBack('Refresh token expired')
         }
         else {
@@ -162,7 +165,7 @@ UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshTo
         throw "No access token specified :(";
     }
     jwt.verify(accessToken, ACCESS_TOKEN_SECRET, async (err, decode) => {
-        if (err && err.toString().includes('TokenExpiredError: jwt expired')) {
+        if (!IsTokenExpired(err)) {
             // We need to refresh the access token
             await UserModel.refreshAccessToken(accessToken, refreshToken, async (err, user) => {
                 if (err && err.toString() === 'Refresh token expired') {
@@ -190,11 +193,11 @@ UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshTo
     })
 }
 
+
 /**
  * @param {new data} newUsername_newPassword_newEmail
  * @param {used to authenticate the user} accessToken 
  */
-
 UserSchema.statics.changeDetails = async function (oldUserDetails, newUsername, newPassword, newEmail) {
     let newRefreshToken = CreateToken({ username: newUsername, newEmail }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
     let newAccessToken = CreateToken({ username: newUsername, newEmail }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
@@ -207,7 +210,6 @@ UserSchema.statics.changeDetails = async function (oldUserDetails, newUsername, 
     updatedUser.accessToken = newAccessToken
     updatedUser.salt = salt
     return updatedUser
-    //await updatedUser.save()
 }
 
 

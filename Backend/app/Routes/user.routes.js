@@ -7,6 +7,7 @@ const noDup = require('./Middlewares/validateNoDup');
 const { validateEmailToken } = require('./Middlewares/validateEmailToken');
 
 const { signup, deleteUser, login, logout, changeDetails, forgotPassword, resetPassword } = require('../Controllers/user.controllers');
+const { Success } = require('../Helpers/generals.helpers');
 
 
 module.exports = function routes(app) {
@@ -22,7 +23,7 @@ module.exports = function routes(app) {
 
     // A route to check if the user cookies are authenticated
     router.post('/is-authenticated', authenticate(true), (req, res) => {
-        return res.status(200).send({ user: req.user });
+        return Success(res, { user: req.user });
     });
 
     router.post('/logout', authenticate(true), logout);

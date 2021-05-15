@@ -2,7 +2,7 @@
 const config = require("config");
 
 // Authenticate the user with its cookies'
-const { UserModel } = require('../../Schemas/User');
+const { UserModel } = require('../../Schemas/user.schemas');
 const { TOKEN_EXPIRED } = require('../../../../client/src/Magic/Errors.magic');
 const { Unauthorized } = require("../../Helpers/generals.helpers");
 
@@ -12,8 +12,8 @@ const ACCESS_TOKEN = config.get("ACCESS_TOKEN");
 module.exports = (flag = false) => {
     return async (req, res, next) => {
         try {
-            let accessToken = req.cookies.jwt_access_token;
-            let refreshToken = req.cookies.jwt_refresh_token;
+            let accessToken = req.cookies[config.get("ACCESS_TOKEN")];
+            let refreshToken = req.cookies[config.get("REFRESH_TOKEN")];
             // If there is no token stored in cookies, the request is unauthorized
             await UserModel.findByTokenOrRefresh(accessToken, refreshToken, (err, user) => {
                 // Refresh Token expired or something

@@ -2,7 +2,7 @@
 const SimilarTechScanDomain = require('../Microservices/SimilarTech');
 const WhatCMSScanDomain = require('../Microservices/WhatCMS');
 const WappalyzerScanDomain = require('../Microservices/Wappalyzer');
-const { BatchOfQueriesModel } = require('../Schemas/BatchOfQueries');
+const { BatchOfQueriesModel } = require('../Schemas/BatchOfQueries.schemas');
 
 // Constants
 const { R_IP } = require("../../../client/src/Magic/Regex.magic");

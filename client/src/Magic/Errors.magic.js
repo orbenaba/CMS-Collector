@@ -7,5 +7,6 @@ module.exports = {
     INVALID_PASSWORD: "Invalid password. Password's length must be at least 8 and at most 25, and must contain at least one uppercase, one lowercase and one digit.",
     INVALID_EMAIL: "Invalid email.",
     INVALID_IPDOMAIN: "Invalid IP/Domain",
-    TOKEN_EXPIRED: "Cookies are expired, please refresh your session"
+    TOKEN_EXPIRED: "Cookies are expired, please refresh your session",
+    PASSWORD_USED_RECENTLY: "Cannot use the same password as one of your last password."
 }

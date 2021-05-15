@@ -1,7 +1,7 @@
 // One request of the user contains multiple assets than we save all this batch as one struct
 const mongoose = require('mongoose');
-const { DomainScanModel, DomainScanSchema } = require('./DomainScan');
-const { IPScanModel, IPScanSchema } = require('./IPScan');
+const { DomainScanModel, DomainScanSchema } = require('./domainScan.schemas');
+const { IPScanModel, IPScanSchema } = require('./IPScan.schemas');
 
 
 // ToDo: add log date & time
