@@ -17,7 +17,7 @@ module.exports = function routes(app) {
 
     // If the token is sent and verified within the request to the route, then
     // we will escape over the validateUser middleWare (which verifies password & username)
-    router.post('/login', authenticate(), validateUser(true), login);
+    router.post('/login', authenticate(), login);// validateUser(true),
 
     router.delete('/delete', authenticate(true), deleteUser);
 

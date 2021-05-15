@@ -133,64 +133,53 @@ UserSchema.statics.authenticate = async function (username, password) {
     }
 }
 
-UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToken, callBack) {
+UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToken) {
     if (!accessToken || !refreshToken) {
         throw "No Access/Refresh tokens specified"
     }
 
-    jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, async (err, decode) => {
-        if (!IsTokenExpired(err)) {
-            return callBack('Refresh token expired')
-        }
-        else {
-            // The refresh token is verified
-            await UserModel.findOne({ email: decode.email }, async (err, user) => {
-                if (err) {
-                    return callBack('Refresh token forgery')
-                }
+    try{
+        const decode = await jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
+        const username = decode.username
+        const user = await UserModel.findOne({ username });
+        user.accessToken = CreateToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE)
+        await user.save()
+        return user;       
 
-                user.accessToken = CreateToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, 10)
-                await user.save()
-                return callBack(null, user)
-            })
+    }catch(err) {
+        if (!IsTokenExpired(err)) {
+            throw 'Refresh token expired'
         }
-    })
+    }
+    console.log("[+] Delete this line")
 }
 
 // Verify the cookie from browser with the token save in mongodb and
 // the access to controlled route will be granted if both matches.
 // In case the access token expired, we refresh it
-UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshToken, callBack) {
+UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshToken) {
     if (!accessToken) {
-        return callBack("No access token specified :(");
+        throw "No access token specified :(";
     }
-    jwt.verify(accessToken, ACCESS_TOKEN_SECRET, async (err, decode) => {
+
+    try{
+        const decode = await jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
+        const user = await UserModel.findOne({ username: decode.username })
+        return user;
+    }catch(err) {
         if (!IsTokenExpired(err)) {
             // We need to refresh the access token
-            await UserModel.refreshAccessToken(accessToken, refreshToken, async (err, user) => {
+            try{
+                const user = await UserModel.refreshAccessToken(accessToken, refreshToken);
+                return user;
+            }catch(err) {
                 if (err && err.toString() === 'Refresh token expired') {
-                    return callBack('Refresh token expired')
+                    throw 'Refresh token expired';
                 }
-                if (err) {
-                    return callBack(err);
-                }
-
-                return callBack(null, user)
-            });
-        }
-        else {
-            if (err) {
-                // Another error occured
-                return callBack(err);
             }
-            await UserModel.findOne({ "username": decode.username, "email": decode.email, "accessToken": accessToken }, (err, user) => {
-                if (err) {
-                    return callBack(err);
-                }
-                callBack(null, user);
-            })
         }
-    })
+        throw err;
+    }
 }
 
 
@@ -199,16 +188,13 @@ UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshTo
  * @param {used to authenticate the user} accessToken 
  */
 UserSchema.statics.changeDetails = async function (oldUserDetails, newUsername, newPassword, newEmail) {
-    let newRefreshToken = CreateToken({ username: newUsername, newEmail }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-    let newAccessToken = CreateToken({ username: newUsername, newEmail }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
-    let salt = crypto.randomBytes(16).toString('hex');
     let updatedUser = await UserModel.findOne({ email: oldUserDetails.email });
     updatedUser.username = newUsername;
     updatedUser.email = newEmail;
     updatedUser.password_hash = newPassword
-    updatedUser.refreshToken = newRefreshToken
-    updatedUser.accessToken = newAccessToken
-    updatedUser.salt = salt
+    updatedUser.refreshToken = CreateToken({ username: newUsername, newEmail }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+    updatedUser.accessToken = CreateToken({ username: newUsername, newEmail }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+    updatedUser.salt = crypto.randomBytes(16).toString('hex');
     return updatedUser
 }
 

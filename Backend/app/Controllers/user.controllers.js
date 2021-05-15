@@ -116,7 +116,7 @@ async function deleteUser(req, res) {
     try {
         if (res.locals.hasToken) {
             await UserModel.deleteUserByUsername(res.locals.user.username);
-            ClearAllCookies(res);
+            await ClearAllCookies(res);
             return Success(res, { success: "Success in deleting user account" })
         }
         else {
@@ -130,7 +130,7 @@ async function deleteUser(req, res) {
 async function logout(req, res) {
     try {
         // Clear the cookies before log out
-        ClearAllCookies(res);
+        await ClearAllCookies(res);
         return Success(res, { message: "Cookies were deleted in success" });
     } catch (error) {
         return ServerError(res, error);
