@@ -10,6 +10,7 @@ import Navbar from "./Componenets/Navbar/Navbar";
 // import Register from "./Componenets/Register/Register";
 // import ForgotPassword from './Componenets/ForgetPassword/ForgetPassword';
 // import ChangeDetails from "./Componenets/Change-Details/ChangeDetails";
+// import Sidebar from "./Componenets/Sidebar/Sidebar";
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -18,17 +19,18 @@ import SignUp from "./Componenets/NewDesign/SignUp/SignUp";
 import ForgotPassword from "./Componenets/NewDesign/ForgotPassword/ForgotPassword"
 import ChangeDetails from "./Componenets/NewDesign/ChangeDetails/ChangeDetails"
 import Home from "./Componenets/NewDesign/Landing/Home/Home"
+import Header from "./Componenets/NewDesign/Landing/components/Header/index"
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 import Logout from './Componenets/Logout/logout';
-import Sidebar from "./Componenets/Sidebar/Sidebar";
 import Activity from "./Componenets/Activity/Activity";
 import Scanning from "./Componenets/Scanning/Scanning";
 import Account from "./Componenets/Account/Account";
 import "./App.css";
 import "antd/dist/antd.css";
 import ResetPassword from './Componenets/ResetPassword/ResetPassword';
+
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -37,9 +39,7 @@ function App() {
     <div>
       <Router>
         <Provider>
-          <Sidebar width={150} height={"100vh"}>
-          </Sidebar>
-          <Navbar></Navbar>
+          <Header/>
           <Switch>
             <Route exact path="/" component={Home}></Route>
             <Route exact path="/login" component={SignIn}></Route>

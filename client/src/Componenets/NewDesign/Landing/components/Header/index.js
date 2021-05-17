@@ -1,12 +1,12 @@
-import { useState, Fragment, lazy } from "react";
+import { useState, Fragment } from "react";
 import { Row, Col, Drawer } from "antd";
 import { CSSTransition } from "react-transition-group";
 import { withTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
-const SvgIcon = lazy(() => import("../../common/SvgIcon"));
-const Button = lazy(() => import("../../common/Button"));
+import SvgIcon from "../../common/SvgIcon";
+import Button from "../../common/Button";
 
 const Header = ({ t }) => {
   const [isNavVisible] = useState(false);

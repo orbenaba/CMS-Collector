@@ -1,11 +1,10 @@
-import { lazy } from "react";
 import { Row, Col } from "antd";
 import { withTranslation } from "react-i18next";
 import Fade from "react-reveal";
 
 import * as S from "./styles";
 
-const Button = lazy(() => import("../../common/Button"));
+import Button from "../../common/Button";
 
 const MiddleBlock = ({ title, content, button, t }) => {
   const scrollTo = (id) => {
