@@ -56,36 +56,31 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SignIn() {
+export default function ForgotPassword() {
   // react hooks
   const history = useHistory();
   const classes = useStyles();
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  // Is the email sent ?
+  const [isSent, setIsSent] = useState(false)
   const [displayedError, setDisplayedError] = useState("");
 
   // event handlers
-  const onSubmit = async (e, handleChangeUser) => {
-    try{
-      e.preventDefault();
-      const objresponse = await axios.post(ServerAddress + "api/user/login", {username, password}, {withCredentials: true});
-      // If Not error was thrown than status 200 (SUCCESS) was in the response header => 
-      // The user signs in successfully => Redirect him to the home page
-      history.push("/");
-      handleChangeUser(objresponse.data.user);
-    }catch(err) {
-      // Error codes -> 400/401/500
-      setDisplayedError(err.response.data.error);
+  const onSubmit = async (event, handleChangeUser) => {
+    event.preventDefault()
+    try {
+        const response = await axios.post(ServerAddress + "api/user/forgot-password",
+            { email }, { withCredentials: true });
+        setIsSent(true)
     }
-  }
+    catch (err) { 
+        setIsSent('error')
+    }
+}
 
-  const onPasswordChange = e => {
-    setPassword(e.target.value);
-  }
-
-  const onUsernameChange = e => {
-    setUsername(e.target.value);
-  }
+const onEmailChange = e => {
+    setEmail(e.target.value);
+}
 
   // Displaying an error in case the validation failed
   let displayedErrorTag = <div></div>;
@@ -97,7 +92,7 @@ export default function SignIn() {
     <Consumer>
       {value=>{
         const { user } = value.state;
-        if(IsLoggedIn(user)) {
+        if(IsLoggedIn(user)) {  
           return (
             <React.Fragment>
                 <h1>You are Already in</h1>
@@ -115,46 +110,25 @@ export default function SignIn() {
                   <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                  Sign in
+                  Forgot Password
                 </Typography>
                 <form className={classes.form} onSubmit={(event) => onSubmit(event, value.handleChangeUser)}>
-                  {/* Username */}
+                  {/* Email */}
                   <TextField
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
-                    id="username"
-                    label="Username"
-                    name="username"
-                    autoComplete="username"
+                    id="email"
+                    label="Email"
+                    name="email"
+                    autoComplete="email"
                     autoFocus
-                    onChange={onUsernameChange}
+                    onChange={onEmailChange}
                     inputProps={{
-                      pattern: REGEX.R_USERNAME,
-                      title: ERRORS.INVALID_USERNAME
+                      pattern: REGEX.R_EMAIL,
+                      title: ERRORS.INVALID_EMAIL
                     }}
-                  />
-                  {/* Password */}
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    onChange={onPasswordChange}
-                    inputProps={{
-                      pattern: REGEX.R_PASSWORD,
-                      title: ERRORS.INVALID_PASSWORD
-                    }}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
                   />
                   {/* Error */}
                   {displayedErrorTag}
@@ -166,13 +140,13 @@ export default function SignIn() {
                     color="primary"
                     className={classes.submit}
                   >
-                    Sign In
+                    Send Mail
                   </Button>
                   <Grid container>
                     {/* Forgot Password Link */}
                     <Grid item xs>
-                      <Link to="/forgot-password" variant="body2">
-                        Forgot password?
+                      <Link to="/login" variant="body2">
+                        Remember the password?
                       </Link>
                     </Grid>
                     {/* Sign up Link */}

@@ -8,11 +8,13 @@ import Home from "./Componenets/Home/Home";
 import Navbar from "./Componenets/Navbar/Navbar";
 // import Login from "./Componenets/Login/Login";
 // import Register from "./Componenets/Register/Register";
+// import ForgotPassword from './Componenets/ForgetPassword/ForgetPassword';
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 import SignIn from "./Componenets/NewDesign/SignIn/SignIn";
 import SignUp from "./Componenets/NewDesign/SignUp/SignUp";
+import ForgotPassword from "./Componenets/NewDesign/ForgotPassword/ForgotPassword"
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -23,7 +25,6 @@ import Scanning from "./Componenets/Scanning/Scanning";
 import Account from "./Componenets/Account/Account";
 import ChangeDetails from "./Componenets/Change-Details/ChangeDetails";
 import "./App.css";
-import ForgotPassword from './Componenets/ForgetPassword/ForgetPassword';
 import ResetPassword from './Componenets/ResetPassword/ResetPassword';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -45,7 +46,7 @@ function App() {
             <Route exact path="/change-details" component={ChangeDetails}></Route>
             <Route exact path="/scanning" component={Scanning}></Route>
             <Route exact path="/account" component={Account}></Route>
-            <Route exact path="/login/reset" component = {ForgotPassword}></Route>
+            <Route exact path="/forgot-password" component = {ForgotPassword}></Route>
             <Route exact path="/reset-password" component = {ResetPassword}></Route>
             <Route path='*' render={() =>
             (

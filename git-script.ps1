@@ -1,3 +1,3 @@
 git add . 
 git commit -m $args[0]
-git push -origin HEAD:master 
+git push -origin HEAD:main 
