@@ -1,10 +1,21 @@
+// react modules
 import React from 'react';
 import { Switch, BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+
+// Custom modules
 import { Provider } from "./Context";
 import Home from "./Componenets/Home/Home";
 import Navbar from "./Componenets/Navbar/Navbar";
-import Login from "./Componenets/Login/Login";
-import Register from "./Componenets/Register/Register";
+// import Login from "./Componenets/Login/Login";
+// import Register from "./Componenets/Register/Register";
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+import SignIn from "./Componenets/NewDesign/SignIn/SignIn";
+import SignUp from "./Componenets/NewDesign/SignUp/SignUp";
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 import Logout from './Componenets/Logout/logout';
 import Sidebar from "./Componenets/Sidebar/Sidebar";
 import Activity from "./Componenets/Activity/Activity";
@@ -27,8 +38,8 @@ function App() {
           <Navbar></Navbar>
           <Switch>
             <Route exact path="/" component={Home}></Route>
-            <Route exact path="/login" component={Login}></Route>
-            <Route exact path="/register" component={Register}></Route>
+            <Route exact path="/login" component={SignIn}></Route>
+            <Route exact path="/register" component={SignUp}></Route>
             <Route exact path="/logout" component={Logout}></Route>
             <Route exact path="/my-activity" component={Activity}></Route>
             <Route exact path="/change-details" component={ChangeDetails}></Route>
