@@ -4,7 +4,7 @@ import Fade from "react-reveal";
 
 import * as S from "./styles";
 
-import Button from "../../common/Button";
+import Button from "../../../Shared/Button";
 
 const MiddleBlock = ({ title, content, button, t }) => {
   const scrollTo = (id) => {

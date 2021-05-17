@@ -10,8 +10,8 @@ import SignIn from "./Componenets/SignIn/SignIn";
 import SignUp from "./Componenets/SignUp/SignUp";
 import ForgotPassword from "./Componenets/ForgotPassword/ForgotPassword"
 import ChangeDetails from "./Componenets/ChangeDetails/ChangeDetails"
-import Home from "./Componenets/Landing/Home/Home"
-import Header from "./Componenets/Landing/components/Header/index"
+import Landing from "./Componenets/Landing/Landing"
+import Header from "./Componenets/Header/index"
 
 
 import Logout from './Componenets/Logout/logout';
@@ -32,7 +32,7 @@ function App() {
         <Provider>
           <Header/>
           <Switch>
-            <Route exact path="/" component={Home}></Route>
+            <Route exact path="/" component={Landing}></Route>
             <Route exact path="/login" component={SignIn}></Route>
             <Route exact path="/register" component={SignUp}></Route>
             <Route exact path="/logout" component={Logout}></Route>

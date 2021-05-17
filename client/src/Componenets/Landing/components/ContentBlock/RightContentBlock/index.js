@@ -2,8 +2,8 @@ import { Row, Col } from "antd";
 import { withTranslation } from "react-i18next";
 import Slide from "react-reveal/Slide";
 
-import SvgIcon from "../../../common/SvgIcon";
-import Button from "../../../common/Button";
+import SvgIcon from "../../../../Shared/SvgIcon";
+import Button from "../../../../Shared/Button";
 
 import * as S from "./styles";
 

@@ -5,8 +5,8 @@ import { withTranslation } from "react-i18next";
 
 import * as S from "./styles";
 
-import SvgIcon from "../../common/SvgIcon";
-import Button from "../../common/Button";
+import SvgIcon from "../Shared/SvgIcon";
+import Button from "../Shared/Button";
 
 const Header = ({ t }) => {
   const [isNavVisible] = useState(false);
