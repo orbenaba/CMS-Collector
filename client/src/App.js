@@ -4,25 +4,16 @@ import { Switch, BrowserRouter as Router, Route, Redirect } from "react-router-d
 
 // Custom modules
 import { Provider } from "./Context";
-import Navbar from "./Componenets/Navbar/Navbar";
-// import Home from "./Componenets/Home/Home";
-// import Login from "./Componenets/Login/Login";
-// import Register from "./Componenets/Register/Register";
-// import ForgotPassword from './Componenets/ForgetPassword/ForgetPassword';
-// import ChangeDetails from "./Componenets/Change-Details/ChangeDetails";
-// import Sidebar from "./Componenets/Sidebar/Sidebar";
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-import SignIn from "./Componenets/NewDesign/SignIn/SignIn";
-import SignUp from "./Componenets/NewDesign/SignUp/SignUp";
-import ForgotPassword from "./Componenets/NewDesign/ForgotPassword/ForgotPassword"
-import ChangeDetails from "./Componenets/NewDesign/ChangeDetails/ChangeDetails"
-import Home from "./Componenets/NewDesign/Landing/Home/Home"
-import Header from "./Componenets/NewDesign/Landing/components/Header/index"
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
+
+
+import SignIn from "./Componenets/SignIn/SignIn";
+import SignUp from "./Componenets/SignUp/SignUp";
+import ForgotPassword from "./Componenets/ForgotPassword/ForgotPassword"
+import ChangeDetails from "./Componenets/ChangeDetails/ChangeDetails"
+import Home from "./Componenets/Landing/Home/Home"
+import Header from "./Componenets/Landing/components/Header/index"
+
+
 import Logout from './Componenets/Logout/logout';
 import Activity from "./Componenets/Activity/Activity";
 import Scanning from "./Componenets/Scanning/Scanning";

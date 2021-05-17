@@ -7,7 +7,6 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,14 +17,14 @@ import {Link, useHistory } from "react-router-dom";
 import axios from "axios";
 
 // custom modules
-import { ServerAddress } from "../../../Magic/Config.magic";
-import ERRORS from "../../../Magic/Errors.magic";
-import REGEX from "../../../Magic/Regex.magic";
-import { Consumer } from "../../../Context";
-import Logout from "../../Logout/logout";
+import { ServerAddress } from "../../Magic/Config.magic";
+import ERRORS from "../../Magic/Errors.magic";
+import REGEX from "../../Magic/Regex.magic";
+import { Consumer } from "../../Context";
+import Logout from "../Logout/logout";
 
 // Helper Functions
-import { IsLoggedIn } from "../../../Helpers/Generals.Helpers";
+import { IsLoggedIn } from "../../Helpers/Generals.Helpers";
 
 // Styling
 const useStyles = makeStyles((theme) => ({

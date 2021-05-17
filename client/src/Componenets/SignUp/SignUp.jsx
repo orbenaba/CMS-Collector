@@ -18,14 +18,14 @@ import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 
 // custom modules
-import { ServerAddress } from "../../../Magic/Config.magic";
-import ERRORS from "../../../Magic/Errors.magic";
-import REGEX from "../../../Magic/Regex.magic";
-import { Consumer } from "../../../Context";
-import Logout from "../../Logout/logout";
+import { ServerAddress } from "../../Magic/Config.magic";
+import ERRORS from "../../Magic/Errors.magic";
+import REGEX from "../../Magic/Regex.magic";
+import { Consumer } from "../../Context";
+import Logout from "../Logout/logout";
 
 // Helper Functions
-import { IsLoggedIn} from "../../../Helpers/Generals.Helpers";
+import { IsLoggedIn} from "../../Helpers/Generals.Helpers";
 
 function Copyright() {
   return (
