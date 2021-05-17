@@ -8,7 +8,7 @@ import * as S from "./styles";
 import SvgIcon from "../Shared/SvgIcon";
 import Button from "../Shared/Button";
 
-const Header = ({ t }) => {
+const Header = ({ props }) => {
   const [isNavVisible] = useState(false);
   const [isSmallScreen] = useState(false);
   const [visible, setVisibility] = useState(false);
@@ -32,14 +32,14 @@ const Header = ({ t }) => {
     return (
       <Fragment>
         <S.CustomNavLinkSmall onClick={() => scrollTo("about")}>
-          <S.Span>{t("About")}</S.Span>
+          <S.Span>About</S.Span>
         </S.CustomNavLinkSmall>
 
         <S.CustomNavLinkSmall
           style={{ width: "180px" }}
         >
           <S.Span>
-            <Button>{t("Contact")}</Button>
+            <Button>Contact</Button>
           </S.Span>
         </S.CustomNavLinkSmall>
       </Fragment>
