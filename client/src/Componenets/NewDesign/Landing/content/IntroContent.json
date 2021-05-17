@@ -1,0 +1,13 @@
+{
+  "title": "Content Management System Collector",
+  "text": "Explore our website and sign up in order to use our API which supplys data about every domain.",
+  "button": [
+    {
+      "title": "Sign up"
+    },
+    {
+      "title": "Learn More",
+      "color": "#fff"
+    }
+  ]
+}

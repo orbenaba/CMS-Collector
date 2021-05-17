@@ -26,6 +26,7 @@ import Activity from "./Componenets/Activity/Activity";
 import Scanning from "./Componenets/Scanning/Scanning";
 import Account from "./Componenets/Account/Account";
 import "./App.css";
+import "antd/dist/antd.css";
 import ResetPassword from './Componenets/ResetPassword/ResetPassword';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
