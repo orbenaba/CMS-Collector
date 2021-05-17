@@ -9,12 +9,14 @@ import Navbar from "./Componenets/Navbar/Navbar";
 // import Login from "./Componenets/Login/Login";
 // import Register from "./Componenets/Register/Register";
 // import ForgotPassword from './Componenets/ForgetPassword/ForgetPassword';
+// import ChangeDetails from "./Componenets/Change-Details/ChangeDetails";
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 import SignIn from "./Componenets/NewDesign/SignIn/SignIn";
 import SignUp from "./Componenets/NewDesign/SignUp/SignUp";
 import ForgotPassword from "./Componenets/NewDesign/ForgotPassword/ForgotPassword"
+import ChangeDetails from "./Componenets/NewDesign/ChangeDetails/ChangeDetails"
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -23,7 +25,6 @@ import Sidebar from "./Componenets/Sidebar/Sidebar";
 import Activity from "./Componenets/Activity/Activity";
 import Scanning from "./Componenets/Scanning/Scanning";
 import Account from "./Componenets/Account/Account";
-import ChangeDetails from "./Componenets/Change-Details/ChangeDetails";
 import "./App.css";
 import ResetPassword from './Componenets/ResetPassword/ResetPassword';
 //import 'bootstrap/dist/css/bootstrap.min.css';
