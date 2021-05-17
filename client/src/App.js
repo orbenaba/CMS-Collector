@@ -4,8 +4,8 @@ import { Switch, BrowserRouter as Router, Route, Redirect } from "react-router-d
 
 // Custom modules
 import { Provider } from "./Context";
-import Home from "./Componenets/Home/Home";
 import Navbar from "./Componenets/Navbar/Navbar";
+// import Home from "./Componenets/Home/Home";
 // import Login from "./Componenets/Login/Login";
 // import Register from "./Componenets/Register/Register";
 // import ForgotPassword from './Componenets/ForgetPassword/ForgetPassword';
@@ -17,6 +17,7 @@ import SignIn from "./Componenets/NewDesign/SignIn/SignIn";
 import SignUp from "./Componenets/NewDesign/SignUp/SignUp";
 import ForgotPassword from "./Componenets/NewDesign/ForgotPassword/ForgotPassword"
 import ChangeDetails from "./Componenets/NewDesign/ChangeDetails/ChangeDetails"
+import Home from "./Componenets/NewDesign/Landing/Home/Home"
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////

@@ -1,13 +1,13 @@
 import { lazy } from "react";
 
-import IntroContent from "../../content/IntroContent.json";
-import MiddleBlockContent from "../../content/MiddleBlockContent.json";
-import AboutContent from "../../content/AboutContent.json";
+import IntroContent from "../content/IntroContent.json";
+import MiddleBlockContent from "../content/MiddleBlockContent.json";
+import AboutContent from "../content/AboutContent.json";
 
-const ContentBlock = lazy(() => import("../../components/ContentBlock"));
-const MiddleBlock = lazy(() => import("../../components/MiddleBlock"));
-const Container = lazy(() => import("../../common/Container"));
-const ScrollToTop = lazy(() => import("../../common/ScrollToTop"));
+const ContentBlock = lazy(() => import("../components/ContentBlock"));
+const MiddleBlock = lazy(() => import("../components/MiddleBlock"));
+const Container = lazy(() => import("../common/Container"));
+const ScrollToTop = lazy(() => import("../common/ScrollToTop"));
 
 const Home = () => {
   return (
