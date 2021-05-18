@@ -5,27 +5,26 @@ const { BadRequest, Unauthorized } = require('../../Helpers/generals.helpers');
 
 module.exports = () => {
     return async (req, res, next) => {
-        // first validating that we have token from the last middleware
-        console.log("[+] res.locals = ", res.locals)
-        if (res.locals.unauthorized || res.locals.hasToken === false) {
-            return Unauthorized(res, 'You must be authorized in order to change details');
-        }
+        if(!res.locals.unauthorizedWithResponse) {
+            // first validating that we have token from the last middleware
+            if (res.locals.unauthorized || res.locals.hasToken === false) {
+                return Unauthorized(res, 'You must be authorized in order to change details');
+            }
 
-        // Validating the given fields
-        let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
-        if (!newUsername || !newPassword || !newEmail) {
-            return BadRequest(res, 'Username, password & email are required fields');
-        }
-        if (!newUsername.match(R_USERNAME)) {
-            return BadRequest(res, INVALID_USERNAME);
-        }
+            // Validating the given fields
+            let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
+            // Not all the fields are required, but if given we'll check for it
+            if (newUsername && !newUsername.match(R_USERNAME)) {
+                return BadRequest(res, INVALID_USERNAME);
+            }
 
-        if (!newPassword.match(R_PASSWORD)) {
-            return BadRequest(res, INVALID_PASSWORD);
-        }
+            if (newPassword && !newPassword.match(R_PASSWORD)) {
+                return BadRequest(res, INVALID_PASSWORD);
+            }
 
-        if (!newEmail.match(R_EMAIL)) {
-            return BadRequest(res, INVALID_EMAIL);
+            if (newEmail && !newEmail.match(R_EMAIL)) {
+                return BadRequest(res, INVALID_EMAIL);
+            }
         }
         next()
     }

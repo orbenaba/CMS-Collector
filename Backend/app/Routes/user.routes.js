@@ -7,6 +7,7 @@ const noDup = require('./Middlewares/validateNoDup');
 const { validateEmailToken } = require('./Middlewares/validateEmailToken');
 
 const { signup, deleteUser, login, logout, changeDetails, forgotPassword, resetPassword } = require('../Controllers/user.controllers');
+const { Success } = require('../Helpers/generals.helpers');
 
 
 module.exports = function routes(app) {
@@ -16,13 +17,16 @@ module.exports = function routes(app) {
 
     // If the token is sent and verified within the request to the route, then
     // we will escape over the validateUser middleWare (which verifies password & username)
-    router.post('/login', authenticate(), validateUser(true), login);
+    router.post('/login', authenticate(), login);// validateUser(true),
 
     router.delete('/delete', authenticate(true), deleteUser);
 
     // A route to check if the user cookies are authenticated
     router.post('/is-authenticated', authenticate(true), (req, res) => {
-        return res.status(200).send({ user: req.user });
+        if(!res.locals.unauthorizedWithResponse){
+            // The response was not sent
+            return Success(res, { user: req.user });
+        }
     });
 
     router.post('/logout', authenticate(true), logout);
