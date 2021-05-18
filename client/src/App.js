@@ -11,7 +11,7 @@ import SignUp from "./Componenets/SignUp/SignUp";
 import ForgotPassword from "./Componenets/ForgotPassword/ForgotPassword"
 import ChangeDetails from "./Componenets/ChangeDetails/ChangeDetails"
 import Landing from "./Componenets/Landing/Landing"
-import Header from "./Componenets/Header/index"
+import Navbar from "./Componenets/Navbar"
 
 
 import Logout from './Componenets/Logout/logout';
@@ -30,7 +30,7 @@ function App() {
     <div>
       <Router>
         <Provider>
-          <Header/>
+          <Navbar/>
           <Switch>
             <Route exact path="/" component={Landing}></Route>
             <Route exact path="/login" component={SignIn}></Route>
