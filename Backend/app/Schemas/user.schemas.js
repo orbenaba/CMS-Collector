@@ -81,6 +81,7 @@ UserSchema.statics.changePassword = async function (newPassowrd, email) {
             console.log(JSON.stringify(err))
             throw err;
         }
+        
         return user;
     });
 
@@ -224,9 +225,10 @@ function hashPassword(user) {
         user.password_hash = crypto.pbkdf2Sync(user.password_hash, user.salt, ITERATIONS, HASH_LENGTH, 'sha512').toString('hex');
 
         // Generating the Access & Refresh Tokens right after the user signed up
-        user.refreshToken = createToken({ username: user.username, email: user.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-        user.accessToken = createToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
+        user.refreshToken = CreateToken({ username: user.username, email: user.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
+        user.accessToken = CreateToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     }
+
     return user
 }
 

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 // Custom Modules
 
-const { UserModel } = require('../Schemas/user.schemas');
+const { UserModel, CreateToken } = require('../Schemas/user.schemas');
 const { saveToken, useToken } = require('../Helpers/ValidToken');
 const validateEmail = require('../Routes/Middlewares/validateEmail')
 
@@ -14,6 +14,8 @@ const validateEmail = require('../Routes/Middlewares/validateEmail')
 // constants
 const ACCESS_TOKEN = config.get("ACCESS_TOKEN");
 const REFRESH_TOKEN = config.get("REFRESH_TOKEN");
+const ACCESS_TOKEN_LIFE = config.get("ACCESS_TOKEN_LIFE");
+const ACCESS_TOKEN_SECRET = config.get("ACCESS_TOKEN_SECRET");
 
 // Gernerals
 const { BadRequest, ServerError, Success, ClearAllCookies } = require("../Helpers/generals.helpers");
@@ -54,7 +56,7 @@ async function forgotPassword(req, res) {
         return
     }
 
-    const token = createToken({ email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE * 3)
+    const token = CreateToken({ email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE * 3)
     console.log("token: ", token)
     saveToken(token, email)
     const link = `http://localhost:3000/reset-password?token=${token}`
@@ -96,7 +98,7 @@ async function resetPassword(req, res) {
                 return Success(res, { user })
             } catch (err) {
                 console.log(JSON.stringify(err))
-                return ServerError(res, error)
+                return ServerError(res, err)
             }
         }
     })

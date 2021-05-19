@@ -2,6 +2,8 @@
 const { BadRequest } = require('../../Helpers/generals.helpers')
 const jwt = require('jsonwebtoken');
 const { validToken } = require('../../Microservices/ValidToken')
+const config = require("config")
+const ACCESS_TOKEN_SECRET = config.get("ACCESS_TOKEN_SECRET");
 function validateEmailToken(req, res, next) {
     const token = req.body.token
     jwt.verify(token, ACCESS_TOKEN_SECRET, async (err, decode) => {
@@ -10,11 +12,7 @@ function validateEmailToken(req, res, next) {
             return BadRequest(res, "Invalid token");
                 }
         else {
-            const email = decode.email
-            const tokenIsValid = validToken(token, email)
-            if (!tokenIsValid) {
-                return BadRequest(res, "Invalid token");
-            }
+
             next()
         }
     })
