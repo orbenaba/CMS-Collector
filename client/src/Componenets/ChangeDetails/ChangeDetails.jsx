@@ -1,5 +1,5 @@
 // react modules
-import React, {useState} from 'react';
+import React, {useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,12 +14,15 @@ import { useHistory } from "react-router-dom";
 
 import axios from "axios";
 
+import Cookies from 'js-cookie';
+
 // custom modules
 import { ServerAddress } from "../../Magic/Config.magic";
 import ERRORS from "../../Magic/Errors.magic";
 import REGEX from "../../Magic/Regex.magic";
 import { Consumer } from "../../Context";
 import Logout from "../Logout/logout";
+
 
 // Helper Functions
 import { IsLoggedIn} from "../../Helpers/Generals.Helpers";
@@ -63,6 +66,13 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [displayedError, setDisplayedError] = useState("");
 
+  // useEffect(()=>{
+  //   // Setting the username and email via the access token
+  //  // const accessToken = Cookies.get("jwt_access_token");
+  //   console.log("accessToken = ", accessToken)
+  //   setUsername(accessToken.username);
+  // },[])
+
   // Event Handlers
   const onSubmit = async (event, handleChangeUser) => {
     try {
@@ -71,7 +81,11 @@ export default function SignUp() {
         setDisplayedError("Passwords not match.");
       }
       else{
-          // call change details here
+        const objResponseData= (await axios.post(ServerAddress + "api/user/change-details", {username, password, email}, {withCredentials: true})).data;
+        // Update to the new user
+        handleChangeUser(objResponseData.user);
+        // Redirect the user to the home page
+        history.push("/");
       }
     } catch (err) {
       setDisplayedError(err.response.data.error);

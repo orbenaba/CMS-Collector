@@ -36,7 +36,7 @@ function App() {
             <Route exact path="/login" component={SignIn}></Route>
             <Route exact path="/register" component={SignUp}></Route>
             <Route exact path="/logout" component={Logout}></Route>
-            <Route exact path="/my-activity" component={Activity}></Route>
+            <Route exact path="/activity" component={Activity}></Route>
             <Route exact path="/change-details" component={ChangeDetails}></Route>
             <Route exact path="/scan" component={Scanning}></Route>
             <Route exact path="/account" component={Account}></Route>

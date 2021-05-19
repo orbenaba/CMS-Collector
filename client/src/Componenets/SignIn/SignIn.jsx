@@ -67,11 +67,11 @@ export default function SignIn() {
   const onSubmit = async (e, handleChangeUser) => {
     try{
       e.preventDefault();
-      const objresponse = await axios.post(ServerAddress + "api/user/login", {username, password}, {withCredentials: true});
+      const objResponse = await axios.post(ServerAddress + "api/user/login", {username, password}, {withCredentials: true});
       // If Not error was thrown than status 200 (SUCCESS) was in the response header => 
       // The user signs in successfully => Redirect him to the home page
       history.push("/");
-      handleChangeUser(objresponse.data.user);
+      handleChangeUser(objResponse.data.user);
     }catch(err) {
       // Error codes -> 400/401/500
       setDisplayedError(err.response.data.error);

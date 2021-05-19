@@ -5,6 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import { withTranslation } from "react-i18next";
 import { useHistory, useLocation } from "react-router-dom";
 import ReactDOM from 'react-dom';
+import axios from "axios";
 
 // styling
 import * as S from "./styles";
@@ -37,7 +38,9 @@ const Navbar = ({ props }) => {
         domElementStyleRef.color = "red";
       }
     }
-  }, [currentBar])
+  }, [currentBar]);
+
+
   // Event Handlers
   const showDrawer = () => {
     setVisibility(!visible);
@@ -56,12 +59,15 @@ const Navbar = ({ props }) => {
     }
   }
 
+  const handleClickOnAccountDetails = () => {
+    history.push("/change-details");
+  }
+
   const IsInHomePage = () => {
-    console.log(history)
     return history.location.pathname === "/";
   }
 
-  const MenuItem = ({ arrBarOptions }) => {
+  const MenuItem = ({ arrBarOptions, username }) => {
     const scrollTo = (id) => {
       const element = document.getElementById(id);
       element.scrollIntoView({
@@ -85,7 +91,6 @@ const Navbar = ({ props }) => {
         {scrollToAbout}
         {
             arrBarOptions.map(objBarOption => {
-              console.log("11111) ", `label-id-${objBarOption.label}`)
               return (
                 <S.CustomNavLinkSmall onClick={()=> handleOptionClick(objBarOption.path)}>
                   <S.Span id={`label-id-${objBarOption.label}`}>{objBarOption.label}</S.Span> 
@@ -99,7 +104,7 @@ const Navbar = ({ props }) => {
           style={{ width: "180px" }}
         >
           <S.Span>
-            <Button>Contact</Button>
+            <Button onClick={handleClickOnAccountDetails}>Hello {username}</Button>
           </S.Span>
 
         </S.CustomNavLinkSmall>
@@ -126,6 +131,10 @@ const Navbar = ({ props }) => {
             {
               label: "Scan",
               path: "/Scan"
+            },
+            {
+              label: "Activity",
+              path: "/Activity"
             }
           ]
         }
@@ -138,7 +147,7 @@ const Navbar = ({ props }) => {
                   <SvgIcon src="logo.png" width={45} height={90}/>
                 </S.LogoContainer>
                 <S.NotHidden>
-                  <MenuItem arrBarOptions={arrBarOptions}/>
+                  <MenuItem arrBarOptions={arrBarOptions} username={user.username}/>
                 </S.NotHidden>
                 <S.Burger onClick={showDrawer}>
                   <S.Outline />
@@ -161,7 +170,7 @@ const Navbar = ({ props }) => {
                       </Col>
                     </S.Label>
                   </Col>
-                  <MenuItem arrBarOptions={arrBarOptions}/>
+                  <MenuItem arrBarOptions={arrBarOptions} username={user.username}/>
                 </Drawer>
               </CSSTransition>
             </S.Container>
