@@ -6,7 +6,21 @@ import SvgIcon from "../../../../Shared/SvgIcon";
 
 import * as S from "./styles";
 
+// Profile Image
+import orProfile from "../../../content/img/or.jpg";
+import shakedProfile from "../../../content/img/shaked.jpg";
+
 const LeftContentBlock = ({ icon, title, content, section, t, id }) => {
+  const parseNameToImportImage = (name) => {
+    switch(name) {
+      case "or":
+        return orProfile;
+      case  "shaked":
+        return shakedProfile;
+      default:
+    }
+  }
+
   return (
     <S.LeftContentBlock>
       <Row type="flex" justify="space-between" align="middle" id={id}>
@@ -32,7 +46,7 @@ const LeftContentBlock = ({ icon, title, content, section, t, id }) => {
                     section.map((item, id) => {
                       return (
                         <Col key={id} span={11}>
-                          <SvgIcon src={item.icon} width="60px" height="60px" />
+                          <img src={parseNameToImportImage(item.name)} width="150px" height="150px" /> {/* item.icon */}
                           <S.MinTitle>{t(item.title)}</S.MinTitle>
                           <S.MinPara>{t(item.content)}</S.MinPara>
                         </Col>

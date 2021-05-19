@@ -1,6 +1,7 @@
 import { Row, Col } from "antd";
 import { withTranslation } from "react-i18next";
 import Slide from "react-reveal/Slide";
+import { useHistory } from "react-router-dom";
 
 import SvgIcon from "../../../../Shared/SvgIcon";
 import Button from "../../../../Shared/Button";
@@ -8,6 +9,11 @@ import Button from "../../../../Shared/Button";
 import * as S from "./styles";
 
 const RightBlock = ({ title, content, button, icon, t, id }) => {
+  const history = useHistory();
+  const handleSignUp = () => {
+    history.push("/register")
+  }
+
   const scrollTo = (id) => {
     const element = document.getElementById(id);
     element.scrollIntoView({
@@ -20,7 +26,7 @@ const RightBlock = ({ title, content, button, icon, t, id }) => {
         <Col lg={11} md={11} sm={11} xs={24}>
           <Slide left>
             <S.ContentWrapper>
-              <h6>{t(title)}</h6>
+              <h1>{t(title)}</h1>
               <S.Content>{t(content)}</S.Content>
               <S.ButtonWrapper>
                 {button &&
@@ -31,7 +37,7 @@ const RightBlock = ({ title, content, button, icon, t, id }) => {
                         key={id}
                         color={item.color}
                         width="true"
-                        onClick={() => scrollTo("about")}
+                        onClick={() => item.title === "Sign up" ? handleSignUp() : scrollTo("about")}
                       >
                         {t(item.title)}
                       </Button>
