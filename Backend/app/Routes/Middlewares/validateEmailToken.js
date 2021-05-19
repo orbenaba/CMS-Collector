@@ -1,6 +1,5 @@
 
 const { BadRequest } = require('../../Helpers/generals.helpers')
-const { ACCESS_TOKEN_SECRET } = require('../../Config')
 const jwt = require('jsonwebtoken');
 const { validToken } = require('../../Microservices/ValidToken')
 function validateEmailToken(req, res, next) {
