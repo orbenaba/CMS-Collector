@@ -7,7 +7,9 @@ const jwt = require('jsonwebtoken');
 // Custom Modules
 
 const { UserModel } = require('../Schemas/user.schemas');
-const { saveToken, useToken, validateEmail } = require('../Helpers/ValidToken');
+const { saveToken, useToken } = require('../Helpers/ValidToken');
+const validateEmail = require('../Routes/Middlewares/validateEmail')
+
 
 // constants
 const ACCESS_TOKEN = config.get("ACCESS_TOKEN");
