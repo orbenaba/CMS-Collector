@@ -1,13 +1,22 @@
+
 const { BadRequest } = require('../../Helpers/generals.helpers')
-const { validToken } = require('../../Helpers/ValidToken')
+const jwt = require('jsonwebtoken');
+const config = require("config")
+const ACCESS_TOKEN_SECRET = config.get("ACCESS_TOKEN_SECRET");
 function validateEmailToken(req, res, next) {
-    const email = req.body.email
     const token = req.body.token
-    const tokenIsValid = validToken(token, email)
-    if (!tokenIsValid) {
-        return BadRequest(res, "Invalid token");
-    }
-    next()
+    jwt.verify(token, ACCESS_TOKEN_SECRET, async (err, decode) => {
+        if (err) {
+            console.log(JSON.stringify(err))
+            return BadRequest(res, "Invalid token");
+                }
+        else {
+
+            next()
+        }
+    })
+
 }
+
 
 module.exports = { validateEmailToken }

@@ -131,7 +131,7 @@ const onEmailChange = e => {
                   {displayedErrorTag}
                   {/* Submit button */}
                   <Button
-                    type="submit"
+                    type="submit"  disabled={isSent} style={isSent === 'error' ? {backgroundColor:'red'} : isSent ? { borderColor: 'light-green' } : {}}
                     fullWidth
                     variant="contained"
                     color="primary"

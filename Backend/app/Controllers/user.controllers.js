@@ -1,14 +1,20 @@
+
 // Node Modules
 const nodemailer = require('nodemailer');
 const config = require("config");
+const jwt = require('jsonwebtoken');
 
 // Custom Modules
-const { UserModel } = require('../Schemas/user.schemas');
-const { saveToken, useToken, validateEmail } = require('../Helpers/ValidToken');
+
+const { UserModel, CreateToken } = require('../Schemas/user.schemas');
+const validateEmail = require('../Routes/Middlewares/validateEmail')
+
 
 // constants
 const ACCESS_TOKEN = config.get("ACCESS_TOKEN");
 const REFRESH_TOKEN = config.get("REFRESH_TOKEN");
+const ACCESS_TOKEN_LIFE = config.get("ACCESS_TOKEN_LIFE");
+const ACCESS_TOKEN_SECRET = config.get("ACCESS_TOKEN_SECRET");
 
 // Gernerals
 const { BadRequest, ServerError, Success, ClearAllCookies } = require("../Helpers/generals.helpers");
@@ -42,16 +48,16 @@ async function signup(req, res) {
 //If the email is exists, a link to reset password will be sent to the user email 
 async function forgotPassword(req, res) {
     const email = req.body.email
-    const validEmail = await validateEmail(email)
+    const user = await validateEmail(email)
 
-    if (!validEmail) {
+    if (!user) {
         res.sendStatus(403)
         return
     }
 
-    const token = require('crypto').randomBytes(48).toString('hex');
-    saveToken(token, email)
-    const link = `http://localhost:3000/reset-password?token=${token}&email=${email}`
+    const token = CreateToken({ email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE * 3)
+    console.log("token: ", token)
+    const link = `http://localhost:3000/reset-password?token=${token}`
 
     var mailOptions = {
         from: 'team5risk@gmail.com',
@@ -64,9 +70,9 @@ async function forgotPassword(req, res) {
         const info = transporter.sendMail(mailOptions);
         console.log('Email sent: ' + info.response);
     }
-    catch (error) {
-        console.log(error);
-        res.sendStatus(400)
+    catch (err) {
+        console.log(err);
+        res.sendStatus(405)
     }
     res.sendStatus(200)
     //console.log(validEmail, email, token)
@@ -74,16 +80,26 @@ async function forgotPassword(req, res) {
 }
 
 async function resetPassword(req, res) {
-    const { password, email, token } = req.body
-    try {
-        console.log("in reset-password: ", email)
-        const user = await UserModel.changePassword(password, email)
-        useToken(token, email)
-        console.log("[+] New user:\n", user)
-        return Success(res, { user })
-    } catch (error) {
-        return ServerError(res, error)
-    }
+    const { password, token } = req.body
+    console.log(password)
+    jwt.verify(token, ACCESS_TOKEN_SECRET, async (err, decode) => {
+        if (err) {
+            console.log(JSON.stringify(err))
+            return ServerError(res, error)
+        }
+        else {
+            const email = decode.email
+            try {
+                console.log("in reset-password: ", email)
+                const user = await UserModel.changePassword(password, email)
+                console.log("[+] reset password:\n", user)
+                return Success(res, { user })
+            } catch (err) {
+                console.log(JSON.stringify(err))
+                return ServerError(res, err)
+            }
+        }
+    })
 }
 
 
