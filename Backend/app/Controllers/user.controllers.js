@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');
 // Custom Modules
 
 const { UserModel, CreateToken } = require('../Schemas/user.schemas');
-const { saveToken, useToken } = require('../Helpers/ValidToken');
 const validateEmail = require('../Routes/Middlewares/validateEmail')
 
 
@@ -58,7 +57,6 @@ async function forgotPassword(req, res) {
 
     const token = CreateToken({ email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE * 3)
     console.log("token: ", token)
-    saveToken(token, email)
     const link = `http://localhost:3000/reset-password?token=${token}`
 
     var mailOptions = {
