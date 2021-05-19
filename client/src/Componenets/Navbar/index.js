@@ -1,9 +1,10 @@
 // react modules
-import { useState, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { Row, Col, Drawer } from "antd";
 import { CSSTransition } from "react-transition-group";
 import { withTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import ReactDOM from 'react-dom';
 
 // styling
 import * as S from "./styles";
@@ -18,11 +19,25 @@ import {IsLoggedIn} from "../../Helpers/Generals.Helpers"
 
 
 const Navbar = ({ props }) => {
+  const location = useLocation();
   const history = useHistory();
   const [isNavVisible] = useState(false);
   const [isSmallScreen] = useState(false);
   const [visible, setVisibility] = useState(false);
-  const [currentBar, setCurrentBar] = useState("");
+  const [currentBar, setCurrentBar] = useState(location.pathname);
+
+  useEffect(()=> {
+    if(currentBar && currentBar != "/") {
+      // If the current bar is not home
+      let element = document.getElementById(`label-id-${currentBar.slice(1)}`);
+      if(element) {
+        let domElementStyleRef = ReactDOM.findDOMNode(element).style;
+        domElementStyleRef.borderBottom = "5px solid red";
+        domElementStyleRef.padding = "0.5rem";
+        domElementStyleRef.color = "red";
+      }
+    }
+  }, [currentBar])
   // Event Handlers
   const showDrawer = () => {
     setVisibility(!visible);
@@ -32,9 +47,13 @@ const Navbar = ({ props }) => {
     setVisibility(!visible);
   };
 
+
   const handleOptionClick = (sPath) => {
-    setCurrentBar(sPath)
-    history.push(sPath);
+    // Saving unnecessaries loadings
+    if(location.pathname !== sPath) {
+      setCurrentBar(sPath)
+      history.push(sPath);
+    }
   }
 
   const IsInHomePage = () => {
@@ -66,9 +85,10 @@ const Navbar = ({ props }) => {
         {scrollToAbout}
         {
             arrBarOptions.map(objBarOption => {
+              console.log("11111) ", `label-id-${objBarOption.label}`)
               return (
                 <S.CustomNavLinkSmall onClick={()=> handleOptionClick(objBarOption.path)}>
-                  <S.Span>{objBarOption.label}</S.Span> 
+                  <S.Span id={`label-id-${objBarOption.label}`}>{objBarOption.label}</S.Span> 
                 </S.CustomNavLinkSmall>
               )
             })
@@ -105,7 +125,7 @@ const Navbar = ({ props }) => {
           arrBarOptions = [
             {
               label: "Scan",
-              path: "/scanning"
+              path: "/Scan"
             }
           ]
         }

@@ -30,7 +30,7 @@ function App() {
     <div>
       <Router>
         <Provider>
-          <Navbar/>
+          <Navbar />
           <Switch>
             <Route exact path="/" component={Landing}></Route>
             <Route exact path="/login" component={SignIn}></Route>
@@ -38,7 +38,7 @@ function App() {
             <Route exact path="/logout" component={Logout}></Route>
             <Route exact path="/my-activity" component={Activity}></Route>
             <Route exact path="/change-details" component={ChangeDetails}></Route>
-            <Route exact path="/scanning" component={Scanning}></Route>
+            <Route exact path="/scan" component={Scanning}></Route>
             <Route exact path="/account" component={Account}></Route>
             <Route exact path="/forgot-password" component = {ForgotPassword}></Route>
             <Route exact path="/reset-password" component = {ResetPassword}></Route>
