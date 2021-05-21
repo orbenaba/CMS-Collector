@@ -8,6 +8,8 @@ import Container from "../Shared/Container";
 import ScrollToTop from "../Shared/ScrollToTop";
 
 
+import About from "./About"
+
 const Landing = () => {
   return (
     <Container>
@@ -26,13 +28,13 @@ const Landing = () => {
         content={MiddleBlockContent.text}
         button={MiddleBlockContent.button}
       />
-      <ContentBlock
-        type="left"
-        title={AboutContent.title}
-        content={AboutContent.text}
-        section={AboutContent.section}
-          icon="landing1.png"
-        id="about"
+      <About 
+          type="left"
+          title={AboutContent.title}
+          content={AboutContent.text}
+          section={AboutContent.section}
+          //icon="landing1.png"
+          id="about"
       />
     </Container>
   );
