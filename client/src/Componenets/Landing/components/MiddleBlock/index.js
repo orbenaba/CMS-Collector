@@ -6,6 +6,8 @@ import * as S from "./styles";
 
 import Button from "../../../Shared/Button";
 
+import Title from "../../Title"
+
 const MiddleBlock = ({ title, content, button, t }) => {
   const scrollTo = (id) => {
     const element = document.getElementById(id);
@@ -19,8 +21,8 @@ const MiddleBlock = ({ title, content, button, t }) => {
         <Fade bottom>
           <S.ContentWrapper>
             <Col lg={24} md={24} sm={24} xs={24}>
-              <h6>{t(title)}</h6>
-              <S.Content>{t(content)}</S.Content>
+              <Title title={title} style={{fontSize: "1.7rem"}}/>
+              <S.Content>{content}</S.Content>
               {button ? (
                 <Button
                   name="submit"

@@ -2,8 +2,6 @@
 import { Row, Col } from "antd";
 import { withTranslation } from "react-i18next";
 
-// Custom Modules
-import SvgIcon from "../../Shared/SvgIcon";
 
 // Styling
 import * as S from "./styles";
