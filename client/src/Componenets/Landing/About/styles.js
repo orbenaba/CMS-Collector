@@ -33,6 +33,7 @@ export const MinTitle = styled.h6`
   font-size: 1rem;
   line-height: 1rem;
   padding: 0.5rem 0;
+  text-align: center;              
 `;
 
 export const MinPara = styled.p`

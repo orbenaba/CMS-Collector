@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Consumer } from "../../Context";
-import Title from "../Shared/Title/Title";
+import Title from "../Landing/Title";
 import { makeStyles } from "@material-ui/core/styles";
 import AddScan from "./AddScan";
 import DomainOrIp from "./DomainOrIP";

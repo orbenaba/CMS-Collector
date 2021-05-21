@@ -10,10 +10,13 @@ import ScrollToTop from "../Shared/ScrollToTop";
 
 import About from "./About"
 
+import Title from "./Title"
+
 const Landing = () => {
   return (
     <Container>
       <ScrollToTop />
+      <Title></Title>
       <ContentBlock
         type="right"
         first="true"

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Consumer } from "../../Context";
-import Title from "../Shared/Title/Title"
+import Title from "../Landing/Title"
 import { makeStyles } from "@material-ui/styles";
 import { useHistory } from "react-router-dom";
 import axios from "axios";

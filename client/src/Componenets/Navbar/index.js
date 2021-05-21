@@ -30,8 +30,10 @@ const Navbar = ({ props }) => {
   useEffect(()=> {
     if(currentBar && currentBar != "/") {
       // If the current bar is not home
+      console.log("currentBar =", `label-id-${currentBar.slice(1)}`)
       let element = document.getElementById(`label-id-${currentBar.slice(1)}`);
       if(element) {
+        console.log("Found")
         let domElementStyleRef = ReactDOM.findDOMNode(element).style;
         domElementStyleRef.borderBottom = "5px solid red";
         domElementStyleRef.padding = "0.5rem";
@@ -91,6 +93,7 @@ const Navbar = ({ props }) => {
         {scrollToAbout}
         {
             arrBarOptions.map(objBarOption => {
+              console.log("[+] objBarOption -", objBarOption)
               return (
                 <S.CustomNavLinkSmall onClick={()=> handleOptionClick(objBarOption.path)}>
                   <S.Span id={`label-id-${objBarOption.label}`}>{objBarOption.label}</S.Span> 
@@ -119,11 +122,11 @@ const Navbar = ({ props }) => {
         let arrBarOptions = [
           {
             label: "Login",
-            path: "/login"
+            path: "/Login"
           },
           {
-            label: "Sign Up",
-            path: "/register"
+            label: "Register",
+            path: "/Register"
           }
         ]
         if(IsLoggedIn(user)) {

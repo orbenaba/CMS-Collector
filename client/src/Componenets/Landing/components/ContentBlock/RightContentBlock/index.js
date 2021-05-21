@@ -6,6 +6,9 @@ import { useHistory } from "react-router-dom";
 import SvgIcon from "../../../../Shared/SvgIcon";
 import Button from "../../../../Shared/Button";
 
+import Title from "../../../Title";
+
+
 import * as S from "./styles";
 
 const RightBlock = ({ title, content, button, icon, t, id }) => {
@@ -26,7 +29,7 @@ const RightBlock = ({ title, content, button, icon, t, id }) => {
         <Col lg={11} md={11} sm={11} xs={24}>
           <Slide left>
             <S.ContentWrapper>
-              <h1>{t(title)}</h1>
+              <Title name="Content Management System" title="Collector"/>
               <S.Content>{t(content)}</S.Content>
               <S.ButtonWrapper>
                 {button &&

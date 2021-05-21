@@ -3,7 +3,7 @@ import { Consumer } from "../../Context";
 import axios from "axios";
 import { ServerAddress } from "../../Magic/Config.magic";
 import ResultsTable from "../Shared/Results/ResultsTable.shared";
-import Title from "../Shared/Title/Title";
+import Title from "../Landing/Title";
 import ReactLoading from 'react-loading';
 import { makeStyles } from "@material-ui/styles";
 

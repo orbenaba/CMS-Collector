@@ -3,7 +3,7 @@ import { Consumer } from "../../Context";
 import axios from "axios";
 import { ServerAddress } from "../../Magic/Config.magic";
 import { useHistory } from "react-router-dom"
-import Title from "../Shared/Title/Title";
+import Title from "../Landing/Title";
 import BigButton from "../Scanning/BigButton";
 
 export default function Logout() {

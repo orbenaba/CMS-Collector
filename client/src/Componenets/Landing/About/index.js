@@ -33,7 +33,11 @@ const About = ({ icon, title, content, section, t, id }) => {
             section.map((item, id) => {
                 return (
                     <Col key={id} span={8}>
-                        <img src={parseNameToImportImage(item.name)} width="120px" height="150px" />
+                        <img src={parseNameToImportImage(item.name)} width="120px" height="150px" style={{
+                          borderRadius: "1rem",
+                          display: "flex",
+                          margin: "0 auto"                
+                      }}/>
                         <S.MinTitle>{t(item.title)}</S.MinTitle>
                         <S.MinPara>{t(item.content)}</S.MinPara>
                     </Col>
