@@ -6,20 +6,23 @@
       "name": "shaked",
       "title": "Shaked Bozikovschi",
       "content": "Proven technical skills with a diverse background. Highly motivated and a fast learner.",
-      "icon": "shaked.jpg"
+      "icon": "shaked.jpg",
+      "github":"https://github.com/orbenaba"
     },
     {
       "name": "or",
       "title": "Or Ben-Aba",
       "content": "Enthusiastic researcher, Clear understanding of Low Level concepts , and training in CTFs. Reversing huge softwares. Motivated to learn, grow and excel. Adjusting easily to new environment and eager to expand my horizons.",
-      "icon": "or.jpg"
+      "icon": "or.jpg",
+      "github":"https://github.com/orbenaba"
     },
 
     {
       "name": "shaked",
       "title": "Shaked Bozikovschi",
       "content": "Proven technical skills with a diverse background. Highly motivated and a fast learner.",
-      "icon": "shaked.jpg"
+      "icon": "shaked.jpg",
+      "github":"https://github.com/orbenaba"
     }
   ]
 }

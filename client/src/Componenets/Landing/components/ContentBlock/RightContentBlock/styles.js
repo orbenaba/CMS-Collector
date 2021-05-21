@@ -11,6 +11,7 @@ export const RightBlockContainer = styled.section`
 
 export const Content = styled.p`
   margin: 1.5rem 0 2rem 0;
+  font-size: 1.4rem;
 `;
 
 export const ContentWrapper = styled.div`

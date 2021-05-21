@@ -16,7 +16,6 @@ const Landing = () => {
   return (
     <Container>
       <ScrollToTop />
-      <Title></Title>
       <ContentBlock
         type="right"
         first="true"

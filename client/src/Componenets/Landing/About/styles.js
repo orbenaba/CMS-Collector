@@ -33,11 +33,15 @@ export const MinTitle = styled.h6`
   font-size: 1rem;
   line-height: 1rem;
   padding: 0.5rem 0;
-  text-align: center;              
+  text-align: center;
+  font-family: "Permanent Marker", cursive;
+  color: grey;
 `;
 
 export const MinPara = styled.p`
-  font-size: 0.75rem;
+  font-size: 1rem;
+  margin-left: 1rem;
+  color: grey;
 `;
 
 export const ServiceItem = styled(Col)`
