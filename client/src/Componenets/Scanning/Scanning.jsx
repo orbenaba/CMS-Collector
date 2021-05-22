@@ -15,7 +15,8 @@ const useStyle = makeStyles((theme) => ({
         margin: '0 auto'
     },
     container: {
-        backgroundColor: 'var(--mainBlue)',
+        margin: '0 auto',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
         width: '60%',
         borderRadius: '1rem'
     }
@@ -100,7 +101,9 @@ export default function Scanning() {
                 if (user._id != null) {
                     return (
                         <form onSubmit={(event) => onSubmit(event, domainOrIps, dispatch)}>
-                            <Title name="Scan your" title="ips/domains"></Title>
+                            <div style={{ display: "flex", justifyContent: "center"}}>
+                                <Title name="Scan your" title="ips/domains"></Title>
+                            </div>
                             <div style={{ display: 'flex' }}>
                                 <div style={{ margin: '0 25%', justifyContent: 'center' }}>
                                     <AddScan></AddScan>

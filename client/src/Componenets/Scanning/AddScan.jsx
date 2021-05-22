@@ -4,26 +4,23 @@ import { makeStyles } from "@material-ui/core/styles";
 import { R_IP, R_DOMAIN } from "../../Magic/Regex.magic";
 import { INVALID_IPDOMAIN } from "../../Magic/Errors.magic";
 import { useAlert } from 'react-alert'
-import BigButton from "./BigButton";
-
+import { Button } from "@material-ui/core";
 
 
 const useStyle = makeStyles((theme) => ({
     inputDesign: {
         display: 'flex',
         boxSizing: 'border-box',
-        borderRadius: '4px',
+        borderRadius: '0.5rem',
         backgroundColor: 'black',
-        color: 'var(--azure)',
-        padding: '4px 5px',
+        color: 'red',
+        padding: '8px 10px',
         marginBottom: '10px',
         marginTop: '20px',
         fontSize: '15px',
         fontWeight: 'bold',
-        fontFamily: 'cursive',
         width: '15rem',
         height: '3rem',
-        fontWeigaht: 'bold',
         outline: 'none',
         textAlign: 'center',
         borderWidth: '0.2rem',
@@ -31,18 +28,15 @@ const useStyle = makeStyles((theme) => ({
     },
 
     addInput: {
-        color: 'black',
+        color: 'grey',
         border: 'none',
         padding: '20px',
         display: 'flex',
-        alignItems: 'center',
-        alignText: 'center',
-        justifyContent: 'center',
         margin: '0 auto',
         marginTop: '10px',
         cursor: 'pointer',
         '&:hover': {
-            color: 'var(--mainBlue)'
+            color: 'red'
         }
     }
 }))
@@ -59,7 +53,6 @@ export default function AddScan() {
 
     const onClick = async (e, dispatch) => {
         e.preventDefault()
-
         if (domainOrIP.match(R_DOMAIN) || domainOrIP.match(new RegExp(R_IP))) {
             dispatch({ type: "ADD", payload: domainOrIP })
             setDomainOrIP('')
@@ -83,7 +76,15 @@ export default function AddScan() {
                             className={classes.inputDesign}
                             placeholder={domainOrIP ? domainOrIP : "Insert IP/Domain"}
                         />
-                        <BigButton text="Scan" />
+                        <div>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                style={{marginLeft: "40%", marginTop: "34%"}}
+                                >
+                                Scan
+                            </Button>
+                        </div>
                     </div>
                 )
             }}
