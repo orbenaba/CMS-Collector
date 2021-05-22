@@ -6,8 +6,9 @@ import ERRORS from "../../Magic/Errors.magic";
 import { ServerAddress } from "../../Magic/Config.magic";
 import axios from "axios";
 import { makeStyles } from '@material-ui/core/styles';
-
-
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
+import { Button, TextField } from "@material-ui/core";
 // Styling
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -100,39 +101,62 @@ export default function ResetPassword() {
 
 
     return (
-        <form name="formInput" onSubmit={(event) => onSubmit(event)} className={classes.form} style={{ fontFamily: 'cursive' }}>
-            {
-                paramApproved ? (
-                    <>
-                        <label className={classes.formLabel}>Password</label>
-                        <input
-                            name="password"
-                            defaultValue=""
-                            style={!canSubmit ? { borderColor: 'red' } : {}} //TODO improve style
-                            className={classes.materialUIInput}
-                            onChange={e => onPasswordChange(e.target.value)}
-                            required
-                            pattern={REGEX.R_PASSWORD}
-                            title={ERRORS.INVALID_PASSWORD}
-                            autoComplete="password"
-                            type={'password'}
-                        />
-                        <label className={classes.formLabel}>Confirm Password</label>
-                        <input
-                            name="confirm-password"
-                            defaultValue=""
-                            className={classes.materialUIInput}
-                            onChange={e => onConfirmPasswordChange(e.target.value)}
-                            required
-                            pattern={REGEX.R_PASSWORD}
-                            title={ERRORS.INVALID_PASSWORD}
-                            autoComplete="password"
-                            type={'password'}
-                        />
-                        <Link to="/login" className={classes.linkTo}>Cancel</Link>
-                        <input type="submit" disabled={!canSubmit} style={isSent === 'error' ? { backgroundColor: 'red' } : isSent ? { backgroundColor: 'green' } : {}} className={classes.btnSubmit} />
-                    </>) :
-                    <label className={classes.formLabel}>Timeout</label>
-            }
-        </form>)
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+
+                <form name="formInput" onSubmit={(event) => onSubmit(event)} className={classes.form}>
+                    {
+                        paramApproved ? (
+                            <>
+
+                                <TextField
+                                    label="Password"
+                                    name="password"
+                                    variant="outlined"
+                                    margin="normal"
+                                    defaultValue=""
+                                    style={!canSubmit ? { borderColor: 'red' } : {}} //TODO improve style
+                                    autoFocus
+                                    fullWidth
+                                    onChange={e => onPasswordChange(e.target.value)}
+                                    required
+                                    inputProps={{
+                                        pattern: REGEX.R_PASSWORD,
+                                        title: ERRORS.INVALID_PASSWORD
+                                    }}
+                                    autoComplete="password"
+                                    type={'password'}
+                                />
+                                <TextField
+                                    label="confirm-password"
+                                    name="confirm-password"
+                                    variant="outlined"
+                                    margin="normal"
+                                    defaultValue=""
+                                    className={classes.materialUIInput}
+                                    onChange={e => onConfirmPasswordChange(e.target.value)}
+                                    required
+                                    autoFocus
+                                    fullWidth
+                                    inputProps={{
+                                        pattern: REGEX.R_PASSWORD,
+                                        title: ERRORS.INVALID_PASSWORD
+                                    }}
+                                    autoComplete="password"
+                                    type={'password'}
+                                />
+                                <Button type="submit" fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submit}
+                                    disabled={!canSubmit} style={isSent === 'error' ? { backgroundColor: 'red' } : isSent ? { backgroundColor: 'green' } : {}} className={classes.btnSubmit} >
+                                        Send</Button>
+                            </>) :
+                            <label className={classes.formLabel}>Timeout</label>
+                    }
+                </form>
+            </div>
+        </Container>)
+
 }
