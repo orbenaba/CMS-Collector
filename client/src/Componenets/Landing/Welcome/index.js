@@ -3,15 +3,15 @@ import { withTranslation } from "react-i18next";
 import Slide from "react-reveal/Slide";
 import { useHistory } from "react-router-dom";
 
-import SvgIcon from "../../../../Shared/SvgIcon";
-import Button from "../../../../Shared/Button";
+import SvgIcon from "../../Shared/SvgIcon";
+import Button from "../../Shared/Button";
 
-import Title from "../../../Title";
+import Title from "../Title";
 
 
 import * as S from "./styles";
 
-const RightBlock = ({ title, content, button, icon, t, id }) => {
+const Welcome = ({ title, content, button, icon, t, id }) => {
   const history = useHistory();
   const handleSignUp = () => {
     history.push("/register")
@@ -65,4 +65,4 @@ const RightBlock = ({ title, content, button, icon, t, id }) => {
   );
 };
 
-export default withTranslation()(RightBlock);
+export default withTranslation()(Welcome);
