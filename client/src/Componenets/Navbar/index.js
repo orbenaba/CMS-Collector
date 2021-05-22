@@ -87,13 +87,26 @@ const Navbar = ({ props }) => {
         </S.CustomNavLinkSmall>
       )
     }
+  
+    // Dont support click event for not auth users
+    let HelloButton = (
+      <S.Span>
+        <Button>Welcome</Button>
+      </S.Span>
+    )
+    if (username) {
+      HelloButton = (
+        <S.Span>
+          <Button onClick={handleClickOnAccountDetails}>Hello {username}</Button>
+        </S.Span>
+      )
+    }
 
     return (
       <Fragment>
         {scrollToAbout}
         {
             arrBarOptions.map(objBarOption => {
-              console.log("[+] objBarOption -", objBarOption)
               return (
                 <S.CustomNavLinkSmall onClick={()=> handleOptionClick(objBarOption.path)}>
                   <S.Span id={`label-id-${objBarOption.label}`}>{objBarOption.label}</S.Span> 
@@ -106,9 +119,8 @@ const Navbar = ({ props }) => {
         <S.CustomNavLinkSmall
           style={{ width: "180px" }}
         >
-          <S.Span>
-            <Button onClick={handleClickOnAccountDetails}>Hello {username}</Button>
-          </S.Span>
+          
+          {HelloButton}
 
         </S.CustomNavLinkSmall>
       </Fragment>
