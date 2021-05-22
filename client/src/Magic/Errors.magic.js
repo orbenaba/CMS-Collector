@@ -8,5 +8,6 @@ module.exports = {
     INVALID_EMAIL: "Invalid email.",
     INVALID_IPDOMAIN: "Invalid IP/Domain",
     TOKEN_EXPIRED: "Cookies are expired, please refresh your session",
-    PASSWORD_USED_RECENTLY: "Cannot use the same password as one of your last password."
+    PASSWORD_USED_RECENTLY: "Cannot use the same password as one of your last password.",
+    USER_EMAIL_NOT_FOUND: "Error! User not found, Make sure the email address is correct"
 }

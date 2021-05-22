@@ -1,11 +1,42 @@
 
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import REGEX from "../../Magic/Regex.magic";
 import ERRORS from "../../Magic/Errors.magic";
-import useStyles from "../Login/useStyles.login";
 import { ServerAddress } from "../../Magic/Config.magic";
 import axios from "axios";
+import { makeStyles } from '@material-ui/core/styles';
+
+
+// Styling
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+
+    errorDisplay: {
+        color: '#ED4956',
+        fontFamily: 'sans-serif',
+        fontSize: '1rem',
+        fontWeight: 'lighter',
+        textAlign: 'center'
+    }
+}));
+
 
 export default function ResetPassword() {
 
@@ -17,9 +48,10 @@ export default function ResetPassword() {
     const [canSubmit, setCanSubmit] = useState(false)
     const [isSent, setIsSent] = useState(false)
     const [paramApproved, setParamApproved] = useState(false)
+    const history = useHistory()
 
     const classes = useStyles();
-    useEffect(()=>{console.log(isSent)},[isSent])
+    useEffect(() => { console.log(isSent) }, [isSent])
 
     useEffect(() => {
         const passequals = confirmPassword === password
@@ -30,7 +62,7 @@ export default function ResetPassword() {
         console.log(`effect`)
         axios.post(ServerAddress + "api/user/validate-change-password",
             { token })
-            .then(()=>{
+            .then(() => {
                 console.log(`approved`)
                 !paramApproved && setParamApproved(true)
             })
@@ -38,7 +70,7 @@ export default function ResetPassword() {
                 paramApproved && setParamApproved(false)
                 console.log(`not apprvoed`)
             });
-        
+
     }, [paramApproved])
 
 
@@ -52,18 +84,19 @@ export default function ResetPassword() {
 
     const onSubmit = async (event) => {
         event.preventDefault()
-        
+
         try {
             const response = await axios.post(ServerAddress + "api/user/reset-password",
-                {token, password }) 
+                { token, password })
             setIsSent(true)
+            history.push('/login')
         }
-        catch (err) { 
+        catch (err) {
             setIsSent('error')
         }
 
-    }
 
+    }
 
 
     return (
@@ -97,7 +130,7 @@ export default function ResetPassword() {
                             type={'password'}
                         />
                         <Link to="/login" className={classes.linkTo}>Cancel</Link>
-                        <input type="submit" disabled={!canSubmit} style={isSent === 'error' ? {backgroundColor:'red'} : isSent ? { backgroundColor: 'green' } : {}} className={classes.btnSubmit} />
+                        <input type="submit" disabled={!canSubmit} style={isSent === 'error' ? { backgroundColor: 'red' } : isSent ? { backgroundColor: 'green' } : {}} className={classes.btnSubmit} />
                     </>) :
                     <label className={classes.formLabel}>Timeout</label>
             }

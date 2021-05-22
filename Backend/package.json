@@ -25,6 +25,7 @@
     "nodemailer": "^6.6.0",
     "phantom": "^6.3.0",
     "phantomjs": "^1.9.20",
+    "react-live-clock": "^5.1.0",
     "wappalyzer": "^6.5.26"
   }
 }

@@ -18,6 +18,7 @@ const ACCESS_TOKEN_SECRET = config.get("ACCESS_TOKEN_SECRET");
 
 // Gernerals
 const { BadRequest, ServerError, Success, ClearAllCookies } = require("../Helpers/generals.helpers");
+const { isTokenInBlacklist, invalidateToken } = require('../Routes/Middlewares/validateEmailToken');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -83,9 +84,9 @@ async function resetPassword(req, res) {
     const { password, token } = req.body
     console.log(password)
     jwt.verify(token, ACCESS_TOKEN_SECRET, async (err, decode) => {
-        if (err) {
+        if (err || isTokenInBlacklist(token)) {
             console.log(JSON.stringify(err))
-            return ServerError(res, error)
+            return ServerError(res, err)
         }
         else {
             const email = decode.email
@@ -93,6 +94,7 @@ async function resetPassword(req, res) {
                 console.log("in reset-password: ", email)
                 const user = await UserModel.changePassword(password, email)
                 console.log("[+] reset password:\n", user)
+                invalidateToken(token)                
                 return Success(res, { user })
             } catch (err) {
                 console.log(JSON.stringify(err))
@@ -155,7 +157,7 @@ async function logout(req, res) {
 
 async function changeDetails(req, res) {
     try {
-        if(!res.locals.unauthorizedWithResponse) {
+        if (!res.locals.unauthorizedWithResponse) {
             let oldUserDetails = req.user;
             let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
             // newUsername, newPassword, newEmail have already been validated
