@@ -149,10 +149,6 @@ export default function SignIn() {
                       title: ERRORS.INVALID_PASSWORD
                     }}
                   />
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                  />
                   {/* Error */}
                   {displayedErrorTag}
                   {/* Submit button */}

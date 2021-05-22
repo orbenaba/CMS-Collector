@@ -97,23 +97,26 @@ export default function ChangeDetails() {
     }
   };
 
-  const onLogout = async () => {
+  const onLogout = async (handleChangeUser) => {
     try {
         await axios.post(ServerAddress + "api/user/logout", {}, { withCredentials: true });
+        handleChangeUser({})
         history.push('/login');
     } catch (err) {
         console.log("error ....", err.response)
     }
   }
 
-  const onDeleteAccount = async () => {
-    try{
-      await axios.post(ServerAddress + "api/user/delete", {}, {withCredentials: true})
-      history.push('/login');
-    }catch(err) {
-      setDisplayedError(err.response.data.error);
+  const onDeleteAccount = async (resetContext) => {
+    try {
+        if (window.confirm('Do you sure you want to delete your account permanately?')) {
+            await axios.delete(ServerAddress + "api/user/delete", { withCredentials: true });
+            resetContext();
+            history.push('/register')
+        }
+    } catch (err) {
     }
-  }
+}
 
   const onPasswordChange = e => {
     setPassword(e.target.value);
@@ -138,6 +141,8 @@ export default function ChangeDetails() {
     <Consumer>
       {value => {
           const { user } = value.state;
+          const { handleChangeUser, resetContext } = value;
+
           if(!IsLoggedIn(user)) {
             return (
               <React.Fragment>
@@ -150,24 +155,30 @@ export default function ChangeDetails() {
             console.log(user)
             return (
               <Container style={{display: "flex"}}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="warn"
-                    className={classes.logout}
-                    onClick={onLogout}
-                  >
-                    Log out
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="warn"
-                    className={classes.deleteAccount}
-                    onClick={onDeleteAccount}
-                  >
-                    Delete Account
-                  </Button>
+                  <div>
+                      <div style={{display: "flex"}}>
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            className={classes.logout}
+                            onClick={() => onLogout(handleChangeUser)}
+                          >
+                            Log out
+                          </Button>
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            className={classes.deleteAccount}
+                            onClick={() => onDeleteAccount(resetContext)}
+                          >
+                            Delete Account
+                          </Button>
+                      </div>
+                      <div>
+                        <h1>ffffffffffff</h1>
+                      </div>
+                  </div>
+
                   <Container component="main" maxWidth="xs">
                     <div className={classes.paper}>
                       <Avatar className={classes.avatar}>
