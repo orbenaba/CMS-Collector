@@ -1,6 +1,7 @@
 import { Row, Col } from "antd";
 import { withTranslation } from "react-i18next";
 import Fade from "react-reveal";
+import { useHistory } from "react-router-dom";
 
 import * as S from "./styles";
 
@@ -8,13 +9,12 @@ import Button from "../../../Shared/Button";
 
 import Title from "../../Title"
 
-const MiddleBlock = ({ title, content, button, t }) => {
-  const scrollTo = (id) => {
-    const element = document.getElementById(id);
-    element.scrollIntoView({
-      behavior: "smooth",
-    });
-  };
+const MiddleBlock = ({ title, content, button}) => {
+  const history = useHistory();
+  const handleClick = () => {
+    history.push("/register");
+  }
+
   return (
     <S.MiddleBlock>
       <Row type="flex" justify="center" align="middle">
@@ -27,9 +27,9 @@ const MiddleBlock = ({ title, content, button, t }) => {
                 <Button
                   name="submit"
                   type="submit"
-                  onClick={() => scrollTo("mission")}
+                  onClick={handleClick}
                 >
-                  {t(button)}
+                  {button}
                 </Button>
               ) : (
                 ""

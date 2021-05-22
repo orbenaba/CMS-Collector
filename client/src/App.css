@@ -1,5 +1,10 @@
-:root{
-    --mainBlue: blue;
-    --azure: rgb(162, 231, 255);
-    --purpleBlue: rgb(96, 56, 255);
+:root {
+  --mainBlue: blue;
+  --azure: rgb(162, 231, 255);
+  --purpleBlue: rgb(96, 56, 255);
+}
+
+.loading {
+  margin: 0 auto;
+  margin-top: 5rem;
 }

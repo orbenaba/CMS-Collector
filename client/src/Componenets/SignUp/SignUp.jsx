@@ -4,14 +4,14 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import ReactLoading from 'react-loading';
 
 import { Link, useHistory } from "react-router-dom";
 
@@ -25,19 +25,6 @@ import { Consumer } from "../../Context";
 
 // Helper Functions
 import { IsLoggedIn} from "../../Helpers/Generals.Helpers";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 // Styling
 const useStyles = makeStyles((theme) => ({
@@ -70,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   // React Hooks
+  const [bIsLoading, setBIsLoading] = useState(false);
   const history = useHistory();
   const classes = useStyles();
   const [username, setUsername] = useState("");
@@ -86,12 +74,14 @@ export default function SignUp() {
         setDisplayedError("Passwords not match.");
       }
       else{
+        setBIsLoading(true);
         const objResponse = await axios.post(ServerAddress + "api/user/register",
                       { username, password, email }, { withCredentials: true });
         // If Not error was thrown than status 200 (SUCCESS) was in the response header => 
         // The user signs up successfully => Redirect him to the home page
         history.push('/');
         handleChangeUser(objResponse.data.user)
+        setBIsLoading(false);
       }
     } catch (err) {
       setDisplayedError(err.response.data.error);
@@ -115,6 +105,10 @@ export default function SignUp() {
   let displayedErrorTag = <div></div>;
   if(displayedError !== "") {
     displayedErrorTag = <h1 className={classes.errorDisplay}>{displayedError}</h1>
+  }
+
+  if(bIsLoading) {
+    return <ReactLoading color='red' height={'10rem'} width={'10rem'} type={'balls'} className="loading"></ReactLoading>
   }
 
   return (
@@ -236,9 +230,6 @@ export default function SignUp() {
                     </Grid>
                   </form>
                 </div>
-                <Box mt={5}>
-                  <Copyright />
-                </Box>
               </Container>
             );
           }

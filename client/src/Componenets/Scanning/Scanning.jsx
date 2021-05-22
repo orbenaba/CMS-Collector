@@ -80,8 +80,10 @@ export default function Scanning() {
     if (isLoading === true) {
         return (
             <div>
-                <Title name="Scan your" title="ips/domains"></Title>
-                <ReactLoading color={'var(--mainBlue)'} height={'10rem'} width={'10rem'} type={'spokes'} className={classes.loading}></ReactLoading>
+                <div style={{ textAlign: "center" }}>
+                    <Title name="Scan your" title="ips/domains"></Title>
+                </div>
+                <ReactLoading color='red' height={'10rem'} width={'10rem'} type={'balls'} className="loading"></ReactLoading>
             </div>
         )
     }

@@ -11,10 +11,22 @@ import Title from "../Title";
 
 import * as S from "./styles";
 
-const Welcome = ({ title, content, button, icon, t, id }) => {
+const Welcome = ({ isAuth, content, button, icon, id }) => {
   const history = useHistory();
   const handleSignUp = () => {
     history.push("/register")
+  }
+
+  const handleLogin = () => {
+    history.push("/login");
+  }
+
+  const handleActivity = () => {
+    history.push("/activity")
+  }
+
+  const handleScan = () => {
+    history.push("/scan")
   }
 
   const scrollTo = (id) => {
@@ -23,6 +35,45 @@ const Welcome = ({ title, content, button, icon, t, id }) => {
       behavior: "smooth",
     });
   };
+
+  let buttons = (
+    <div style={{display: "flex", width: "100rem"}}>
+      <Button
+        width="true"
+        onClick={handleSignUp}
+      >
+        Sign Up
+      </Button>
+      <Button
+        color="#fff"
+        width="true"
+        onClick={handleLogin}
+      >
+        Log In
+      </Button>
+    </div>
+  );
+  if(isAuth) {
+    buttons = (
+      <div style={{display: "flex", width: "100rem"}}>
+      <Button
+          width="true"
+          onClick={handleActivity}
+        >
+          My Activity
+        </Button>
+        <Button
+          color="#fff"
+          width="true"
+          onClick={handleScan}
+        >
+          Scan
+        </Button>
+      </div>
+    );
+  }
+
+
   return (
     <S.RightBlockContainer>
       <Row type="flex" justify="space-between" align="middle" id={id}>
@@ -30,22 +81,9 @@ const Welcome = ({ title, content, button, icon, t, id }) => {
           <Slide left>
             <S.ContentWrapper>
               <Title name="Content Management System" title="Collector"/>
-              <S.Content>{t(content)}</S.Content>
+              <S.Content>{content}</S.Content>
               <S.ButtonWrapper>
-                {button &&
-                  typeof button === "object" &&
-                  button.map((item, id) => {
-                    return (
-                      <Button
-                        key={id}
-                        color={item.color}
-                        width="true"
-                        onClick={() => item.title === "Sign up" ? handleSignUp() : scrollTo("about")}
-                      >
-                        {t(item.title)}
-                      </Button>
-                    );
-                  })}
+                {buttons}
               </S.ButtonWrapper>
             </S.ContentWrapper>
           </Slide>
