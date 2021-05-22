@@ -13,14 +13,13 @@ import { useHistory } from "react-router-dom";
 
 import axios from "axios";
 
-import Cookies from 'js-cookie';
 
 // custom modules
 import { ServerAddress } from "../../Magic/Config.magic";
 import ERRORS from "../../Magic/Errors.magic";
 import REGEX from "../../Magic/Regex.magic";
 import { Consumer } from "../../Context";
-
+import AccountBrief from "./AccountBrief";
 
 // Helper Functions
 import { IsLoggedIn} from "../../Helpers/Generals.Helpers";
@@ -174,8 +173,9 @@ export default function ChangeDetails() {
                             Delete Account
                           </Button>
                       </div>
+                      {/* Recap */}
                       <div>
-                        <h1>ffffffffffff</h1>
+                        <AccountBrief createdAt={user.createdAt}/>
                       </div>
                   </div>
 
