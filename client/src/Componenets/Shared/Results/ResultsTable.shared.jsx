@@ -37,12 +37,12 @@ function Row(props) {
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
-                <TableCell style={{ backgroundColor: 'black', textAlign: 'center', borderWidth: '0.2rem', borderColor: 'var(--azure)', borderStyle: 'solid' }}>
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} style={{ color: 'black', backgroundColor: 'var(--azure)' }}>
+                <TableCell style={{ textAlign: 'center' }}>
+                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)} style={{ color: 'black', backgroundColor: 'red' }}>
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row" style={{ backgroundColor: 'black', fontFamily: 'cursive', color: 'var(--azure)', borderWidth: '0.2rem', borderColor: 'black', borderStyle: 'solid', fontSize: '1rem' }}>
+                <TableCell component="th" scope="row" style={{ fontSize: '1rem' }}>
                     {row.asset}
                 </TableCell>
             </TableRow>
@@ -50,15 +50,15 @@ function Row(props) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
-                            <Typography variant="h6" gutterBottom component="div" align="center" style={{ fontFamily: 'cursive' }}>
+                            <Typography variant="h6" gutterBottom component="div" align="center">
                                 Systems
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead >
                                     <TableRow>
-                                        <TableCell style={{ fontFamily: 'cursive' }}>Name</TableCell>
-                                        <TableCell style={{ fontFamily: 'cursive' }}>Version</TableCell>
-                                        <TableCell style={{ fontFamily: 'cursive' }}>Categories</TableCell>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell>Version</TableCell>
+                                        <TableCell>Categories</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -88,12 +88,12 @@ export default function ResultsTable(props) {
     const ipScans = null;
     const domainScans = JSON.parse(props.domainScans);
     return (
-        <TableContainer component={Paper} style={{ marginBottom: '3rem', width: '75%', margin: '0 auto' }}>
-            <Table aria-label="collapsible table" style={{ borderWidth: '0.5rem', borderColor: 'var(--mainBlue)', borderStyle: 'solid' }}>
+        <TableContainer component={Paper} style={{ marginBottom: '7rem', width: '75%', margin: '0 auto' }}>
+            <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow>
-                        <TableCell style={{ backgroundColor: 'black', borderWidth: '0.2rem', borderColor: 'var(--azure)', borderStyle: 'solid' }} />
-                        <TableCell style={{ backgroundColor: 'black', fontFamily: 'cursive', borderWidth: '0.2rem', borderColor: 'var(--azure)', borderStyle: 'solid', color: 'var(--azure)', fontWeight: 'bolder', fontSize: '1.5rem' }}>Asset</TableCell>
+                        <TableCell/>
+                        <TableCell style={{ fontWeight: 'bolder', fontSize: '1.5rem' }}>Asset</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

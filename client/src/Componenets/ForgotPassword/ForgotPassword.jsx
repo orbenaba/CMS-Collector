@@ -19,7 +19,6 @@ import { ServerAddress } from "../../Magic/Config.magic";
 import ERRORS from "../../Magic/Errors.magic";
 import REGEX from "../../Magic/Regex.magic";
 import { Consumer } from "../../Context";
-import Logout from "../Logout/logout";
 
 // Helper Functions
 import { IsLoggedIn } from "../../Helpers/Generals.Helpers";
@@ -97,9 +96,9 @@ export default function ForgotPassword() {
         if (IsLoggedIn(user)) {
           return (
             <React.Fragment>
-              <h1>You are Already in</h1>
-              <h1>Please log out before logging in to another account</h1>
-              <Logout />
+                <h1>You are Already in</h1>
+                <h1>Please log out before logging in to another account</h1>
+                <Logout />
             </React.Fragment>
           )
         }

@@ -4,14 +4,12 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import ReactLoading from 'react-loading';
 import {Link, useHistory } from "react-router-dom";
 
 import axios from "axios";
@@ -21,7 +19,6 @@ import { ServerAddress } from "../../Magic/Config.magic";
 import ERRORS from "../../Magic/Errors.magic";
 import REGEX from "../../Magic/Regex.magic";
 import { Consumer } from "../../Context";
-import Logout from "../Logout/logout";
 
 // Helper Functions
 import { IsLoggedIn } from "../../Helpers/Generals.Helpers";
@@ -57,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   // react hooks
+  const [bIsLoading, setBIsLoading] = useState(false);
   const history = useHistory();
   const classes = useStyles();
   const [password, setPassword] = useState("");
@@ -66,12 +64,14 @@ export default function SignIn() {
   // event handlers
   const onSubmit = async (e, handleChangeUser) => {
     try{
+      setBIsLoading(true);
       e.preventDefault();
-      const objresponse = await axios.post(ServerAddress + "api/user/login", {username, password}, {withCredentials: true});
+      const objResponse = await axios.post(ServerAddress + "api/user/login", {username, password}, {withCredentials: true});
       // If Not error was thrown than status 200 (SUCCESS) was in the response header => 
       // The user signs in successfully => Redirect him to the home page
       history.push("/");
-      handleChangeUser(objresponse.data.user);
+      handleChangeUser(objResponse.data.user);
+      setBIsLoading(false);
     }catch(err) {
       // Error codes -> 400/401/500
       setDisplayedError(err.response.data.error);
@@ -92,6 +92,10 @@ export default function SignIn() {
     displayedErrorTag = <h1 className={classes.errorDisplay}>{displayedError}</h1>
   }
 
+  if(bIsLoading) {
+    return <ReactLoading color='red' height={'10rem'} width={'10rem'} type={'balls'} className="loading"></ReactLoading>
+  }
+
   return (
     <Consumer>
       {value=>{
@@ -101,7 +105,6 @@ export default function SignIn() {
             <React.Fragment>
                 <h1>You are Already in</h1>
                 <h1>Please log out before logging in to another account</h1>
-                <Logout />
             </React.Fragment>
         )
         }
@@ -150,10 +153,6 @@ export default function SignIn() {
                       pattern: REGEX.R_PASSWORD,
                       title: ERRORS.INVALID_PASSWORD
                     }}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
                   />
                   {/* Error */}
                   {displayedErrorTag}

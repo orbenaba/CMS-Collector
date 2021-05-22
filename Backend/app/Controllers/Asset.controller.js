@@ -8,25 +8,30 @@ const { BatchOfQueriesModel } = require('../Schemas/BatchOfQueries.schemas');
 const { R_IP } = require("../../../client/src/Magic/Regex.magic");
 
 // Gernerals
-const { BadRequest, ServerError, Success, RemoveDups } = require("../Helpers/generals.helpers");
+const { BadRequest, ServerError, Success, RemoveDups, Unauthorized } = require("../Helpers/generals.helpers");
 
 async function scan(req, res) {
     try {
-        let domains_ips = req.body.domainOrIps;
-        let username = res.locals.user.username;
-        let batchOfScans = new BatchOfQueriesModel({ username });
-        const promises = domains_ips.map(domain_ip => {
-            if (domain_ip.toString().match(R_IP)) {
-                // do ip scan ....
-            }
-            else {
-                // do domain scan ...
-                return scanDomain(batchOfScans, domain_ip.toString());
-            }
-        });
-
-        await Promise.all(promises)
-        return Success(res, { results: batchOfScans });
+        if(res.locals.hasToken) {
+            let domains_ips = req.body.domainOrIps;
+            let username = req.user.username;
+            let batchOfScans = new BatchOfQueriesModel({ username });
+            const promises = domains_ips.map(domain_ip => {
+                if (domain_ip.toString().match(R_IP)) {
+                    // do ip scan ....
+                }
+                else {
+                    // do domain scan ...
+                    return scanDomain(batchOfScans, domain_ip.toString());
+                }
+            });
+    
+            await Promise.all(promises)
+            return Success(res, { results: batchOfScans });
+        }
+        else {
+            return Unauthorized(res, "No Access Token specified");
+        }
     } catch (err) {
         return ServerError(res, err);
     }

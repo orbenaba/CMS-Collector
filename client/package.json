@@ -23,6 +23,7 @@
     "react-compound-timer": "^1.2.0",
     "react-cookie": "^4.0.3",
     "react-dom": "^17.0.1",
+    "react-helmet": "^6.1.0",
     "react-hook-form": "^6.15.5",
     "react-i18next": "^11.8.15",
     "react-live-clock": "^5.1.0",

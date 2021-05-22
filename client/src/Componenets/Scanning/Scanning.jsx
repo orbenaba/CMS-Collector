@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Consumer } from "../../Context";
-import Title from "../Shared/Title/Title";
+import Title from "../Landing/Title";
 import { makeStyles } from "@material-ui/core/styles";
 import AddScan from "./AddScan";
 import DomainOrIp from "./DomainOrIP";
@@ -9,13 +9,16 @@ import axios from "axios";
 import { ServerAddress } from "../../Magic/Config.magic";
 import ReactLoading from 'react-loading';
 import ResultsTable from "../Shared/Results/ResultsTable.shared";
+import { Button } from "@material-ui/core";
+
 
 const useStyle = makeStyles((theme) => ({
     loading: {
         margin: '0 auto'
     },
     container: {
-        backgroundColor: 'var(--mainBlue)',
+        margin: '0 auto',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
         width: '60%',
         borderRadius: '1rem'
     }
@@ -77,17 +80,26 @@ export default function Scanning() {
     if (isLoading === true) {
         return (
             <div>
-                <Title name="Scan your" title="ips/domains"></Title>
-                <ReactLoading color={'var(--mainBlue)'} height={'10rem'} width={'10rem'} type={'spokes'} className={classes.loading}></ReactLoading>
+                <div style={{ textAlign: "center" }}>
+                    <Title name="Scan your" title="ips/domains"></Title>
+                </div>
+                <ReactLoading color='red' height={'10rem'} width={'10rem'} type={'balls'} className="loading"></ReactLoading>
             </div>
         )
     }
 
     if (displayResults === true) {
         return (
-            <div>
+            <div style={{textAlign: "center", }}>
                 <Title name="scan" title="results"></Title>
-                <button style={{ margin: '0 auto', display: 'flex', backgroundColor: 'var(--mainBlue)', fontFamily: 'cursive', color: 'white', height: '3.3rem', fontSize: '2rem', cursor: 'pointer' }} onClick={closeTable}>Close Results</button>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    style={{marginTop: "4%", backgroundColor: "yellow"}}
+                    onClick={closeTable}
+                    >
+                    Close
+                </Button>
                 <ResultsTable domainScans={JSON.stringify(scanResults.domainScans)} ipScans={JSON.stringify(scanResults.ipScans)}></ResultsTable>
             </div>
         )
@@ -100,7 +112,9 @@ export default function Scanning() {
                 if (user._id != null) {
                     return (
                         <form onSubmit={(event) => onSubmit(event, domainOrIps, dispatch)}>
-                            <Title name="Scan your" title="ips/domains"></Title>
+                            <div style={{ display: "flex", justifyContent: "center"}}>
+                                <Title name="Scan your" title="ips/domains"></Title>
+                            </div>
                             <div style={{ display: 'flex' }}>
                                 <div style={{ margin: '0 25%', justifyContent: 'center' }}>
                                     <AddScan></AddScan>

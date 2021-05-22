@@ -3,20 +3,11 @@ import { Consumer } from "../../Context";
 import axios from "axios";
 import { ServerAddress } from "../../Magic/Config.magic";
 import ResultsTable from "../Shared/Results/ResultsTable.shared";
-import Title from "../Shared/Title/Title";
+import Title from "../Landing/Title";
 import ReactLoading from 'react-loading';
-import { makeStyles } from "@material-ui/styles";
-
-const useStyle = makeStyles((theme) => ({
-    loading: {
-        margin: '0 auto',
-        marginTop: '5rem'
-    }
-}))
 
 
 export default function Activity() {
-    const classes = useStyle();
     const [isLoading, setIsLoading] = useState(true);
     const [scans, setScans] = useState([]);
 
@@ -37,13 +28,13 @@ export default function Activity() {
     }, [])
 
     if (isLoading) {
-        return <ReactLoading color={'var(--mainBlue)'} height={'10rem'} width={'10rem'} type={'balls'} className={classes.loading}></ReactLoading>
+        return <ReactLoading color='red' height={'10rem'} width={'10rem'} type={'balls'} className="loading"></ReactLoading>
     }
     return (
         <Consumer>
             {value => {
                 return (
-                    <div>
+                    <div style={{textAlign: "center"}}>
                         <Title name="Browse" title="activity"></Title>
                         <ResultsTable domainScans={JSON.stringify(scans)}></ResultsTable>
                     </div>

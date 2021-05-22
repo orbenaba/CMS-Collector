@@ -14,10 +14,9 @@ import Landing from "./Componenets/Landing/Landing"
 import Navbar from "./Componenets/Navbar"
 
 
-import Logout from './Componenets/Logout/logout';
+
 import Activity from "./Componenets/Activity/Activity";
 import Scanning from "./Componenets/Scanning/Scanning";
-import Account from "./Componenets/Account/Account";
 import "./App.css";
 import "antd/dist/antd.css";
 import ResetPassword from './Componenets/ResetPassword/ResetPassword';
@@ -35,11 +34,9 @@ function App() {
             <Route exact path="/" component={Landing}></Route>
             <Route exact path="/login" component={SignIn}></Route>
             <Route exact path="/register" component={SignUp}></Route>
-            <Route exact path="/logout" component={Logout}></Route>
-            <Route exact path="/my-activity" component={Activity}></Route>
+            <Route exact path="/activity" component={Activity}></Route>
             <Route exact path="/change-details" component={ChangeDetails}></Route>
             <Route exact path="/scan" component={Scanning}></Route>
-            <Route exact path="/account" component={Account}></Route>
             <Route exact path="/forgot-password" component = {ForgotPassword}></Route>
             <Route exact path="/reset-password" component = {ResetPassword}></Route>
             <Route path='*' render={() =>

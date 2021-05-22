@@ -5,19 +5,18 @@ import { DIP, ID } from "../../Magic/Asset.magic";
 
 const useStyle = makeStyles((theme) => ({
     allBlock: {
-        backgroundColor: 'black',
-        color: 'var(--azure)',
+        color: 'red',
         width: '75%',
         margin: '0 auto',
         marginBottom: '0.5rem',
         height: "2rem",
-        borderRadius: '30rem'
+        borderRadius: '1rem',
+        marginTop: "5%"
     }
 }))
 
 export default function DomainOrIp(props) {
     const classes = useStyle();
-    console.log("props.domainOrIP = ", props.domainOrIP)
     const [domOIp, setDomOIp] = useState(props.domainOrIP[DIP]);
 
 
@@ -27,6 +26,6 @@ export default function DomainOrIp(props) {
 
     return (<h3 className="text-dark text-center p-1 bg-light border-bottom" className={classes.allBlock}>
         <i className="far fa-times-circle fa-sm float-left m-1 text-danger" style={{ cursor: "pointer", marginRight: '1rem', marginLeft: '1.5rem', color: 'red' }} onClick={() => remove(props.dispatch)}></i>
-        <i style={{ fontFamily: 'cursive' }}>{domOIp}</i>
+        <i>{domOIp}</i>
     </h3>)
 }

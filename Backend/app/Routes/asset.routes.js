@@ -17,6 +17,7 @@ module.exports = function routes(app) {
 
     router.get('/get-all-user-scans', authenticate(), getAllUserScans);
 
-    router.get('/recap-user-scans', authenticate(), recapAboutUserScans)
+    router.get('/recap-user-scans', authenticate(), recapAboutUserScans);
+    
     app.use('/api/asset', router);
 }
