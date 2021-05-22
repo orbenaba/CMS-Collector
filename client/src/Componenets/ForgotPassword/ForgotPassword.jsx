@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link, useHistory } from "react-router-dom";
-import Timer from '../../Helpers/ClockStyle'
+import Timer from './ForgetPasswordTimer'
 
 import axios from "axios";
 
@@ -54,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
 export default function ForgotPassword() {
   // react hooks
   const history = useHistory();
@@ -74,8 +73,9 @@ export default function ForgotPassword() {
       setDisplayedError("Email was sent! Check your mail box");
     }
     catch (err) {
-      setIsSent('error')
+      setIsSent(false)
       setDisplayedError("Error! User not found, Make sure the email address is correct");
+      
     }
   }
 
@@ -98,7 +98,6 @@ export default function ForgotPassword() {
             <React.Fragment>
                 <h1>You are Already in</h1>
                 <h1>Please log out before logging in to another account</h1>
-                <Logout />
             </React.Fragment>
           )
         }

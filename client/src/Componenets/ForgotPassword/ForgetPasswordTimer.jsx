@@ -2,10 +2,10 @@ import React from 'react';
 import Timer from 'react-compound-timer'
 
 
-export default function ClocksStayle({ onStop, shouldStart }) {
+export default function ForgetPasswordTimer({ onStop, shouldStart }) {
     return (
         <Timer
-            initialTime={5000}
+            initialTime={5 * 60000}
             direction="backward"
             startImmediately={false}
             checkpoints={[
