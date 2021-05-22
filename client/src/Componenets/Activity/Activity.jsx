@@ -43,7 +43,7 @@ export default function Activity() {
         <Consumer>
             {value => {
                 return (
-                    <div>
+                    <div style={{textAlign: "center"}}>
                         <Title name="Browse" title="activity"></Title>
                         <ResultsTable domainScans={JSON.stringify(scans)}></ResultsTable>
                     </div>

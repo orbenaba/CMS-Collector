@@ -88,7 +88,7 @@ export default function ResultsTable(props) {
     const ipScans = null;
     const domainScans = JSON.parse(props.domainScans);
     return (
-        <TableContainer component={Paper} style={{ marginBottom: '3rem', width: '75%', margin: '0 auto' }}>
+        <TableContainer component={Paper} style={{ marginBottom: '7rem', width: '75%', margin: '0 auto' }}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow>

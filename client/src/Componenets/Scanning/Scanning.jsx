@@ -9,6 +9,8 @@ import axios from "axios";
 import { ServerAddress } from "../../Magic/Config.magic";
 import ReactLoading from 'react-loading';
 import ResultsTable from "../Shared/Results/ResultsTable.shared";
+import { Button } from "@material-ui/core";
+
 
 const useStyle = makeStyles((theme) => ({
     loading: {
@@ -86,9 +88,16 @@ export default function Scanning() {
 
     if (displayResults === true) {
         return (
-            <div>
+            <div style={{textAlign: "center", }}>
                 <Title name="scan" title="results"></Title>
-                <button style={{ margin: '0 auto', display: 'flex', backgroundColor: 'var(--mainBlue)', fontFamily: 'cursive', color: 'white', height: '3.3rem', fontSize: '2rem', cursor: 'pointer' }} onClick={closeTable}>Close Results</button>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    style={{marginTop: "4%", backgroundColor: "yellow"}}
+                    onClick={closeTable}
+                    >
+                    Close
+                </Button>
                 <ResultsTable domainScans={JSON.stringify(scanResults.domainScans)} ipScans={JSON.stringify(scanResults.ipScans)}></ResultsTable>
             </div>
         )
