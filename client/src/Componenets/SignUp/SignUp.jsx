@@ -85,6 +85,7 @@ export default function SignUp() {
       }
     } catch (err) {
       setDisplayedError(err.response.data.error);
+      setBIsLoading(false);
     }
   };
 

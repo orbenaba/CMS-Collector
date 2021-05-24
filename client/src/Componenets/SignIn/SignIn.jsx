@@ -75,6 +75,7 @@ export default function SignIn() {
     }catch(err) {
       // Error codes -> 400/401/500
       setDisplayedError(err.response.data.error);
+      setBIsLoading(false);
     }
   }
 
