@@ -1,16 +1,16 @@
 // react modules
-import React, { useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import React, { useState } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 import { Link, useHistory } from "react-router-dom";
-import Timer from './ForgetPasswordTimer'
+import Timer from "./ForgetPasswordTimer";
 
 import axios from "axios";
 
@@ -24,21 +24,20 @@ import { Consumer } from "../../Context";
 import { IsLoggedIn } from "../../Helpers/Generals.Helpers";
 //import Clock from "../../Helpers/ClockStyle";
 
-
 // Styling
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -46,12 +45,12 @@ const useStyles = makeStyles((theme) => ({
   },
 
   errorDisplay: {
-    color: '#ED4956',
-    fontFamily: 'sans-serif',
-    fontSize: '1rem',
-    fontWeight: 'lighter',
-    textAlign: 'center'
-  }
+    color: "#ED4956",
+    fontFamily: "sans-serif",
+    fontSize: "1rem",
+    fontWeight: "lighter",
+    textAlign: "center",
+  },
 }));
 
 export default function ForgotPassword() {
@@ -60,48 +59,48 @@ export default function ForgotPassword() {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   // Is the email sent ?
-  const [isSent, setIsSent] = useState(false)
+  const [isSent, setIsSent] = useState(false);
   const [displayedError, setDisplayedError] = useState("");
 
   // event handlers
   const onSubmit = async (event, handleChangeUser) => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      const response = await axios.post(ServerAddress + "api/user/forgot-password",
-        { email }, { withCredentials: true });
-      setIsSent(true)
+      const response = await axios.post(
+        ServerAddress + "api/user/forgot-password",
+        { email },
+        { withCredentials: true }
+      );
+      setIsSent(true);
       setDisplayedError("Email was sent! Check your mail box");
-    }
-    catch (err) {
-      setIsSent(false)
+    } catch (err) {
+      setIsSent(false);
       setDisplayedError("Error! User not found, Make sure the email address is correct");
-      
     }
-  }
+  };
 
-  const onEmailChange = e => {
+  const onEmailChange = (e) => {
     setEmail(e.target.value);
-  }
+  };
 
   // Displaying an error in case the validation failed
   let displayedErrorTag = <div></div>;
   if (displayedError !== "") {
-    displayedErrorTag = <h1 className={classes.errorDisplay}>{displayedError}</h1>
+    displayedErrorTag = <h1 className={classes.errorDisplay}>{displayedError}</h1>;
   }
 
   return (
     <Consumer>
-      {value => {
+      {(value) => {
         const { user } = value.state;
         if (IsLoggedIn(user)) {
           return (
             <React.Fragment>
-                <h1>You are Already in</h1>
-                <h1>Please log out before logging in to another account</h1>
+              <h1>You are Already in</h1>
+              <h1>Please log out before logging in to another account</h1>
             </React.Fragment>
-          )
-        }
-        else {
+          );
+        } else {
           return (
             <Container component="main" maxWidth="xs">
               <CssBaseline />
@@ -127,26 +126,29 @@ export default function ForgotPassword() {
                     onChange={onEmailChange}
                     inputProps={{
                       pattern: REGEX.R_EMAIL,
-                      title: ERRORS.INVALID_EMAIL
+                      title: ERRORS.INVALID_EMAIL,
                     }}
                   />
                   {/* Error */}
                   {displayedErrorTag}
                   {/* Submit button */}
                   <Button
-                    type="submit" disabled={isSent} 
+                    type="submit"
+                    disabled={isSent}
                     fullWidth
                     variant="contained"
                     color="primary"
-                    className={classes.submit}
-                  >
+                    className={classes.submit}>
                     Send Mail
-                    {'  '}
-                    {isSent && <Timer
-                      onStop={() => {
-                        setIsSent(false)
-                      }}
-                      shouldStart={!!isSent} />}
+                    {"  "}
+                    {isSent && (
+                      <Timer
+                        onStop={() => {
+                          setIsSent(false);
+                        }}
+                        shouldStart={!!isSent}
+                      />
+                    )}
                   </Button>
                   <Grid container>
                     {/* Forgot Password Link */}
@@ -170,5 +172,5 @@ export default function ForgotPassword() {
         }
       }}
     </Consumer>
-  )
+  );
 }

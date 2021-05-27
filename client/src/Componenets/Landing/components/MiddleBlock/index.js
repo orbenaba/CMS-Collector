@@ -7,13 +7,13 @@ import * as S from "./styles";
 
 import Button from "../../../Shared/Button";
 
-import Title from "../../Title"
+import Title from "../../Title";
 
-const MiddleBlock = ({ title, content, button}) => {
+const MiddleBlock = ({ title, content, button }) => {
   const history = useHistory();
   const handleClick = () => {
     history.push("/register");
-  }
+  };
 
   return (
     <S.MiddleBlock>
@@ -21,14 +21,10 @@ const MiddleBlock = ({ title, content, button}) => {
         <Fade bottom>
           <S.ContentWrapper>
             <Col lg={24} md={24} sm={24} xs={24}>
-              <Title title={title} style={{fontSize: "1.7rem"}}/>
+              <Title title={title} style={{ fontSize: "1.7rem" }} />
               <S.Content>{content}</S.Content>
               {button ? (
-                <Button
-                  name="submit"
-                  type="submit"
-                  onClick={handleClick}
-                >
+                <Button name="submit" type="submit" onClick={handleClick}>
                   {button}
                 </Button>
               ) : (
