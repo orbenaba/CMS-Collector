@@ -1,16 +1,16 @@
 // react modules
-import React,  {useState} from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import ReactLoading from 'react-loading';
-import {Link, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import ReactLoading from "react-loading";
+import { Link, useHistory } from "react-router-dom";
 
 import axios from "axios";
 
@@ -27,16 +27,16 @@ import { IsLoggedIn } from "../../Helpers/Generals.Helpers";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -44,12 +44,12 @@ const useStyles = makeStyles((theme) => ({
   },
 
   errorDisplay: {
-    color: '#ED4956',
-    fontFamily: 'sans-serif',
-    fontSize: '1rem',
-    fontWeight: 'lighter',
-    textAlign: 'center'
-  }
+    color: "#ED4956",
+    fontFamily: "sans-serif",
+    fontSize: "1rem",
+    fontWeight: "lighter",
+    textAlign: "center",
+  },
 }));
 
 export default function SignIn() {
@@ -63,53 +63,63 @@ export default function SignIn() {
 
   // event handlers
   const onSubmit = async (e, handleChangeUser) => {
-    try{
+    try {
       setBIsLoading(true);
       e.preventDefault();
-      const objResponse = await axios.post(ServerAddress + "api/user/login", {username, password}, {withCredentials: true});
-      // If Not error was thrown than status 200 (SUCCESS) was in the response header => 
+      const objResponse = await axios.post(
+        ServerAddress + "api/user/login",
+        { username, password },
+        { withCredentials: true }
+      );
+      // If Not error was thrown than status 200 (SUCCESS) was in the response header =>
       // The user signs in successfully => Redirect him to the home page
       history.push("/");
       handleChangeUser(objResponse.data.user);
       setBIsLoading(false);
-    }catch(err) {
+    } catch (err) {
       // Error codes -> 400/401/500
       setDisplayedError(err.response.data.error);
       setBIsLoading(false);
     }
-  }
+  };
 
-  const onPasswordChange = e => {
+  const onPasswordChange = (e) => {
     setPassword(e.target.value);
-  }
+  };
 
-  const onUsernameChange = e => {
+  const onUsernameChange = (e) => {
     setUsername(e.target.value);
-  }
+  };
 
   // Displaying an error in case the validation failed
   let displayedErrorTag = <div></div>;
-  if(displayedError !== "") {
-    displayedErrorTag = <h1 className={classes.errorDisplay}>{displayedError}</h1>
+  if (displayedError !== "") {
+    displayedErrorTag = <h1 className={classes.errorDisplay}>{displayedError}</h1>;
   }
 
-  if(bIsLoading) {
-    return <ReactLoading color='red' height={'10rem'} width={'10rem'} type={'balls'} className="loading"></ReactLoading>
+  if (bIsLoading) {
+    return (
+      <ReactLoading
+        color="red"
+        height={"10rem"}
+        width={"10rem"}
+        type={"balls"}
+        className="loading"></ReactLoading>
+    );
   }
 
   return (
     <Consumer>
-      {value=>{
+      {(value) => {
         const { user } = value.state;
-        if(IsLoggedIn(user)) {
+        if (IsLoggedIn(user)) {
           return (
             <React.Fragment>
-                <h1>You are Already in</h1>
-                <h1>Please log out before logging in to another account</h1>
+              <h1>You are Already in</h1>
+              <h1>Please log out before logging in to another account</h1>
             </React.Fragment>
-        )
-        }
-        else {
+          );
+        } else {
           return (
             <Container component="main" maxWidth="xs">
               <CssBaseline />
@@ -135,7 +145,7 @@ export default function SignIn() {
                     onChange={onUsernameChange}
                     inputProps={{
                       pattern: REGEX.R_USERNAME,
-                      title: ERRORS.INVALID_USERNAME
+                      title: ERRORS.INVALID_USERNAME,
                     }}
                   />
                   {/* Password */}
@@ -152,7 +162,7 @@ export default function SignIn() {
                     onChange={onPasswordChange}
                     inputProps={{
                       pattern: REGEX.R_PASSWORD,
-                      title: ERRORS.INVALID_PASSWORD
+                      title: ERRORS.INVALID_PASSWORD,
                     }}
                   />
                   {/* Error */}
@@ -163,8 +173,7 @@ export default function SignIn() {
                     fullWidth
                     variant="contained"
                     color="primary"
-                    className={classes.submit}
-                  >
+                    className={classes.submit}>
                     Sign In
                   </Button>
                   <Grid container>
@@ -188,5 +197,5 @@ export default function SignIn() {
         }
       }}
     </Consumer>
-  )
+  );
 }
