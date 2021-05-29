@@ -31,7 +31,13 @@ const { connectDB } = require("./config/db");
     //Setting routes to the express server
     assetRoutes(app);
     userRoutes(app);
-    const serverPort = process.env.PORT | 4000;
+
+    app.get('/', (req, res) => {
+        res.send('Hello to CMS collector API')
+    })
+
+    // heroku is filling the PORT by itself
+    const serverPort = process.env.PORT || 4000;
     //connecting the server
     app.listen(serverPort, console.log(`[+] Server listens on port ${serverPort}`.green));
 })();

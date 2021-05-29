@@ -10,6 +10,7 @@ import * as S from "./styles";
 // Profile Image
 import orProfile from "../content/img/or.jpg";
 import shakedProfile from "../content/img/shaked.jpg";
+import FrenProfile from "../content/img/Fren.jpg"
 
 const About = ({ icon, title, content, section, t, id }) => {
   
@@ -20,6 +21,7 @@ const About = ({ icon, title, content, section, t, id }) => {
       case  "shaked":
         return shakedProfile;
       default:
+        return FrenProfile;
     }
   }
 
