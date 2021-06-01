@@ -2,7 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "cacheDirectories": ["client/node_modules", "/node_modules"],
+  "cacheDirectories": [
+    "client/node_modules",
+    "/node_modules"
+  ],
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

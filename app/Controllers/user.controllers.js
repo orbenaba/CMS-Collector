@@ -24,10 +24,10 @@ var transporter = nodemailer.createTransport({
     host: "smtp.mailtrap.io",
     port: 2525,
     auth: {
-      user: "505480d644e0be",
-      pass: "f925ef540e3699"
+        user: "505480d644e0be",
+        pass: "f925ef540e3699"
     }
-  });
+});
 
 
 
@@ -98,7 +98,7 @@ async function resetPassword(req, res) {
                 console.log("in reset-password: ", email)
                 const user = await UserModel.changePassword(password, email)
                 console.log("[+] reset password:\n", user)
-                invalidateToken(token)                
+                invalidateToken(token)
                 return Success(res, { user })
             } catch (err) {
                 console.log(JSON.stringify(err))
