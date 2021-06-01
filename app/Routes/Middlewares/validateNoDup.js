@@ -3,7 +3,7 @@ const { INVALID_USERNAME, INVALID_PASSWORD, INVALID_EMAIL } = require('../../../
 const { R_USERNAME, R_PASSWORD, R_EMAIL } = require('../../../client/src/Magic/Regex.magic');
 const { BadRequest, Unauthorized } = require('../../Helpers/generals.helpers');
 
-module.exports = () => {
+module.exports = () => { 
     return async (req, res, next) => {
         if(!res.locals.unauthorizedWithResponse) {
             // first validating that we have token from the last middleware
