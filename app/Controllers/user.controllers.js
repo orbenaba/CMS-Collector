@@ -20,10 +20,14 @@ const ACCESS_TOKEN_SECRET = config.get("ACCESS_TOKEN_SECRET");
 const { BadRequest, ServerError, Success, ClearAllCookies } = require("../Helpers/generals.helpers");
 const { isTokenInBlacklist, invalidateToken } = require('../Routes/Middlewares/validateEmailToken');
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: config.get("EMAIL_AUTH")
-});
+var transport = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: "505480d644e0be",
+      pass: "f925ef540e3699"
+    }
+  });
 
 
 
@@ -61,7 +65,7 @@ async function forgotPassword(req, res) {
     const link = `http://localhost:3000/reset-password?token=${token}`
 
     var mailOptions = {
-        from: 'team5risk@gmail.com',
+        from: 'f204cfe131-8eef21@inbox.mailtrap.io',
         to: email,
         subject: 'Forget Password',
         text: link
