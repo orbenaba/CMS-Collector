@@ -8,6 +8,7 @@ const { json, urlencoded } = require('body-parser');
 // Custom routes
 const assetRoutes = require('./app/Routes/asset.routes');
 const userRoutes = require('./app/Routes/user.routes');
+const path = require('path');
 
 // Helpers
 const { connectDB } = require("./config/db");
@@ -28,13 +29,21 @@ const { connectDB } = require("./config/db");
     app.use(urlencoded({ extended: true }));
     // Cookies for json web tokens
     app.use(cookieParser());
+
+    // Serve static files from the React app
+    app.use(express.static(path.join(__dirname, 'client/build')));
+
+
     //Setting routes to the express server
     assetRoutes(app);
     userRoutes(app);
 
-    app.get('/', (req, res) => {
-        res.send('Hello to CMS collector API')
-    })
+    // The "catchall" handler: for any request that doesn't
+    // match one above, send back React's index.html file.
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname + '/client/build/index.html'));
+    });
+
 
     // heroku is filling the PORT by itself
     const serverPort = process.env.PORT || 4000;
