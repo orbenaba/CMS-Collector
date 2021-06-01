@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Consumer } from "../../Context";
 import { makeStyles } from "@material-ui/core/styles";
 import { R_IP, R_DOMAIN } from "../../Magic/Regex.magic";
-import { INVALID_IPDOMAIN } from "../../Magic/Errors.magic";
+// import { INVALID_IPDOMAIN } from "../../Magic/Errors.magic.react";
 import { useAlert } from "react-alert";
 import { Button } from "@material-ui/core";
+
+const INVALID_IPDOMAIN = "Invalid IP/Domain"
 
 const useStyle = makeStyles((theme) => ({
   inputDesign: {

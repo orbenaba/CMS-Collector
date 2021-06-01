@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import REGEX from "../../Magic/Regex.magic";
-import ERRORS from "../../Magic/Errors.magic";
+import ERRORS from "../../Magic/Errors.magic.react";
 import { ServerAddress } from "../../Magic/Config.magic";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";

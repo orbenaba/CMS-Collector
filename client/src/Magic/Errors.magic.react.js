@@ -1,4 +1,4 @@
-module.exports = {
+const obj  = {
   ACCOUNT_NOT_EXIST:
     "The username you entered doesn't belong to an account. Please check your username and try again.",
   WRONG_PASSWORD: "Sorry, your password was incorrect. Please double-check your password.",
@@ -13,5 +13,8 @@ module.exports = {
   INVALID_IPDOMAIN: "Invalid IP/Domain",
   TOKEN_EXPIRED: "Cookies are expired, please refresh your session",
   PASSWORD_USED_RECENTLY: "Cannot use the same password as one of your last password.",
-  USER_EMAIL_NOT_FOUND: "Error! User not found, Make sure the email address is correct"
-}
+  USER_EMAIL_NOT_FOUND: "Error! User not found, Make sure the email address is correct",
+};
+
+
+export default obj

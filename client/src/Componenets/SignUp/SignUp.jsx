@@ -19,7 +19,7 @@ import axios from "axios";
 
 // custom modules
 import { ServerAddress } from "../../Magic/Config.magic";
-import ERRORS from "../../Magic/Errors.magic";
+import ERRORS from "../../Magic/Errors.magic.react";
 import REGEX from "../../Magic/Regex.magic";
 import { Consumer } from "../../Context";
 
