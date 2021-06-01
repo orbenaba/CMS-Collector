@@ -1,3 +1,3 @@
 module.exports = {
-  ServerAddress: "http://localhost:4000/",
+  ServerAddress: process.env.NODE_ENV === 'production' ? "/" : "http://localhost:4000/",
 };
