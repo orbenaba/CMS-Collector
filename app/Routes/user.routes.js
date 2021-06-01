@@ -42,7 +42,6 @@ module.exports = function routes(app) {
     app.use('/api/user', router);
 
     app.post('*', (req, res) => res.status(404).send({ notFound: 'Status code 404' }));
-    app.get('*', (req, res) => res.status(404).send({ notFound: 'Status code 404' }));
     app.delete('*', (req, res) => res.status(404).send({ notFound: 'Status code 404' }));
     app.patch('*', (req, res) => res.status(404).send({ notFound: 'Status code 404' }));
     app.head('*', (req, res) => res.status(404).send({ notFound: 'Status code 404' }));
