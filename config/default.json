@@ -1,0 +1,19 @@
+{
+    "ACCESS_TOKEN": "jwt_access_token",
+    "REFRESH_TOKEN": "jwt_refresh_token",
+    "ACCESS_TOKEN_SECRET": "secret",
+    "ACCESS_TOKEN_LIFE": "300",
+    "REFRESH_TOKEN_SECRET": "super-secret",
+    "REFRESH_TOKEN_LIFE": "86400",
+    "API_KEYS": {
+        "WHAT_CMS": "7052b741d2418a5580767ea221a81c04fa46f9c7fb544862b2ccfc725c5580dfe3fff7",
+        "SIMILAR_TECH": "351587a8f5ca4774a53af2875efe0882",
+        "WAPPALYZER": "XR6BM30myY7wFAYgsDIWq69HyLfCLl2ca724Y2Fh"
+    },
+    "MongoURI": "mongodb+srv://or:PWizwThI0j6SqUI4@cluster0.c7h9o.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "EMAIL_AUTH": {
+        "user": "team5risk@gmail.com",
+        "pass": "TRK12345!"
+    },
+    "OLD_PASSWORDS_MEMORY":8
+}
