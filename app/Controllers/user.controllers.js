@@ -62,7 +62,7 @@ async function forgotPassword(req, res) {
 
     const token = CreateToken({ email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE * 3)
     console.log("token: ", token)
-    const link = `${process.env.NODE_ENV === 'production' ? "/" : "http://localhost:4000/"}reset-password?token=${token}`
+    const link = `${process.env.NODE_ENV === 'production' ? "https://vast-basin-88117.herokuapp.com/" : "http://localhost:4000/"}reset-password?token=${token}`
 
     var mailOptions = {
         from: 'f204cfe131-8eef21@inbox.mailtrap.io',
