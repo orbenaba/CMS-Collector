@@ -7,7 +7,7 @@ const validateAssets = require('./Middlewares/validateAssets');
 const authenticate = require('./Middlewares/authenticate');
 
 // Importing controllers
-const { scan, recapAboutUserScans, getAllUserScans } = require('../Controllers/asset.controller');
+const { scan, recapAboutUserScans, getAllUserScans } = require('../Controllers/Asset.controller');
 
 
 module.exports = function routes(app) {
