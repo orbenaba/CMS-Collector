@@ -12,7 +12,7 @@ const REFRESH_TOKEN_LIFE = config.get("REFRESH_TOKEN_LIFE");
 const ACCESS_TOKEN_LIFE = config.get("ACCESS_TOKEN_LIFE");
 const ITERATIONS = 10000;
 const HASH_LENGTH = 512;
-const ERRORS = require('../../../client/src/Magic/Errors.magic');
+const ERRORS = require('../../client/src/Magic/Errors.magic');
 const { R_EMAIL, R_USERNAME } = require('../Magic/Regex.magic');
 
 // Custom Algorithm

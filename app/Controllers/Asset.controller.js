@@ -5,7 +5,7 @@ const WappalyzerScanDomain = require('../Microservices/Wappalyzer');
 const { BatchOfQueriesModel } = require('../Schemas/BatchOfQueries.schemas');
 
 // Constants
-const { R_IP } = require("../../../client/src/Magic/Regex.magic");
+const { R_IP } = require("../../client/src/Magic/Regex.magic");
 
 // Gernerals
 const { BadRequest, ServerError, Success, RemoveDups, Unauthorized } = require("../Helpers/generals.helpers");

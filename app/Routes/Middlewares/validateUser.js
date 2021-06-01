@@ -1,6 +1,6 @@
 // true specifies NOT_MAIL flag
-const { INVALID_USERNAME, INVALID_PASSWORD, INVALID_EMAIL } = require('../../../../client/src/Magic/Errors.magic');
-const { R_USERNAME, R_PASSWORD, R_EMAIL } = require('../../../../client/src/Magic/Regex.magic');
+const { INVALID_USERNAME, INVALID_PASSWORD, INVALID_EMAIL } = require('../../../client/src/Magic/Errors.magic');
+const { R_USERNAME, R_PASSWORD, R_EMAIL } = require('../../../client/src/Magic/Regex.magic');
 const { CheckIfPasswordInList, Unauthorized, BadRequest } = require('../../Helpers/generals.helpers');
 // flag specifices With out mail 
 module.exports = (flag = false) => {

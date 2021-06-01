@@ -1,6 +1,6 @@
 
 const { BadRequest } = require("../../Helpers/generals.helpers");
-const { R_IP, R_DOMAIN } = require("../../../../client/src/Magic/Regex.magic");
+const { R_IP, R_DOMAIN } = require("../../../client/src/Magic/Regex.magic");
 module.exports = () => {
     return (req, res, next) => {
         const domains_ips = req.body.domainOrIps;

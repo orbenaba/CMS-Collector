@@ -3,7 +3,7 @@ const config = require("config");
 
 // Authenticate the user with its cookies'
 const { UserModel } = require('../../Schemas/user.schemas');
-const { TOKEN_EXPIRED } = require('../../../../client/src/Magic/Errors.magic');
+const { TOKEN_EXPIRED } = require('../../../client/src/Magic/Errors.magic');
 const { Unauthorized } = require("../../Helpers/generals.helpers");
 
 // constants
