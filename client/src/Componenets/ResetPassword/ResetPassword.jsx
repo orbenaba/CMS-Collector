@@ -1,13 +1,18 @@
+// react modules
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import REGEX from "../../Magic/Regex.magic";
-import ERRORS from "../../Magic/Errors.magic.react";
-import { ServerAddress } from "../../Magic/Config.magic";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import { Button, TextField } from "@material-ui/core";
+
+// custom modules
+import REGEX from "../../Magic/Regex.magic";
+import ERRORS from "../../Magic/Errors.magic.react";
+import { ServerAddress } from "../../Magic/Config.magic";
+
+
 // Styling
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -96,6 +101,9 @@ export default function ResetPassword() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+        <Typography component="h1" variant="h5">
+          Reset your password
+        </Typography>
         <form name="formInput" onSubmit={(event) => onSubmit(event)} className={classes.form}>
           {paramApproved ? (
             <>
