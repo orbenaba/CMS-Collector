@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import { Button, TextField } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 
 // custom modules
 import REGEX from "../../Magic/Regex.magic";

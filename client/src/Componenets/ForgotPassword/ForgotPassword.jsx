@@ -109,7 +109,8 @@ export default function ForgotPassword() {
                   <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                  Forgot Password
+                  Reset password
+                  Enter your email to reset your password
                 </Typography>
                 <form className={classes.form} onSubmit={(event) => onSubmit(event, value.handleChangeUser)}>
                   {/* Email */}
