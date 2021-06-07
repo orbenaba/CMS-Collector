@@ -21,11 +21,14 @@ const { BadRequest, ServerError, Success, ClearAllCookies } = require("../Helper
 const { isTokenInBlacklist, invalidateToken } = require('../Routes/Middlewares/validateEmailToken');
 
 var transporter = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
+    service: 'gmail',
+    // host: "out.walla.co.il",
+    // secure: true,
+    // requireTLS: true,
+    // port: 587,
     auth: {
-        user: "505480d644e0be",
-        pass: "f925ef540e3699"
+        user: "team5risk@gmail.com",
+        pass: "TRK12345!"
     }
 });
 
