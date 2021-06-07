@@ -90,6 +90,7 @@ function Row(props) {
 export default function ResultsTable(props) {
   // const ipScans = JSON.parse(props.ipScans);
   const ipScans = null;
+  console.log(`domainsScasssss=${props.domainScans}`);
   const domainScans = JSON.parse(props.domainScans);
   return (
     <TableContainer component={Paper} style={{ marginBottom: "7rem", width: "75%", margin: "0 auto" }}>

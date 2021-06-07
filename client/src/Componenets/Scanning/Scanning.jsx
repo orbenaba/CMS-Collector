@@ -64,6 +64,7 @@ export default function Scanning() {
           { domainOrIps: sanitizeArray(domainOrIps) },
           { withCredentials: true }
         );
+        console.log(`res.data=${JSON.stringify(res.data)}`);
         setScanResults(res.data.results);
         setDisplayResults(true);
         // clear the context assets

@@ -23,7 +23,7 @@ module.exports = (flag = false) => {
                 // update the access token cookie
                 res.cookie(ACCESS_TOKEN, user.accessToken);
                 req.accessToken = user.accessToken;
-                req.user = user;
+                req.body.user = user;
                 res.locals.hasToken = true;
             }
         }catch(err) {

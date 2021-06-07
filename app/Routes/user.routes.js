@@ -25,7 +25,7 @@ module.exports = function routes(app) {
     router.post('/is-authenticated', authenticate(true), (req, res) => {
         if(!res.locals.unauthorizedWithResponse){
             // The response was not sent
-            const {username, email, accessToken, refreshToken, _id, createdAt} = req.user;
+            const {username, email, accessToken, refreshToken, _id, createdAt} = req.body.user;
             return Success(res, { user: {username, email, accessToken, refreshToken, _id, createdAt } });
         }
     });

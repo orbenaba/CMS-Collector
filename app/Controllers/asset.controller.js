@@ -14,7 +14,7 @@ async function scan(req, res) {
     try {
         if(res.locals.hasToken) {
             let domains_ips = req.body.domainOrIps;
-            let username = req.user.username;
+            let username = req.body.user.username;
             let batchOfScans = new BatchOfQueriesModel({ username });
             const promises = domains_ips.map(domain_ip => {
                 if (domain_ip.toString().match(R_IP)) {
@@ -27,6 +27,8 @@ async function scan(req, res) {
             });
     
             await Promise.all(promises)
+            await batchOfScans.save()
+            console.log(`batchOfScans==!==${JSON.stringify(batchOfScans)}`);
             return Success(res, { results: batchOfScans });
         }
         else {
@@ -62,13 +64,15 @@ async function scanDomain(batchOfScans, domain) {
 
 async function getAllUserScans(req, res) {
     try {
-        const username = req.user.username;
+        const username = req.body.user.username;
         const userBatchs = await BatchOfQueriesModel.find({ username });
+        console.log(`userBatches=${JSON.stringify(userBatchs)}`);
         let scans = [];
         for (let batch of userBatchs) {
             scans = scans.concat(batch.domainScans);
             scans = scans.concat(batch.ipsScans);
         }
+        console.log(`userbatseccc=${JSON.stringify(scans)}`);
         return Success(res, { scans })
     } catch (err) {
         return ServerError(res, err);
@@ -77,7 +81,7 @@ async function getAllUserScans(req, res) {
 
 async function recapAboutUserScans(req, res) {
     try {
-        const username = req.user.username;
+        const username = req.body.user.username;
         const totalScans = (await BatchOfQueriesModel.find({ username })).length;
         return Success(res, { results: { totalScans } })
     } catch (error) {

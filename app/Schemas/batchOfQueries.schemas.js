@@ -28,8 +28,7 @@ BatchOfQueriesSchema.methods.addDomainScan = async function (domainAsset, domain
         await newDomainScan.addSystems(domainInfo);
 
         this.domainScans.push(newDomainScan);
-        await this.save();
-
+       
         console.log("----------------\n[+] Saved \n---------------");
     } catch (err) {
         console.error(err);
@@ -45,6 +44,7 @@ BatchOfQueriesSchema.statics.isExisted = async function (domain2Find) {
         for (let dom of doms) {
             let i = dom.domainScans.findIndex(obj => obj.asset === domain2Find);
             if (i >= 0) {
+                console.log(`returning exiting=${JSON.stringify(dom.domainScans[i])}`);
                 return dom.domainScans[i];
             }
         }

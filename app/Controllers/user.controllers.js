@@ -124,7 +124,7 @@ async function login(req, res) {
     try {
         if (res.locals.hasToken) {
             // Login wih {refresh & access tokens}
-            return Success(res, { user: req.user });
+            return Success(res, { user: req.body.user });
         }
         else {
             // Login with {username & password}
@@ -164,8 +164,9 @@ async function logout(req, res) {
     try {
         // Clear the cookies before log out
         await ClearAllCookies(res);
-        return Success(res, { message: "Cookies were deleted in success" });
+        res.redirect('/login');
     } catch (error) {
+        console.error(error);
         return ServerError(res, error);
     }
 }
@@ -173,7 +174,7 @@ async function logout(req, res) {
 async function changeDetails(req, res) {
     try {
         if (!res.locals.unauthorizedWithResponse) {
-            let oldUserDetails = req.user;
+            let oldUserDetails = req.body.user;
             let newUsername = req.body.username, newPassword = req.body.password, newEmail = req.body.email;
             // newUsername, newPassword, newEmail have already been validated
             const user = await UserModel.changeDetails(oldUserDetails, newUsername, newPassword, newEmail)

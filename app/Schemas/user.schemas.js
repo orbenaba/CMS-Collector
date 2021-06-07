@@ -108,6 +108,7 @@ UserSchema.statics.changePassword = async function (newPassowrd, email) {
 UserSchema.statics.login = async function (username, password) {
     // If the user did not authenticated then an exception would be thrown
     const userM = await UserModel.authenticate(username, password);
+    console.log(`userm=${!!userM}`);
     let payload = { username: userM.username, email: userM.email };
     let accessToken = CreateToken(payload, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     let refreshToken = CreateToken(payload, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
@@ -157,6 +158,7 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
         const decode = await jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
         const username = decode.username
         const user = await UserModel.findOne({ username });
+        console.log(`user===${!!user}`);
         user.accessToken = CreateToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE)
         await user.save()
         return user;       
