@@ -20,7 +20,7 @@ const ACCESS_TOKEN_SECRET = config.get("ACCESS_TOKEN_SECRET");
 const { BadRequest, ServerError, Success, ClearAllCookies } = require("../Helpers/generals.helpers");
 const { isTokenInBlacklist, invalidateToken } = require('../Routes/Middlewares/validateEmailToken');
 
-var transporter = nodemailer.createTransport({
+var transporter = process.env.NODE_ENV === 'production' ? nodemailer.createTransport({
     service: 'gmail',
     // host: "out.walla.co.il",
     // secure: true,
@@ -30,7 +30,15 @@ var transporter = nodemailer.createTransport({
         user: "team5risk@gmail.com",
         pass: "TRK12345!"
     }
-});
+}) :
+    nodemailer.createTransport({
+        host: "smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+            user: "505480d644e0be",
+            pass: "f925ef540e3699"
+        }
+    });
 
 
 
