@@ -1,6 +1,6 @@
 const Wappalyzer = require("wappalyzer");
 const wappalyzer = new Wappalyzer();
-await wappalyzer.init();
+wappalyzer.init();
 async function scanDomain(domain_ip) {
   try {
     let domain_ip_formatted = "https://" + domain_ip;
