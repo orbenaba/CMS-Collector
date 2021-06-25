@@ -14,3 +14,4 @@ nodalyzer.init(function (status) {
   });
   nodalyzer.close();
 });
+

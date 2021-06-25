@@ -29,10 +29,8 @@ const Navbar = ({ props }) => {
   useEffect(() => {
     if (currentBar && currentBar != "/") {
       // If the current bar is not home
-      console.log("currentBar =", `label-id-${currentBar.slice(1)}`);
       let element = document.getElementById(`label-id-${currentBar.slice(1)}`);
       if (element) {
-        console.log("Found");
         let domElementStyleRef = ReactDOM.findDOMNode(element).style;
         domElementStyleRef.borderBottom = "5px solid red";
         domElementStyleRef.padding = "0.5rem";

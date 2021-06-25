@@ -18,7 +18,6 @@ DomainScanSchema.methods.addSystems = async function (systemsInput) {
 
     const systems = systemsInput.systems ? systemsInput.systems : systemsInput
     try {
-        // console.log(`addSystems:${JSON.stringify(systems)}`);
         for (let i = 0; i < systems.length; i++) {
             let curSys = await new SystemModel({ name: systems[i].name, categories: systems[i].categories, version: systems[i].version ? systems[i].version : "0.0" });
             await this.systems.push(curSys);

@@ -2,6 +2,7 @@
 const SimilarTechScanDomain = require('../Microservices/SimilarTech');
 const WhatCMSScanDomain = require('../Microservices/WhatCMS');
 const WappalyzerScanDomain = require('../Microservices/Wappalyzer');
+const BuiltWithScanDomain = require("../Microservices/BuiltWith");
 const { BatchOfQueriesModel } = require('../Schemas/batchOfQueries.schemas');
 
 // Constants
@@ -12,7 +13,7 @@ const { BadRequest, ServerError, Success, RemoveDups, Unauthorized } = require("
 
 async function scan(req, res) {
     try {
-        if(res.locals.hasToken) {
+        if (res.locals.hasToken) {
             let domains_ips = req.body.domainOrIps;
             let username = req.body.user.username;
             let batchOfScans = new BatchOfQueriesModel({ username });
@@ -25,10 +26,9 @@ async function scan(req, res) {
                     return scanDomain(batchOfScans, domain_ip.toString());
                 }
             });
-    
+
             await Promise.all(promises)
             await batchOfScans.save()
-            console.log(`batchOfScans==!==${JSON.stringify(batchOfScans)}`);
             return Success(res, { results: batchOfScans });
         }
         else {
@@ -42,14 +42,18 @@ async function scan(req, res) {
 async function scanDomain(batchOfScans, domain) {
     try {
         // Saving time in case the domain was scaned before
-        let domain2Add = await BatchOfQueriesModel.isExisted(domain);
+        let domain2Add = null;//await BatchOfQueriesModel.isExisted(domain);
+        console.log("hi")
         // if not existed before in the DataBase
         if (!domain2Add) {
             // Run all the micro-services parallelly with promise all
-            const requests2MicroServices = [SimilarTechScanDomain(domain), WhatCMSScanDomain(domain), WappalyzerScanDomain(domain)];
+
+            console.log("hi")
+            const requests2MicroServices = [SimilarTechScanDomain(domain), WhatCMSScanDomain(domain), BuiltWithScanDomain(domain), WappalyzerScanDomain(domain)];
             // Here, allInfoAboutDomain is an array of arrays when each array is suit for each micro service
             const allInfoAboutDomain = await Promise.all(requests2MicroServices);
             // Removing duplicates
+            console.log("allInfoAboutDomain =", allInfoAboutDomain)
             domain2Add = RemoveDups(allInfoAboutDomain);
         }
         // Here, keep the results in the DataBase
@@ -57,6 +61,7 @@ async function scanDomain(batchOfScans, domain) {
 
         return batchOfScans.domainScans;
     } catch (err) {
+        console.log("error =", err)
         return [];
     }
 }
@@ -66,13 +71,11 @@ async function getAllUserScans(req, res) {
     try {
         const username = req.body.user.username;
         const userBatchs = await BatchOfQueriesModel.find({ username });
-        console.log(`userBatches=${JSON.stringify(userBatchs)}`);
         let scans = [];
         for (let batch of userBatchs) {
             scans = scans.concat(batch.domainScans);
             scans = scans.concat(batch.ipsScans);
         }
-        console.log(`userbatseccc=${JSON.stringify(scans)}`);
         return Success(res, { scans })
     } catch (err) {
         return ServerError(res, err);
