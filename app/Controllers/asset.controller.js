@@ -46,7 +46,7 @@ async function scanDomain(batchOfScans, domain) {
         // if not existed before in the DataBase
         if (!domain2Add) {
             // Run all the micro-services parallelly with promise all
-            const requests2MicroServices = [SimilarTechScanDomain(domain), WhatCMSScanDomain(domain)]; //WappalyzerScanDomain(domain)];
+            const requests2MicroServices = [SimilarTechScanDomain(domain), WhatCMSScanDomain(domain), WappalyzerScanDomain(domain)];
             // Here, allInfoAboutDomain is an array of arrays when each array is suit for each micro service
             const allInfoAboutDomain = await Promise.all(requests2MicroServices);
             // Removing duplicates

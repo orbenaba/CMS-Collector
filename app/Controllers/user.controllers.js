@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 // Custom Modules
 
-const { UserModel, CreateToken } = require('../Schemas/user.schemas');
+const { UserModel, CreateToken: createToken } = require('../Schemas/user.schemas');
 const validateEmail = require('../Routes/Middlewares/validateEmail')
 
 
@@ -71,7 +71,7 @@ async function forgotPassword(req, res) {
         return
     }
 
-    const token = CreateToken({ email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE * 3)
+    const token = createToken({ email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE * 3)
     console.log("token: ", token)
     const link = `${process.env.NODE_ENV === 'production' ? "https://vast-basin-88117.herokuapp.com/" : "http://localhost:3000/"}reset-password?token=${token}`
 
