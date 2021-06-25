@@ -65,16 +65,13 @@ export default function ResetPassword() {
   }, [password, confirmPassword, canSubmit]);
 
   useEffect(() => {
-    console.log(`effect`);
     axios
       .post(ServerAddress + "api/user/validate-change-password", { token })
       .then(() => {
-        console.log(`approved`);
         !paramApproved && setParamApproved(true);
       })
       .catch(() => {
         paramApproved && setParamApproved(false);
-        console.log(`not apprvoed`);
       });
   }, [paramApproved]);
 

@@ -117,7 +117,7 @@ export default function ChangeDetails() {
         resetContext();
         history.push("/register");
       }
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const onPasswordChange = (e) => {
@@ -153,7 +153,6 @@ export default function ChangeDetails() {
             </React.Fragment>
           );
         } else {
-          console.log(user);
           return (
             <Container style={{ display: "flex" }}>
               <div>

@@ -37,12 +37,12 @@ UserSchema.pre("save", function (next) {
     // Generate salt only when the password_hash has changed (and not when the refreshToken/accessToken has been changed)
     if (IsNotHash(this.password_hash)) {
         // This is the function that is always being called when changing a password
-        if(IsPasswordAlreadyUsed(this.oldPasswords, this.password_hash)) {
+        if (IsPasswordAlreadyUsed(this.oldPasswords, this.password_hash)) {
             this.refreshToken = CreateToken({ username: this.username, email: this.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
-            this.accessToken = CreateToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);        
+            this.accessToken = CreateToken({ username: this.username, email: this.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
             throw ERRORS.PASSWORD_USED_RECENTLY;
         }
-        else{
+        else {
             AddPasswordToOldPasswords(this.oldPasswords, this.password_hash);
         }
         this.salt = crypto.randomBytes(16).toString('hex');
@@ -78,10 +78,9 @@ UserSchema.statics.deleteUserByUsername = async function (username) {
 UserSchema.statics.changePassword = async function (newPassowrd, email) {
     let userFound = await UserModel.findOne({ email }, (err, user) => {
         if (err) {
-            console.log(JSON.stringify(err))
             throw err;
         }
-        
+
         return user;
     });
 
@@ -89,15 +88,12 @@ UserSchema.statics.changePassword = async function (newPassowrd, email) {
         try {
             userFound.password_hash = newPassowrd
             const user = hashPassword(userFound)
-            console.log(`user found! ${userFound}`)
             // await UserModel.updateOne({ email: userFound.email }, userFound)
             await user.save()
         }
         catch (err) {
-            console.log(`err ${JSON.stringify(err)}`)
             throw err
         }
-        console.log(`user updated!`)
     }
     else {
         throw new Error("User not exist")
@@ -108,7 +104,6 @@ UserSchema.statics.changePassword = async function (newPassowrd, email) {
 UserSchema.statics.login = async function (username, password) {
     // If the user did not authenticated then an exception would be thrown
     const userM = await UserModel.authenticate(username, password);
-    console.log(`userm=${!!userM}`);
     let payload = { username: userM.username, email: userM.email };
     let accessToken = CreateToken(payload, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE);
     let refreshToken = CreateToken(payload, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
@@ -154,16 +149,15 @@ UserSchema.statics.refreshAccessToken = async function (accessToken, refreshToke
         throw "No Access/Refresh tokens specified"
     }
 
-    try{
+    try {
         const decode = await jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
         const username = decode.username
         const user = await UserModel.findOne({ username });
-        console.log(`user===${!!user}`);
         user.accessToken = CreateToken({ username: user.username, email: user.email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE)
         await user.save()
-        return user;       
+        return user;
 
-    }catch(err) {
+    } catch (err) {
         if (!IsTokenExpired(err)) {
             throw 'Refresh token expired'
         }
@@ -178,17 +172,17 @@ UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshTo
         throw "No access token specified :(";
     }
 
-    try{
+    try {
         const decode = await jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
         const user = await UserModel.findOne({ username: decode.username })
         return user;
-    }catch(err) {
+    } catch (err) {
         if (!IsTokenExpired(err)) {
             // We need to refresh the access token
-            try{
+            try {
                 const user = await UserModel.refreshAccessToken(accessToken, refreshToken);
                 return user;
-            }catch(err) {
+            } catch (err) {
                 if (err && err.toString() === 'Refresh token expired') {
                     throw 'Refresh token expired';
                 }
@@ -205,7 +199,7 @@ UserSchema.statics.findByTokenOrRefresh = async function (accessToken, refreshTo
  * @param {used to authenticate the user} accessToken
  */
 UserSchema.statics.changeDetails = async function (updatedUser, newUsername, newPassword, newEmail) {
-    updatedUser.username = newUsername ? newUsername : updatedUser.username ;
+    updatedUser.username = newUsername ? newUsername : updatedUser.username;
     updatedUser.email = newEmail ? newEmail : updatedUser.email;
     updatedUser.password_hash = newPassword ? newPassword : updatedUser.password_hash;
     updatedUser.refreshToken = CreateToken({ username: updatedUser.username, email: updatedUser.email }, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE);
@@ -220,7 +214,6 @@ function hashPassword(user) {
     // Generate salt only when the password_hash has changed (and not when the refreshToken/accessToken has been changed)
     // if the password just now added in the create user so isModified = true
     if (user.password_hash.length < 30) {
-        console.log(`hashing password`);
         // password_hash was not changed
         user.salt = crypto.randomBytes(16).toString('hex');
         // pbkdf2 algorithm is used to generate and validate hashes 

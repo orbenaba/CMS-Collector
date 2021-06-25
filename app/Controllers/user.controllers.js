@@ -72,7 +72,6 @@ async function forgotPassword(req, res) {
     }
 
     const token = CreateToken({ email }, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE * 3)
-    console.log("token: ", token)
     const link = `${process.env.NODE_ENV === 'production' ? "https://vast-basin-88117.herokuapp.com/" : "http://localhost:3000/"}reset-password?token=${token}`
 
     var mailOptions = {
@@ -84,35 +83,26 @@ async function forgotPassword(req, res) {
 
     try {
         const info = transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
     }
     catch (err) {
-        console.log(err);
         res.sendStatus(405)
     }
     res.sendStatus(200)
-    //console.log(validEmail, email, token)
-
 }
 
 async function resetPassword(req, res) {
     const { password, token } = req.body
-    console.log(password)
     jwt.verify(token, ACCESS_TOKEN_SECRET, async (err, decode) => {
         if (err || isTokenInBlacklist(token)) {
-            console.log(JSON.stringify(err))
             return ServerError(res, err)
         }
         else {
             const email = decode.email
             try {
-                console.log("in reset-password: ", email)
                 const user = await UserModel.changePassword(password, email)
-                console.log("[+] reset password:\n", user)
                 invalidateToken(token)
                 return Success(res, { user })
             } catch (err) {
-                console.log(JSON.stringify(err))
                 return ServerError(res, err)
             }
         }
